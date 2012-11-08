@@ -1,6 +1,6 @@
-#import "ISTableViewController.h"
+#import "ISSampleTableViewController.h"
 
-@implementation ISTableViewController
+@implementation ISSampleTableViewController
 
 - (id)init
 {

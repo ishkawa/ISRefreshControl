@@ -16,7 +16,7 @@
 		7F0F0892164BE48700C4A4EA /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F0891164BE48700C4A4EA /* Default.png */; };
 		7F0F0894164BE48700C4A4EA /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F0893164BE48700C4A4EA /* Default@2x.png */; };
 		7F0F0896164BE48700C4A4EA /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F0895164BE48700C4A4EA /* Default-568h@2x.png */; };
-		7F0F08A6164BE71200C4A4EA /* ISTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F08A5164BE71200C4A4EA /* ISTableViewController.m */; };
+		7F0F08A6164BE71200C4A4EA /* ISSampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F08A5164BE71200C4A4EA /* ISSampleTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,8 +33,8 @@
 		7F0F0891164BE48700C4A4EA /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		7F0F0893164BE48700C4A4EA /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		7F0F0895164BE48700C4A4EA /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		7F0F08A4164BE71200C4A4EA /* ISTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISTableViewController.h; sourceTree = "<group>"; };
-		7F0F08A5164BE71200C4A4EA /* ISTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISTableViewController.m; sourceTree = "<group>"; };
+		7F0F08A4164BE71200C4A4EA /* ISSampleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSampleTableViewController.h; sourceTree = "<group>"; };
+		7F0F08A5164BE71200C4A4EA /* ISSampleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSampleTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,8 +83,8 @@
 			children = (
 				7F0F088E164BE48700C4A4EA /* ISAppDelegate.h */,
 				7F0F088F164BE48700C4A4EA /* ISAppDelegate.m */,
-				7F0F08A4164BE71200C4A4EA /* ISTableViewController.h */,
-				7F0F08A5164BE71200C4A4EA /* ISTableViewController.m */,
+				7F0F08A4164BE71200C4A4EA /* ISSampleTableViewController.h */,
+				7F0F08A5164BE71200C4A4EA /* ISSampleTableViewController.m */,
 				7F0F0886164BE48700C4A4EA /* Supporting Files */,
 			);
 			path = ISRCDemo;
@@ -172,7 +172,7 @@
 			files = (
 				7F0F088C164BE48700C4A4EA /* main.m in Sources */,
 				7F0F0890164BE48700C4A4EA /* ISAppDelegate.m in Sources */,
-				7F0F08A6164BE71200C4A4EA /* ISTableViewController.m in Sources */,
+				7F0F08A6164BE71200C4A4EA /* ISSampleTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
