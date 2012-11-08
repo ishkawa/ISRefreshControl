@@ -6,7 +6,7 @@
 {
     self = [super init];
     if (self) {
-        self.refreshControl = [[UIRefreshControl alloc] init];
+        self.refreshControl = (UIRefreshControl *)[[ISRefreshControl alloc] init];
         [self.refreshControl addTarget:self
                                 action:@selector(refresh)
                       forControlEvents:UIControlEventValueChanged];
@@ -14,10 +14,22 @@
     return self;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    UIView *view = [[UIView alloc] init];
+    view.frame = CGRectMake(0, 0, 320, 50);
+    view.backgroundColor = [UIColor darkGrayColor];
+    
+    self.tableView.tableHeaderView = view;
+}
+
 #pragma mark -
 
 - (void)refresh
 {
+    NSLog(@"\n%@", [self.view performSelector:@selector(recursiveDescription)]);
     [self.refreshControl beginRefreshing];
     
     int64_t delayInSeconds = 2.0;

@@ -6,7 +6,11 @@
 
 + (void)load
 {
-    class_setSuperclass([self class], [ISRefreshViewController class]);
+    @autoreleasepool {
+        if ([[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
+            class_setSuperclass([self class], [ISRefreshViewController class]);
+        }
+    }
 }
 
 @end

@@ -19,6 +19,7 @@
 		7F0F08A6164BE71200C4A4EA /* ISSampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F08A5164BE71200C4A4EA /* ISSampleTableViewController.m */; };
 		7F61F0FE164BFD4700F9DBE6 /* ISRefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F61F0FB164BFD4700F9DBE6 /* ISRefreshViewController.m */; };
 		7F61F0FF164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F61F0FD164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m */; };
+		7F61F109164C0F0800F9DBE6 /* ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F61F108164C0F0800F9DBE6 /* ISRefreshControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,7 +42,8 @@
 		7F61F0FB164BFD4700F9DBE6 /* ISRefreshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISRefreshViewController.m; sourceTree = "<group>"; };
 		7F61F0FC164BFD4700F9DBE6 /* UITableViewController+RefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewController+RefreshControl.h"; sourceTree = "<group>"; };
 		7F61F0FD164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewController+RefreshControl.m"; sourceTree = "<group>"; };
-		7F61F100164BFD5F00F9DBE6 /* ISRefreshControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ISRefreshControl.h; sourceTree = "<group>"; };
+		7F61F107164C0F0800F9DBE6 /* ISRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISRefreshControl.h; sourceTree = "<group>"; };
+		7F61F108164C0F0800F9DBE6 /* ISRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISRefreshControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,7 +117,8 @@
 		7F61F0F9164BFD4700F9DBE6 /* ISRefreshControl */ = {
 			isa = PBXGroup;
 			children = (
-				7F61F100164BFD5F00F9DBE6 /* ISRefreshControl.h */,
+				7F61F107164C0F0800F9DBE6 /* ISRefreshControl.h */,
+				7F61F108164C0F0800F9DBE6 /* ISRefreshControl.m */,
 				7F61F0FA164BFD4700F9DBE6 /* ISRefreshViewController.h */,
 				7F61F0FB164BFD4700F9DBE6 /* ISRefreshViewController.m */,
 				7F61F0FC164BFD4700F9DBE6 /* UITableViewController+RefreshControl.h */,
@@ -195,6 +198,7 @@
 				7F0F08A6164BE71200C4A4EA /* ISSampleTableViewController.m in Sources */,
 				7F61F0FE164BFD4700F9DBE6 /* ISRefreshViewController.m in Sources */,
 				7F61F0FF164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m in Sources */,
+				7F61F109164C0F0800F9DBE6 /* ISRefreshControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
