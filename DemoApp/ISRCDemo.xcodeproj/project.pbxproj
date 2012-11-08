@@ -17,6 +17,8 @@
 		7F0F0894164BE48700C4A4EA /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F0893164BE48700C4A4EA /* Default@2x.png */; };
 		7F0F0896164BE48700C4A4EA /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F0895164BE48700C4A4EA /* Default-568h@2x.png */; };
 		7F0F08A6164BE71200C4A4EA /* ISSampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F08A5164BE71200C4A4EA /* ISSampleTableViewController.m */; };
+		7F61F0FE164BFD4700F9DBE6 /* ISRefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F61F0FB164BFD4700F9DBE6 /* ISRefreshViewController.m */; };
+		7F61F0FF164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F61F0FD164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,11 @@
 		7F0F0895164BE48700C4A4EA /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		7F0F08A4164BE71200C4A4EA /* ISSampleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSampleTableViewController.h; sourceTree = "<group>"; };
 		7F0F08A5164BE71200C4A4EA /* ISSampleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSampleTableViewController.m; sourceTree = "<group>"; };
+		7F61F0FA164BFD4700F9DBE6 /* ISRefreshViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISRefreshViewController.h; sourceTree = "<group>"; };
+		7F61F0FB164BFD4700F9DBE6 /* ISRefreshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISRefreshViewController.m; sourceTree = "<group>"; };
+		7F61F0FC164BFD4700F9DBE6 /* UITableViewController+RefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewController+RefreshControl.h"; sourceTree = "<group>"; };
+		7F61F0FD164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewController+RefreshControl.m"; sourceTree = "<group>"; };
+		7F61F100164BFD5F00F9DBE6 /* ISRefreshControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ISRefreshControl.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				7F0F0885164BE48700C4A4EA /* ISRCDemo */,
+				7F61F0F9164BFD4700F9DBE6 /* ISRefreshControl */,
 				7F0F087E164BE48700C4A4EA /* Frameworks */,
 				7F0F087C164BE48700C4A4EA /* Products */,
 			);
@@ -102,6 +110,18 @@
 				7F0F0895164BE48700C4A4EA /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7F61F0F9164BFD4700F9DBE6 /* ISRefreshControl */ = {
+			isa = PBXGroup;
+			children = (
+				7F61F100164BFD5F00F9DBE6 /* ISRefreshControl.h */,
+				7F61F0FA164BFD4700F9DBE6 /* ISRefreshViewController.h */,
+				7F61F0FB164BFD4700F9DBE6 /* ISRefreshViewController.m */,
+				7F61F0FC164BFD4700F9DBE6 /* UITableViewController+RefreshControl.h */,
+				7F61F0FD164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m */,
+			);
+			path = ISRefreshControl;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,6 +193,8 @@
 				7F0F088C164BE48700C4A4EA /* main.m in Sources */,
 				7F0F0890164BE48700C4A4EA /* ISAppDelegate.m in Sources */,
 				7F0F08A6164BE71200C4A4EA /* ISSampleTableViewController.m in Sources */,
+				7F61F0FE164BFD4700F9DBE6 /* ISRefreshViewController.m in Sources */,
+				7F61F0FF164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
