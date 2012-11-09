@@ -18,11 +18,13 @@
 {
     [super viewDidLoad];
     
-    UIView *view = [[UIView alloc] init];
-    view.frame = CGRectMake(0, 0, 320, 50);
-    view.backgroundColor = [UIColor darkGrayColor];
+    UILabel *label = [[UILabel alloc] init];
+    label.frame = CGRectMake(0, 0, 320, 50);
+    label.text = @"header";
+    label.textColor = [UIColor lightGrayColor];
+    label.textAlignment = UITextAlignmentCenter;
     
-    self.tableView.tableHeaderView = view;
+    self.tableView.tableHeaderView = label;
 }
 
 #pragma mark -
