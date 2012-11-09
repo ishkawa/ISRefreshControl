@@ -1,4 +1,5 @@
 #import "ISRefreshViewController.h"
+#import "ISRefreshControl.h"
 
 @implementation ISRefreshViewController
 
@@ -6,10 +7,17 @@
 {
     self = [super init];
     if (self) {
+        NSKeyValueObservingOptions options = (NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew);
+        
         [self addObserver:self
                forKeyPath:@"refreshControl"
-                  options:(NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew)
+                  options:options
                   context:nil];
+        
+        [self.tableView addObserver:self
+                         forKeyPath:@"contentOffset"
+                            options:options
+                            context:nil];
     }
     return self;
 }
@@ -23,8 +31,11 @@
 
 - (void)dealloc
 {
+    [self.tableView removeObserver:self forKeyPath:@"contentOffset"];
     [self removeObserver:self forKeyPath:@"refreshControl"];
 }
+
+#pragma mark - key value observing
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
@@ -40,9 +51,30 @@
             newView.backgroundColor = [UIColor blueColor];
             [self.view addSubview:newView];
         }
-    } else {
+    }
+    else if ([keyPath isEqualToString:@"contentOffset"]) {
+        [self updateRefreshControl];
+    }
+    else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+#pragma mark -
+
+- (void)updateRefreshControl
+{
+    CGFloat offset = self.tableView.contentOffset.y;
+    if (offset > 0) {
+        return;
+    }
+    
+    CGFloat threthold = -self.refreshControl.frame.size.height;
+    if (offset < threthold) {
+        offset = threthold;
+    }
+
+    [(ISRefreshControl *)self.refreshControl setOffset:offset];
 }
 
 @end

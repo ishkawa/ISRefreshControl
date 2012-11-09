@@ -5,10 +5,11 @@
 
 @property (nonatomic, readonly, getter=isRefreshing) BOOL refreshing;
 
+@property (nonatomic) CGFloat offset;
 @property (nonatomic, retain) UIColor *tintColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, retain) NSAttributedString *attributedTitle UI_APPEARANCE_SELECTOR;
 
-//- (void)beginRefreshing;
-//- (void)endRefreshing;
+- (void)beginRefreshing;
+- (void)endRefreshing;
 
 @end
