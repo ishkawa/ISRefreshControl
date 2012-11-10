@@ -1,5 +1,5 @@
 #import "ISAppDelegate.h"
-#import "ISSampleTableViewController.h"
+#import "ISDemoViewController.h"
 
 @implementation ISAppDelegate
 
@@ -7,7 +7,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
-    self.window.rootViewController = [[ISSampleTableViewController alloc] init];
+    self.window.rootViewController = [[ISDemoViewController alloc] init];
     [self.window makeKeyAndVisible];
     
     return YES;
