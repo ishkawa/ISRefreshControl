@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface ISSampleTableViewController : UITableViewController
+@interface ISDemoViewController : UITableViewController
 
 @property (strong, nonatomic) NSArray *items;
 
