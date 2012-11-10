@@ -31,7 +31,6 @@
 
 - (void)refresh
 {
-    NSLog(@"\n%@", [self.view performSelector:@selector(recursiveDescription)]);
     [self.refreshControl beginRefreshing];
     
     int64_t delayInSeconds = 2.0;
