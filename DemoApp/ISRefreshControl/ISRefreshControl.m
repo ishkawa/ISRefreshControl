@@ -8,6 +8,7 @@ const CGFloat additionalTopInset = 50.f;
 @property (nonatomic) BOOL refreshing;
 @property (nonatomic) BOOL refreshed;
 @property (nonatomic) BOOL didOffset;
+@property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
 @property (readonly, nonatomic) UITableView *superTableView;
 
 @end
@@ -15,14 +16,25 @@ const CGFloat additionalTopInset = 50.f;
 
 @implementation ISRefreshControl
 
-@synthesize state = _state;
-
 + (id)alloc
 {
     if ([UIRefreshControl class]) {
         return (id)[UIRefreshControl alloc];
     }
     return [super alloc];
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.indicatorView = [[UIActivityIndicatorView alloc] init];
+        self.indicatorView.frame = CGRectMake(160-15, 25-15, 30, 30);
+        self.indicatorView.hidesWhenStopped = YES;
+        self.indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+        [self addSubview:self.indicatorView];
+    }
+    return self;
 }
 
 #pragma mark - accessor
@@ -70,6 +82,7 @@ const CGFloat additionalTopInset = 50.f;
     
     self.refreshing = YES;
     self.refreshed  = NO;
+    [self.indicatorView startAnimating];
 }
 
 - (void)endRefreshing
@@ -80,6 +93,7 @@ const CGFloat additionalTopInset = 50.f;
     
     self.refreshing = NO;
     self.refreshed  = YES;
+    [self.indicatorView stopAnimating];
     
     if (self.didOffset) {
         [self updateTopInset];

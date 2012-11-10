@@ -48,7 +48,6 @@
         }
         if ([newView isKindOfClass:[UIView class]]) {
             newView.frame = CGRectMake(0, -50, 320, 50);
-            newView.backgroundColor = [UIColor blueColor];
             [self.view addSubview:newView];
         }
     }
