@@ -60,6 +60,15 @@ const CGFloat additionalTopInset = 50.f;
     if (!self.refreshing && !self.refreshed && offset <= -50) {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
+    
+    if (offset <= -50) {
+        self.frame = CGRectMake(self.frame.origin.x,
+                                offset,
+                                self.frame.size.width,
+                                self.frame.size.height);
+    } else {
+        self.frame = CGRectMake(0, -50, 320, 50);
+    }
 }
 
 - (void)setDragging:(BOOL)dragging
