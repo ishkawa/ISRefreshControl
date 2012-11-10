@@ -71,6 +71,7 @@
     }
 
     [(ISRefreshControl *)self.refreshControl setOffset:offset];
+    [(ISRefreshControl *)self.refreshControl setDragging:self.tableView.isDragging];
 }
 
 @end

@@ -6,7 +6,8 @@ const CGFloat additionalTopInset = 50.f;
 @interface ISRefreshControl ()
 
 @property (nonatomic) BOOL refreshing;
-@property (nonatomic, getter = isRefreshed) BOOL refreshed;
+@property (nonatomic) BOOL refreshed;
+@property (nonatomic) BOOL didOffset;
 @property (readonly, nonatomic) UITableView *superTableView;
 
 @end
@@ -16,20 +17,22 @@ const CGFloat additionalTopInset = 50.f;
 
 @synthesize state = _state;
 
-- (UITableView *)superTableView
-{
-    if (![self.superview isKindOfClass:[UITableView class]]) {
-        return nil;
-    }
-    return (UITableView *)self.superview;
-}
-
 + (id)alloc
 {
     if ([UIRefreshControl class]) {
         return (id)[UIRefreshControl alloc];
     }
     return [super alloc];
+}
+
+#pragma mark - accessor
+
+- (UITableView *)superTableView
+{
+    if (![self.superview isKindOfClass:[UITableView class]]) {
+        return nil;
+    }
+    return (UITableView *)self.superview;
 }
 
 - (void)setOffset:(CGFloat)offset
@@ -47,6 +50,18 @@ const CGFloat additionalTopInset = 50.f;
     }
 }
 
+- (void)setDragging:(BOOL)dragging
+{
+    _dragging = dragging;
+    
+    if (!self.dragging && self.refreshing && !self.didOffset) {
+        self.didOffset = YES;
+        [self updateTopInset];
+    }
+}
+
+#pragma mark -
+
 - (void)beginRefreshing
 {
     if (self.refreshing) {
@@ -55,8 +70,6 @@ const CGFloat additionalTopInset = 50.f;
     
     self.refreshing = YES;
     self.refreshed  = NO;
-    
-    [self updateTopInset];
 }
 
 - (void)endRefreshing
@@ -68,14 +81,14 @@ const CGFloat additionalTopInset = 50.f;
     self.refreshing = NO;
     self.refreshed  = YES;
     
-    [self updateTopInset];
+    if (self.didOffset) {
+        [self updateTopInset];
+    }
+    self.didOffset = NO;
 }
 
 - (void)updateTopInset
 {
-    // FIXME: setting contentInset will reset contentOffset.
-    //        while user is dragging, it seems like a bug.
-    
     CGFloat diff = additionalTopInset * (self.refreshing?1.f:-1.f);
     UIEdgeInsets inset = self.superTableView.contentInset;
     [UIView animateWithDuration:.3f
