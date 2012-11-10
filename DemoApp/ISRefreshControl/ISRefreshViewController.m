@@ -64,10 +64,6 @@
 - (void)updateRefreshControl
 {
     CGFloat offset = self.tableView.contentOffset.y;
-    CGFloat threthold = -self.refreshControl.frame.size.height;
-    if (offset < threthold) {
-        offset = threthold;
-    }
 
     [(ISRefreshControl *)self.refreshControl setOffset:offset];
     [(ISRefreshControl *)self.refreshControl setDragging:self.tableView.isDragging];
