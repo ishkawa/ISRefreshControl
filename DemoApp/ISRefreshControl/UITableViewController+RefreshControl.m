@@ -8,7 +8,10 @@
 {
     @autoreleasepool {
         if ([[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated"
             class_setSuperclass([self class], [ISRefreshViewController class]);
+#pragma GCC diagnostic pop
         }
     }
 }
