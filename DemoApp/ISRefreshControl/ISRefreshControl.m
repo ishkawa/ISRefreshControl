@@ -1,5 +1,6 @@
 #import "ISRefreshControl.h"
 #import <objc/runtime.h>
+#import <QuartzCore/QuartzCore.h>
 
 const CGFloat additionalTopInset = 50.f;
 
@@ -8,6 +9,7 @@ const CGFloat additionalTopInset = 50.f;
 @property (nonatomic) BOOL refreshing;
 @property (nonatomic) BOOL refreshed;
 @property (nonatomic) BOOL didOffset;
+@property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
 @property (readonly, nonatomic) UITableView *superTableView;
 
@@ -28,10 +30,17 @@ const CGFloat additionalTopInset = 50.f;
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.imageView = [[UIImageView alloc] init];
+        self.imageView.frame = CGRectMake(160-15, 25-15, 30, 30);
+        self.imageView.backgroundColor = [UIColor blueColor];
+        [self addSubview:self.imageView];
+        
         self.indicatorView = [[UIActivityIndicatorView alloc] init];
         self.indicatorView.frame = CGRectMake(160-15, 25-15, 30, 30);
         self.indicatorView.hidesWhenStopped = YES;
-        self.indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+        self.indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+        self.indicatorView.color = [UIColor lightGrayColor];
+        [self.indicatorView.layer setValue:@.01f forKeyPath:@"transform.scale"];
         [self addSubview:self.indicatorView];
     }
     return self;
@@ -91,7 +100,9 @@ const CGFloat additionalTopInset = 50.f;
     
     self.refreshing = YES;
     self.refreshed  = NO;
-    [self.indicatorView startAnimating];
+    
+    [self updateIndicator];
+    [self updateImageView];
 }
 
 - (void)endRefreshing
@@ -102,7 +113,9 @@ const CGFloat additionalTopInset = 50.f;
     
     self.refreshing = NO;
     self.refreshed  = YES;
-    [self.indicatorView stopAnimating];
+    
+    [self updateIndicator];
+    [self updateImageView];
     
     if (self.didOffset) {
         [self updateTopInset];
@@ -120,6 +133,41 @@ const CGFloat additionalTopInset = 50.f;
                                                                              inset.left,
                                                                              inset.bottom,
                                                                              inset.right);
+                     }];
+}
+
+- (void)updateIndicator
+{
+    if (self.refreshing) {
+        [self.indicatorView startAnimating];
+    }
+    [UIView animateWithDuration:.3f
+                     animations:^{
+                         [self.indicatorView.layer setValue:self.refreshing ? @.8f : @0.01f
+                                                 forKeyPath:@"transform.scale"];
+                     }
+                     completion:^(BOOL finished) {
+                         if (!self.refreshing) {
+                             [self.indicatorView stopAnimating];
+                         }
+                     }];
+}
+
+- (void)updateImageView
+{
+    [UIView animateWithDuration:.3f
+                     animations:^{
+                         if (self.refreshing) {
+                             self.imageView.frame = CGRectMake(160, 25, 0, 0);
+                         }
+                     }
+                     completion:^(BOOL finished) {
+                         if (self.refreshing) {
+                             self.imageView.hidden = YES;
+                         } else {
+                             self.imageView.hidden = NO;
+                             self.imageView.frame = CGRectMake(160-15, 25-15, 30, 30);
+                         }
                      }];
 }
 
