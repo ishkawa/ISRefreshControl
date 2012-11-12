@@ -1,4 +1,5 @@
 #import "ISRefreshControl.h"
+#import "ISGumView.h"
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -9,7 +10,7 @@ const CGFloat additionalTopInset = 50.f;
 @property (nonatomic) BOOL refreshing;
 @property (nonatomic) BOOL refreshed;
 @property (nonatomic) BOOL didOffset;
-@property (strong, nonatomic) UIImageView *imageView;
+@property (strong, nonatomic) ISGumView *gumView;
 @property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
 @property (readonly, nonatomic) UITableView *superTableView;
 
@@ -30,10 +31,9 @@ const CGFloat additionalTopInset = 50.f;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.imageView = [[UIImageView alloc] init];
-        self.imageView.frame = CGRectMake(160-15, 25-15, 30, 30);
-        self.imageView.backgroundColor = [UIColor blueColor];
-        [self addSubview:self.imageView];
+        self.gumView = [[ISGumView alloc] init];
+        self.gumView.frame = CGRectMake(160-15, 25-15, 30, 90);
+        [self addSubview:self.gumView];
         
         self.indicatorView = [[UIActivityIndicatorView alloc] init];
         self.indicatorView.frame = CGRectMake(160-15, 25-15, 30, 30);
@@ -62,21 +62,22 @@ const CGFloat additionalTopInset = 50.f;
     
     CGFloat value = fabs(offset/self.frame.size.height);
     self.alpha = value;
+    self.gumView.distance = -offset;
     
     if (self.refreshed && offset >= 0) {
         self.refreshed = NO;
     }
-    if (!self.refreshing && !self.refreshed && offset <= -50) {
+    if (!self.refreshing && !self.refreshed && offset <= -90) {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
     
-    if (offset <= -50) {
+    if (offset <= -90) {
         self.frame = CGRectMake(self.frame.origin.x,
                                 offset,
                                 self.frame.size.width,
                                 self.frame.size.height);
     } else {
-        self.frame = CGRectMake(0, -50, 320, 50);
+        self.frame = CGRectMake(0, -90, 320, 90);
     }
 }
 
@@ -158,15 +159,15 @@ const CGFloat additionalTopInset = 50.f;
     [UIView animateWithDuration:.3f
                      animations:^{
                          if (self.refreshing) {
-                             self.imageView.frame = CGRectMake(160, 25, 0, 0);
+                             self.gumView.frame = CGRectMake(160, 25, 0, 0);
                          }
                      }
                      completion:^(BOOL finished) {
                          if (self.refreshing) {
-                             self.imageView.hidden = YES;
+                             self.gumView.hidden = YES;
                          } else {
-                             self.imageView.hidden = NO;
-                             self.imageView.frame = CGRectMake(160-15, 25-15, 30, 30);
+                             self.gumView.hidden = NO;
+                             self.gumView.frame = CGRectMake(160-15, 25-15, 30, 90);
                          }
                      }];
 }

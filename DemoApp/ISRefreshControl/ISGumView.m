@@ -26,8 +26,22 @@
         self.distance = 0.f;
         self.mainRadius = MAIN_CIRCLE_MAX_RADIUS;
         self.subRadius  = MAIN_CIRCLE_MAX_RADIUS;
+        
+        [self addObserver:self
+               forKeyPath:@"distance"
+                  options:0
+                  context:NULL];
     }
     return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == self && [keyPath isEqualToString:@"distance"]) {
+        [self setNeedsDisplay];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 - (void)drawRect:(CGRect)rect
@@ -41,39 +55,42 @@
     self.mainRadius = MAIN_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.6)*(MAIN_CIRCLE_MAX_RADIUS-MAIN_CIRCLE_MIN_RADIUS);
     self.subRadius  = SUB_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.6)*(SUB_CIRCLE_MAX_RADIUS-SUB_CIRCLE_MIN_RADIUS);
     
+    // offset to keep center
+    CGFloat offset = MAIN_CIRCLE_MAX_RADIUS - self.mainRadius;
+    
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGMutablePathRef path = CGPathCreateMutable();
     
-    CGPathMoveToPoint(path, NULL, 0, 25);
+    CGPathMoveToPoint(path, NULL, offset, 25);
     CGPathAddArcToPoint(path, NULL,
-                        0, 0,
-                        self.mainRadius, 0,
+                        offset, 0,
+                        offset + self.mainRadius, 0,
                         self.mainRadius);
     
     CGPathAddArcToPoint(path, NULL,
-                        self.mainRadius*2.f, 0,
-                        self.mainRadius*2.f, self.mainRadius,
+                        offset + self.mainRadius*2.f, 0,
+                        offset + self.mainRadius*2.f, self.mainRadius,
                         self.mainRadius);
 
     CGPathAddCurveToPoint(path, NULL,
-                          self.mainRadius*2.f,            self.mainRadius*2.f,
-                          self.mainRadius+self.subRadius, self.mainRadius*2.f,
-                          self.mainRadius+self.subRadius, self.distance+self.mainRadius);
+                          offset + self.mainRadius*2.f,            self.mainRadius*2.f,
+                          offset + self.mainRadius+self.subRadius, self.mainRadius*2.f,
+                          offset + self.mainRadius+self.subRadius, self.distance+self.mainRadius);
     
     CGPathAddArcToPoint(path, NULL,
-                        self.mainRadius+self.subRadius, self.distance+self.mainRadius+self.subRadius,
-                        self.mainRadius,                self.distance+self.mainRadius+self.subRadius,
+                        offset + self.mainRadius+self.subRadius, self.distance+self.mainRadius+self.subRadius,
+                        offset + self.mainRadius,                self.distance+self.mainRadius+self.subRadius,
                         self.subRadius);
     
     CGPathAddArcToPoint(path, NULL,
-                        self.mainRadius-self.subRadius, self.distance+self.mainRadius+self.subRadius,
-                        self.mainRadius-self.subRadius, self.distance+self.mainRadius,
+                        offset + self.mainRadius-self.subRadius, self.distance+self.mainRadius+self.subRadius,
+                        offset + self.mainRadius-self.subRadius, self.distance+self.mainRadius,
                         self.subRadius);
     
     CGPathAddCurveToPoint(path, NULL,
-                          self.mainRadius-self.subRadius, self.mainRadius*2.f,
-                          0, self.mainRadius*2.f,
-                          0, self.mainRadius);
+                          offset + self.mainRadius-self.subRadius, self.mainRadius*2.f,
+                          offset + 0, self.mainRadius*2.f,
+                          offset + 0, self.mainRadius);
     
     CGPathCloseSubpath(path);
     CGContextAddPath(ctx, path);
