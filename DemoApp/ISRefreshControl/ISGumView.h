@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface ISGlueView : UIView
+@interface ISGumView : UIView
 
 @property CGFloat distance;
 

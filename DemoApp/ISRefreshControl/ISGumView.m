@@ -1,4 +1,4 @@
-#import "ISGlueView.h"
+#import "ISGumView.h"
 
 #define MAX_DISTANCE 70.f
 
@@ -8,14 +8,14 @@
 #define SUB_CIRCLE_MAX_RADIUS 16.f
 #define SUB_CIRCLE_MIN_RADIUS 2.5f
 
-@interface ISGlueView ()
+@interface ISGumView ()
 
 @property CGFloat mainRadius;
 @property CGFloat subRadius;
 
 @end
 
-@implementation ISGlueView
+@implementation ISGumView
 
 - (id)initWithFrame:(CGRect)frame
 {
