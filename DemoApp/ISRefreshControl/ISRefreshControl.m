@@ -62,8 +62,8 @@ const CGFloat additionalTopInset = 50.f;
     
     CGFloat value = fabs(offset/self.frame.size.height);
     self.alpha = value;
-    if (offset < -50) {
-        self.gumView.distance = -offset-50;
+    if (offset < -30) {
+        self.gumView.distance = -offset-30;
     } else {
         self.gumView.distance = 0.f;
     }
@@ -71,7 +71,7 @@ const CGFloat additionalTopInset = 50.f;
     if (self.refreshed && offset >= 0) {
         self.refreshed = NO;
     }
-    if (!self.refreshing && !self.refreshed && offset <= -140) {
+    if (!self.refreshing && !self.refreshed && offset <= -100) {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 
