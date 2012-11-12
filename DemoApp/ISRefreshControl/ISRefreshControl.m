@@ -32,7 +32,7 @@ const CGFloat additionalTopInset = 50.f;
     self = [super initWithFrame:frame];
     if (self) {
         self.gumView = [[ISGumView alloc] init];
-        self.gumView.frame = CGRectMake(160-15, 25-15, 30, 90);
+        self.gumView.frame = CGRectMake(160-15, 25-15, 35, 90);
         [self addSubview:self.gumView];
         
         self.indicatorView = [[UIActivityIndicatorView alloc] init];
@@ -62,22 +62,29 @@ const CGFloat additionalTopInset = 50.f;
     
     CGFloat value = fabs(offset/self.frame.size.height);
     self.alpha = value;
-    self.gumView.distance = -offset;
+    if (offset < -50) {
+        self.gumView.distance = -offset-50;
+    } else {
+        self.gumView.distance = 0.f;
+    }
     
     if (self.refreshed && offset >= 0) {
         self.refreshed = NO;
     }
-    if (!self.refreshing && !self.refreshed && offset <= -90) {
+    if (!self.refreshing && !self.refreshed && offset <= -140) {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
-    
-    if (offset <= -90) {
-        self.frame = CGRectMake(self.frame.origin.x,
-                                offset,
-                                self.frame.size.width,
-                                self.frame.size.height);
+
+    if (self.refreshing) {
+        self.indicatorView.frame = CGRectMake(self.indicatorView.frame.origin.x,
+                                              offset+75,
+                                              self.indicatorView.frame.size.width,
+                                              self.indicatorView.frame.size.height);
     } else {
-        self.frame = CGRectMake(0, -90, 320, 90);
+        self.gumView.frame = CGRectMake(self.gumView.frame.origin.x,
+                                        offset + 60,
+                                        self.gumView.frame.size.width,
+                                        self.gumView.frame.size.height);
     }
 }
 
@@ -167,7 +174,7 @@ const CGFloat additionalTopInset = 50.f;
                              self.gumView.hidden = YES;
                          } else {
                              self.gumView.hidden = NO;
-                             self.gumView.frame = CGRectMake(160-15, 25-15, 30, 90);
+                             self.gumView.frame = CGRectMake(160-15, 25-15, 35, 90);
                          }
                      }];
 }
