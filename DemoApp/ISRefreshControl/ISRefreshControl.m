@@ -60,18 +60,10 @@ const CGFloat additionalTopInset = 50.f;
 {
     _offset = offset;
     
-    CGFloat value = fabs(offset/self.frame.size.height);
-    self.alpha = value;
-    if (offset < -30) {
-        self.gumView.distance = -offset-30;
-    } else {
-        self.gumView.distance = 0.f;
-    }
-    
     if (self.refreshed && offset >= 0) {
         self.refreshed = NO;
     }
-    if (!self.refreshing && !self.refreshed && offset <= -100) {
+    if (!self.refreshing && !self.refreshed && offset <= -130) {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 
@@ -80,7 +72,20 @@ const CGFloat additionalTopInset = 50.f;
                                               offset+75,
                                               self.indicatorView.frame.size.width,
                                               self.indicatorView.frame.size.height);
+    }
+    
+    if (offset > -60) {
+        if (!self.gumView.shrinking) {
+            self.gumView.distance = 0.f;
+        }
+        self.gumView.frame = CGRectMake(self.gumView.frame.origin.x,
+                                        0,
+                                        self.gumView.frame.size.width,
+                                        self.gumView.frame.size.height);
     } else {
+        if (!self.gumView.shrinking) {
+            self.gumView.distance = -offset-60;
+        }
         self.gumView.frame = CGRectMake(self.gumView.frame.origin.x,
                                         offset + 60,
                                         self.gumView.frame.size.width,
@@ -110,7 +115,7 @@ const CGFloat additionalTopInset = 50.f;
     self.refreshed  = NO;
     
     [self updateIndicator];
-    [self updateImageView];
+    [self.gumView shrink];
 }
 
 - (void)endRefreshing
@@ -123,7 +128,6 @@ const CGFloat additionalTopInset = 50.f;
     self.refreshed  = YES;
     
     [self updateIndicator];
-    [self updateImageView];
     
     if (self.didOffset) {
         [self updateTopInset];
@@ -157,24 +161,7 @@ const CGFloat additionalTopInset = 50.f;
                      completion:^(BOOL finished) {
                          if (!self.refreshing) {
                              [self.indicatorView stopAnimating];
-                         }
-                     }];
-}
-
-- (void)updateImageView
-{
-    [UIView animateWithDuration:.3f
-                     animations:^{
-                         if (self.refreshing) {
-                             self.gumView.frame = CGRectMake(160, 25, 0, 0);
-                         }
-                     }
-                     completion:^(BOOL finished) {
-                         if (self.refreshing) {
-                             self.gumView.hidden = YES;
-                         } else {
                              self.gumView.hidden = NO;
-                             self.gumView.frame = CGRectMake(160-15, 25-15, 35, 90);
                          }
                      }];
 }
