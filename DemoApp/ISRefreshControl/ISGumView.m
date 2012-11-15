@@ -1,12 +1,12 @@
 #import "ISGumView.h"
 
-#define MAX_DISTANCE 70.f
+#define MAX_DISTANCE 65.f
 
 #define MAIN_CIRCLE_MAX_RADIUS 16.f
 #define MAIN_CIRCLE_MIN_RADIUS 11.f
 
 #define SUB_CIRCLE_MAX_RADIUS 16.f
-#define SUB_CIRCLE_MIN_RADIUS 2.5f
+#define SUB_CIRCLE_MIN_RADIUS 1.5f
 
 @interface ISGumView ()
 
@@ -63,8 +63,8 @@
             self.alpha = (self.distance/thredhold);
         }
     } else {
-        self.mainRadius = MAIN_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.6)*(MAIN_CIRCLE_MAX_RADIUS-MAIN_CIRCLE_MIN_RADIUS);
-        self.subRadius  = SUB_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.6)*(SUB_CIRCLE_MAX_RADIUS-SUB_CIRCLE_MIN_RADIUS);
+        self.mainRadius = MAIN_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.1)*(MAIN_CIRCLE_MAX_RADIUS-MAIN_CIRCLE_MIN_RADIUS);
+        self.subRadius  = SUB_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.3)*(SUB_CIRCLE_MAX_RADIUS-SUB_CIRCLE_MIN_RADIUS);
     }
     
     // offset to keep center

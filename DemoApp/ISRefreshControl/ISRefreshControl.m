@@ -63,7 +63,7 @@ const CGFloat additionalTopInset = 50.f;
     if (self.refreshed && offset >= 0) {
         self.refreshed = NO;
     }
-    if (!self.refreshing && !self.refreshed && offset <= -130) {
+    if (!self.refreshing && !self.refreshed && offset <= -115) {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 
@@ -74,20 +74,20 @@ const CGFloat additionalTopInset = 50.f;
                                               self.indicatorView.frame.size.height);
     }
     
-    if (offset > -60) {
+    if (offset > -50) {
         if (!self.gumView.shrinking) {
             self.gumView.distance = 0.f;
         }
         self.gumView.frame = CGRectMake(self.gumView.frame.origin.x,
-                                        0,
+                                        10,
                                         self.gumView.frame.size.width,
                                         self.gumView.frame.size.height);
     } else {
         if (!self.gumView.shrinking) {
-            self.gumView.distance = -offset-60;
+            self.gumView.distance = -offset-50;
         }
         self.gumView.frame = CGRectMake(self.gumView.frame.origin.x,
-                                        offset + 60,
+                                        offset + 40 + 20,
                                         self.gumView.frame.size.width,
                                         self.gumView.frame.size.height);
     }
