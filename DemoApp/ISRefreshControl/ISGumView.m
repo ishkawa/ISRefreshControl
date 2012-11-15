@@ -3,10 +3,10 @@
 #define MAX_DISTANCE 65.f
 
 #define MAIN_CIRCLE_MAX_RADIUS 16.f
-#define MAIN_CIRCLE_MIN_RADIUS 11.f
+#define MAIN_CIRCLE_MIN_RADIUS 10.f
 
 #define SUB_CIRCLE_MAX_RADIUS 16.f
-#define SUB_CIRCLE_MIN_RADIUS 1.5f
+#define SUB_CIRCLE_MIN_RADIUS 2.f
 
 @interface ISGumView ()
 

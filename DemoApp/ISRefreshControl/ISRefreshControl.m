@@ -67,11 +67,13 @@ const CGFloat additionalTopInset = 50.f;
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 
-    if (self.refreshing) {
+    if (self.refreshing && self.offset < -50) {
         self.indicatorView.frame = CGRectMake(self.indicatorView.frame.origin.x,
                                               offset+75,
                                               self.indicatorView.frame.size.width,
                                               self.indicatorView.frame.size.height);
+    } else {
+        self.indicatorView.frame = CGRectMake(160-15, 25-15, 30, 30);
     }
     
     if (offset > -50) {
@@ -152,18 +154,28 @@ const CGFloat additionalTopInset = 50.f;
 {
     if (self.refreshing) {
         [self.indicatorView startAnimating];
-    }
-    [UIView animateWithDuration:.3f
-                     animations:^{
-                         [self.indicatorView.layer setValue:self.refreshing ? @.8f : @0.01f
-                                                 forKeyPath:@"transform.scale"];
-                     }
-                     completion:^(BOOL finished) {
-                         if (!self.refreshing) {
+        
+        int64_t delayInSeconds = 1.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * 0.1 * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [UIView animateWithDuration:.4f
+                             animations:^{
+                                 [self.indicatorView.layer setValue:@.8f forKeyPath:@"transform.scale"];
+                             }
+                             completion:^(BOOL finished) {
+                             }];
+        });
+    } else {
+        [UIView animateWithDuration:.3f
+                         animations:^{
+                             [self.indicatorView.layer setValue:@0.01f forKeyPath:@"transform.scale"];
+                         }
+                         completion:^(BOOL finished) {
                              [self.indicatorView stopAnimating];
                              self.gumView.hidden = NO;
-                         }
-                     }];
+                         }];
+    }
+    
 }
 
 @end
