@@ -160,7 +160,7 @@ const CGFloat additionalTopInset = 50.f;
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             [UIView animateWithDuration:.4f
                              animations:^{
-                                 [self.indicatorView.layer setValue:@.8f forKeyPath:@"transform.scale"];
+                                 [self.indicatorView.layer setValue:@.7f forKeyPath:@"transform.scale"];
                              }
                              completion:^(BOOL finished) {
                              }];
