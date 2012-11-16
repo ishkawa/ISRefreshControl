@@ -53,14 +53,14 @@
         self.distance = MAX_DISTANCE;
     }
     if (self.shrinking) {
-        CGFloat thredhold = (MAX_DISTANCE/8.f);
-        
-        self.mainRadius = MAIN_CIRCLE_MIN_RADIUS*pow((self.distance/MAX_DISTANCE), 0.08);
-        if (self.distance > thredhold) {
-            self.subRadius  = SUB_CIRCLE_MIN_RADIUS+(MAIN_CIRCLE_MIN_RADIUS-SUB_CIRCLE_MIN_RADIUS)*(1-((self.distance-thredhold)/(MAX_DISTANCE-thredhold)));
+        self.mainRadius = MAIN_CIRCLE_MIN_RADIUS*pow((self.distance/MAX_DISTANCE), 0.1);
+        CGFloat val = pow((self.distance/MAX_DISTANCE), 0.08);
+        NSLog(@"val: %lf", val);
+        if (self.distance > self.mainRadius) {
+            CGFloat diff = fabsf(SUB_CIRCLE_MIN_RADIUS-self.mainRadius);
+            self.subRadius = SUB_CIRCLE_MIN_RADIUS+diff*(1-(self.distance-self.mainRadius)/(MAX_DISTANCE-self.mainRadius));
         } else {
-            self.subRadius  = SUB_CIRCLE_MIN_RADIUS*(self.distance/thredhold);
-            self.alpha = (self.distance/thredhold);
+            self.subRadius  = self.mainRadius;
         }
     } else {
         self.mainRadius = MAIN_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.1)*(MAIN_CIRCLE_MAX_RADIUS-MAIN_CIRCLE_MIN_RADIUS);
