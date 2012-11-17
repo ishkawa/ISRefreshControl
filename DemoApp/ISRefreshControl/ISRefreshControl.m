@@ -61,6 +61,13 @@ const CGFloat additionalTopInset = 50.f;
     
     if (self.refreshed && offset >= 0) {
         self.refreshed = NO;
+        if (self.gumView.hidden) {
+            int64_t delayInSeconds = 1.0;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * .3f * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                self.gumView.hidden = NO;
+            });
+        }
     }
     if (!self.refreshing && !self.refreshed && offset <= -115) {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
@@ -171,7 +178,6 @@ const CGFloat additionalTopInset = 50.f;
                          }
                          completion:^(BOOL finished) {
                              [self.indicatorView stopAnimating];
-                             self.gumView.hidden = NO;
                          }];
     }
     
