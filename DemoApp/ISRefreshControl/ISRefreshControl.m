@@ -31,8 +31,7 @@ const CGFloat additionalTopInset = 50.f;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.gumView = [[ISGumView alloc] init];
-        self.gumView.frame = CGRectMake(160-15, 25-15, 35, 90);
+        self.gumView = [[ISGumView alloc] initWithFrame:CGRectMake(160-15, 25-15, 35, 90)];
         [self addSubview:self.gumView];
         
         self.indicatorView = [[UIActivityIndicatorView alloc] init];

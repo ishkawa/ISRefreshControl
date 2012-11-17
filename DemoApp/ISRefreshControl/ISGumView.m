@@ -12,6 +12,7 @@
 
 @property CGFloat mainRadius;
 @property CGFloat subRadius;
+@property (strong, nonatomic) UIImageView *imageView;
 
 @end
 
@@ -26,6 +27,12 @@
         self.distance = 0.f;
         self.mainRadius = MAIN_CIRCLE_MAX_RADIUS;
         self.subRadius  = MAIN_CIRCLE_MAX_RADIUS;
+        
+        self.imageView = [[UIImageView alloc] init];
+        self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-12, self.mainRadius*2-12);
+        self.imageView.center = CGPointMake(frame.size.width/2.f, self.mainRadius);
+        self.imageView.image = [UIImage imageNamed:@"ISRefresgControlIcon"];
+        [self addSubview:self.imageView];
         
         [self addObserver:self
                forKeyPath:@"distance"
@@ -64,9 +71,11 @@
         self.mainRadius = MAIN_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.1)*(MAIN_CIRCLE_MAX_RADIUS-MAIN_CIRCLE_MIN_RADIUS);
         self.subRadius  = SUB_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.3)*(SUB_CIRCLE_MAX_RADIUS-SUB_CIRCLE_MIN_RADIUS);
     }
+    self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-5, self.mainRadius*2-5);
+    self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f);
     
     // offset to keep center
-    CGFloat offset = MAIN_CIRCLE_MAX_RADIUS - self.mainRadius;
+    CGFloat offset = self.frame.size.width/2.f - self.mainRadius;
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGMutablePathRef path = CGPathCreateMutable();

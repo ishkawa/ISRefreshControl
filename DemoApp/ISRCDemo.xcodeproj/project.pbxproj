@@ -21,6 +21,8 @@
 		7F61F0FE164BFD4700F9DBE6 /* ISRefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F61F0FB164BFD4700F9DBE6 /* ISRefreshViewController.m */; };
 		7F61F0FF164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F61F0FD164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m */; };
 		7F61F109164C0F0800F9DBE6 /* ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F61F108164C0F0800F9DBE6 /* ISRefreshControl.m */; };
+		7F990C2C1656A05200FFE830 /* ISRefresgControlIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F990C2A1656A05200FFE830 /* ISRefresgControlIcon.png */; };
+		7F990C2D1656A05200FFE830 /* ISRefresgControlIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F990C2B1656A05200FFE830 /* ISRefresgControlIcon@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,8 @@
 		7F61F0FD164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewController+RefreshControl.m"; sourceTree = "<group>"; };
 		7F61F107164C0F0800F9DBE6 /* ISRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISRefreshControl.h; sourceTree = "<group>"; };
 		7F61F108164C0F0800F9DBE6 /* ISRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISRefreshControl.m; sourceTree = "<group>"; };
+		7F990C2A1656A05200FFE830 /* ISRefresgControlIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ISRefresgControlIcon.png; sourceTree = "<group>"; };
+		7F990C2B1656A05200FFE830 /* ISRefresgControlIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ISRefresgControlIcon@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,8 +132,18 @@
 				7F61F0FB164BFD4700F9DBE6 /* ISRefreshViewController.m */,
 				7F61F0FC164BFD4700F9DBE6 /* UITableViewController+RefreshControl.h */,
 				7F61F0FD164BFD4700F9DBE6 /* UITableViewController+RefreshControl.m */,
+				7F990C291656A05200FFE830 /* Images */,
 			);
 			path = ISRefreshControl;
+			sourceTree = "<group>";
+		};
+		7F990C291656A05200FFE830 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				7F990C2A1656A05200FFE830 /* ISRefresgControlIcon.png */,
+				7F990C2B1656A05200FFE830 /* ISRefresgControlIcon@2x.png */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,6 +202,8 @@
 				7F0F0892164BE48700C4A4EA /* Default.png in Resources */,
 				7F0F0894164BE48700C4A4EA /* Default@2x.png in Resources */,
 				7F0F0896164BE48700C4A4EA /* Default-568h@2x.png in Resources */,
+				7F990C2C1656A05200FFE830 /* ISRefresgControlIcon.png in Resources */,
+				7F990C2D1656A05200FFE830 /* ISRefresgControlIcon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
