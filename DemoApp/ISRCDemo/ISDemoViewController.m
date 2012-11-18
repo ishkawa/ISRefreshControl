@@ -29,6 +29,11 @@
 
 #pragma mark -
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return YES;
+}
+
 - (void)refresh
 {
     [self.refreshControl beginRefreshing];

@@ -31,18 +31,32 @@ const CGFloat additionalTopInset = 50.f;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.gumView = [[ISGumView alloc] initWithFrame:CGRectMake(160-15, 25-15, 35, 90)];
+        self.gumView = [[ISGumView alloc] init];
         [self addSubview:self.gumView];
         
         self.indicatorView = [[UIActivityIndicatorView alloc] init];
-        self.indicatorView.frame = CGRectMake(160-15, 25-15, 30, 30);
         self.indicatorView.hidesWhenStopped = YES;
         self.indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
         self.indicatorView.color = [UIColor lightGrayColor];
         [self.indicatorView.layer setValue:@.01f forKeyPath:@"transform.scale"];
         [self addSubview:self.indicatorView];
+        
+        [self addObserver:self forKeyPath:@"frame" options:0 context:NULL];
     }
     return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == self && [keyPath isEqualToString:@"frame"]) {
+        CGFloat width = self.frame.size.width;
+        self.gumView.frame = CGRectMake(width/2.f-15, 25-15, 35, 90);
+        self.indicatorView.frame = CGRectMake(width/2.f-15, 25-15, 30, 30);
+        
+        return;
+    }
+    
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
 #pragma mark - accessor
@@ -79,7 +93,10 @@ const CGFloat additionalTopInset = 50.f;
                                               self.indicatorView.frame.size.width,
                                               self.indicatorView.frame.size.height);
     } else {
-        self.indicatorView.frame = CGRectMake(160-15, 25-15, 30, 30);
+        self.indicatorView.frame = CGRectMake(self.indicatorView.frame.origin.x,
+                                              25,
+                                              self.indicatorView.frame.size.width,
+                                              self.indicatorView.frame.size.height);
     }
     
     if (offset > -50) {
