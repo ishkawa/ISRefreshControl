@@ -31,11 +31,10 @@ const CGFloat additionalTopInset = 50.f;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.gumView = [[ISGumView alloc] initWithFrame:CGRectMake(160-15, 25-15, 35, 90)];
+        self.gumView = [[ISGumView alloc] init];
         [self addSubview:self.gumView];
         
         self.indicatorView = [[UIActivityIndicatorView alloc] init];
-        self.indicatorView.frame = CGRectMake(160-15, 25-15, 30, 30);
         self.indicatorView.hidesWhenStopped = YES;
         self.indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
         self.indicatorView.color = [UIColor lightGrayColor];
@@ -43,6 +42,13 @@ const CGFloat additionalTopInset = 50.f;
         [self addSubview:self.indicatorView];
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    CGFloat width = self.frame.size.width;
+    self.gumView.frame = CGRectMake(width/2.f-15, 25-15, 35, 90);
+    self.indicatorView.frame = CGRectMake(width/2.f-15, 25-15, 30, 30);
 }
 
 #pragma mark - accessor
@@ -73,31 +79,18 @@ const CGFloat additionalTopInset = 50.f;
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 
-    if (self.refreshing && self.offset < -50) {
-        self.indicatorView.frame = CGRectMake(self.indicatorView.frame.origin.x,
-                                              offset+75,
-                                              self.indicatorView.frame.size.width,
-                                              self.indicatorView.frame.size.height);
-    } else {
-        self.indicatorView.frame = CGRectMake(160-15, 25-15, 30, 30);
-    }
-    
-    if (offset > -50) {
-        if (!self.gumView.shrinking) {
-            self.gumView.distance = 0.f;
-        }
-        self.gumView.frame = CGRectMake(self.gumView.frame.origin.x,
-                                        10,
-                                        self.gumView.frame.size.width,
-                                        self.gumView.frame.size.height);
-    } else {
+    if (offset < -50) {
+        self.frame = CGRectMake(0, offset, self.frame.size.width, self.frame.size.height);
+        
         if (!self.gumView.shrinking) {
             self.gumView.distance = -offset-50;
         }
-        self.gumView.frame = CGRectMake(self.gumView.frame.origin.x,
-                                        offset + 40 + 20,
-                                        self.gumView.frame.size.width,
-                                        self.gumView.frame.size.height);
+    } else {
+        self.frame = CGRectMake(0, -50, self.frame.size.width, self.frame.size.height);
+        
+        if (!self.gumView.shrinking) {
+            self.gumView.distance = 0.f;
+        }
     }
 }
 

@@ -47,7 +47,9 @@
             [oldView removeFromSuperview];
         }
         if ([newView isKindOfClass:[UIView class]]) {
-            newView.frame = CGRectMake(0, -50, 320, 50);
+            newView.frame = CGRectMake(0, -50, self.view.frame.size.width, 50);
+            newView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            [newView setNeedsLayout];
             [self.view addSubview:newView];
         }
     }
