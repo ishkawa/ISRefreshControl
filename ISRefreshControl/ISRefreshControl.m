@@ -40,23 +40,15 @@ const CGFloat additionalTopInset = 50.f;
         self.indicatorView.color = [UIColor lightGrayColor];
         [self.indicatorView.layer setValue:@.01f forKeyPath:@"transform.scale"];
         [self addSubview:self.indicatorView];
-        
-        [self addObserver:self forKeyPath:@"frame" options:0 context:NULL];
     }
     return self;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)layoutSubviews
 {
-    if (object == self && [keyPath isEqualToString:@"frame"]) {
-        CGFloat width = self.frame.size.width;
-        self.gumView.frame = CGRectMake(width/2.f-15, 25-15, 35, 90);
-        self.indicatorView.frame = CGRectMake(width/2.f-15, 25-15, 30, 30);
-        
-        return;
-    }
-    
-    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    CGFloat width = self.frame.size.width;
+    self.gumView.frame = CGRectMake(width/2.f-15, 25-15, 35, 90);
+    self.indicatorView.frame = CGRectMake(width/2.f-15, 25-15, 30, 30);
 }
 
 #pragma mark - accessor
@@ -87,34 +79,18 @@ const CGFloat additionalTopInset = 50.f;
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 
-    if (self.refreshing && self.offset < -50) {
-        self.indicatorView.frame = CGRectMake(self.indicatorView.frame.origin.x,
-                                              offset+75,
-                                              self.indicatorView.frame.size.width,
-                                              self.indicatorView.frame.size.height);
-    } else {
-        self.indicatorView.frame = CGRectMake(self.indicatorView.frame.origin.x,
-                                              25,
-                                              self.indicatorView.frame.size.width,
-                                              self.indicatorView.frame.size.height);
-    }
-    
-    if (offset > -50) {
-        if (!self.gumView.shrinking) {
-            self.gumView.distance = 0.f;
-        }
-        self.gumView.frame = CGRectMake(self.gumView.frame.origin.x,
-                                        10,
-                                        self.gumView.frame.size.width,
-                                        self.gumView.frame.size.height);
-    } else {
+    if (offset < -50) {
+        self.frame = CGRectMake(0, offset, self.frame.size.width, self.frame.size.height);
+        
         if (!self.gumView.shrinking) {
             self.gumView.distance = -offset-50;
         }
-        self.gumView.frame = CGRectMake(self.gumView.frame.origin.x,
-                                        offset + 40 + 20,
-                                        self.gumView.frame.size.width,
-                                        self.gumView.frame.size.height);
+    } else {
+        self.frame = CGRectMake(0, -50, self.frame.size.width, self.frame.size.height);
+        
+        if (!self.gumView.shrinking) {
+            self.gumView.distance = 0.f;
+        }
     }
 }
 
