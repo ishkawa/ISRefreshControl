@@ -1,8 +1,8 @@
-### Requirements
+## Requirements
 
 iOS5 or later
 
-### Usage 
+## Usage 
 
 1. add files under `ISRefreshControl/` to your project.
 2. import `ISRefreshControl.h`
@@ -19,7 +19,7 @@ self.refreshControl = (UIRefreshControl *)[[ISRefreshControl alloc] init];
 NOTE: currently, `ISRefreshControl` does not support setting on storyboard. 
 
 
-### How it works
+## How it works
 
 #### iOS6
 
@@ -32,6 +32,6 @@ imitates `UIRefreshControl`.
 `ISRefreshControl` sends `UIControlEventValueChanged` when content offset of `UITableView` overs threshold.
 `UITableViewController` is extended to send content offset to ISRefreshControl.
 
-### License
+## License
 
 MIT
