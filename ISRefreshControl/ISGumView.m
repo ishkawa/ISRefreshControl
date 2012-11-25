@@ -34,12 +34,14 @@
         self.imageView.image = [UIImage imageNamed:@"ISRefresgControlIcon"];
         [self addSubview:self.imageView];
         
-        [self addObserver:self
-               forKeyPath:@"distance"
-                  options:0
-                  context:NULL];
+        [self addObserver:self forKeyPath:@"distance" options:0 context:NULL];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"distance"];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
