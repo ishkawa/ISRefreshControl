@@ -42,6 +42,9 @@ void Swizzle(Class c, SEL original, SEL alternative)
 
 - (void)addObserversForRefreshControl
 {
+    if (![[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
+        return;
+    }
     NSKeyValueObservingOptions options = (NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew);
     
     [self addObserver:self
