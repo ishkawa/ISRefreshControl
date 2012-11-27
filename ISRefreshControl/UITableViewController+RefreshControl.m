@@ -26,25 +26,47 @@ void Swizzle(Class c, SEL original, SEL alternative)
     }
 }
 
-- (id)init
+- (void)viewDidLoad
 {
-    self = [super init];
-    if (self) {
-        [self addObserversForRefreshControl];
-    }
-    return self;
-}
-
-- (void)awakeFromNib
-{
+    [super viewDidLoad];
     [self addObserversForRefreshControl];
 }
+
+- (void)viewWillUnload
+{
+    [self removeObserversForRefreshControl];
+    [super viewWillUnload];
+}
+
+- (void)dealloc
+{
+    [self removeObserversForRefreshControl];
+}
+
+#pragma mark -
+
+- (ISRefreshControl *)iOS5_refreshControl
+{
+    return objc_getAssociatedObject(self, @"iOS5RefreshControl");
+}
+
+- (void)iOS5_setRefreshControl:(ISRefreshControl *)refreshControl
+{
+    objc_setAssociatedObject(self, @"iOS5RefreshControl", refreshControl, OBJC_ASSOCIATION_RETAIN);
+}
+
+#pragma mark - KVO
 
 - (void)addObserversForRefreshControl
 {
     if (![[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
         return;
     }
+    if ([objc_getAssociatedObject(self, @"observing") boolValue]) {
+        return;
+    }
+    objc_setAssociatedObject(self, @"observing", @YES, OBJC_ASSOCIATION_RETAIN);
+
     NSKeyValueObservingOptions options = (NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew);
     
     [self addObserver:self
@@ -58,23 +80,18 @@ void Swizzle(Class c, SEL original, SEL alternative)
                         context:NULL];
 }
 
-- (void)dealloc
+- (void)removeObserversForRefreshControl
 {
     if (![[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
         return;
     }
+    if (![objc_getAssociatedObject(self, @"observing") boolValue]) {
+        return;
+    }
+    objc_setAssociatedObject(self, @"observing", @NO, OBJC_ASSOCIATION_RETAIN);
+
     [self.tableView removeObserver:self forKeyPath:@"contentOffset"];
     [self removeObserver:self forKeyPath:@"refreshControl"];
-}
-
-- (ISRefreshControl *)iOS5_refreshControl
-{
-    return objc_getAssociatedObject(self, @"iOS5RefreshControl");
-}
-
-- (void)iOS5_setRefreshControl:(ISRefreshControl *)refreshControl
-{
-    objc_setAssociatedObject(self, @"iOS5RefreshControl", refreshControl, OBJC_ASSOCIATION_RETAIN);
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
