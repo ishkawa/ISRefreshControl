@@ -76,6 +76,7 @@ const CGFloat additionalTopInset = 50.f;
         }
     }
     if (!self.refreshing && !self.refreshed && offset <= -115) {
+        [self beginRefreshing];
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 
