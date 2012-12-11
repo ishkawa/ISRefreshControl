@@ -115,6 +115,7 @@ void Swizzle(Class c, SEL original, SEL alternative)
         CGFloat offset = self.tableView.contentOffset.y;
         [(ISRefreshControl *)self.refreshControl setOffset:offset];
         [(ISRefreshControl *)self.refreshControl setDragging:self.tableView.isDragging];
+        [(ISRefreshControl *)self.refreshControl setTracking:self.tableView.isTracking];
         
         return;
     }

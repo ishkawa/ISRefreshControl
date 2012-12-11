@@ -7,6 +7,7 @@
 
 @property (nonatomic) CGFloat offset;
 @property (nonatomic) BOOL dragging;
+@property (nonatomic, readwrite, getter=isTracking) BOOL tracking;
 @property (nonatomic, retain) UIColor *tintColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, retain) NSAttributedString *attributedTitle UI_APPEARANCE_SELECTOR;
 
