@@ -64,6 +64,10 @@ const CGFloat additionalTopInset = 50.f;
 {
     if ([self.superview isKindOfClass:[UIScrollView class]]) {
         [self.superview addObserver:self forKeyPath:@"contentOffset" options:0 context:NULL];
+        
+        self.frame = CGRectMake(0, -50, self.superview.frame.size.width, 50);
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        [self setNeedsLayout];
     }
 }
 
