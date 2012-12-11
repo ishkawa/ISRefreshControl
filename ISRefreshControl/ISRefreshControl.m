@@ -51,6 +51,68 @@ const CGFloat additionalTopInset = 50.f;
     self.indicatorView.frame = CGRectMake(width/2.f-15, 25-15, 30, 30);
 }
 
+#pragma mark -
+
+- (void)willMoveToSuperview:(UIView *)newSuperview
+{
+    if ([self.superview isKindOfClass:[UIScrollView class]]) {
+        [self.superview removeObserver:self forKeyPath:@"contentOffset"];
+    }
+}
+
+- (void)didMoveToSuperview
+{
+    if ([self.superview isKindOfClass:[UIScrollView class]]) {
+        [self.superview addObserver:self forKeyPath:@"contentOffset" options:0 context:NULL];
+    }
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == self.superview && [keyPath isEqualToString:@"contentOffset"]) {
+        UIScrollView *scrollView = (UIScrollView *)self.superview;
+        CGFloat offset = scrollView.contentOffset.y;
+        
+        if (self.refreshed && offset >= 0) {
+            self.refreshed = NO;
+            if (self.gumView.hidden) {
+                int64_t delayInSeconds = 1.0;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * .3f * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    self.gumView.hidden = NO;
+                });
+            }
+        }
+        if (!self.refreshing && !self.refreshed && offset <= -115 && scrollView.isTracking) {
+            [self beginRefreshing];
+            [self sendActionsForControlEvents:UIControlEventValueChanged];
+        }
+        
+        if (offset < -50) {
+            self.frame = CGRectMake(0, offset, self.frame.size.width, self.frame.size.height);
+            
+            if (!self.gumView.shrinking) {
+                self.gumView.distance = -offset-50;
+            }
+        } else {
+            self.frame = CGRectMake(0, -50, self.frame.size.width, self.frame.size.height);
+            
+            if (!self.gumView.shrinking) {
+                self.gumView.distance = 0.f;
+            }
+        }
+        
+        if (!scrollView.isDragging && self.refreshing && !self.didOffset) {
+            self.didOffset = YES;
+            [self updateTopInset];
+        }
+        return;
+    }
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
 #pragma mark - accessor
 
 - (UITableView *)superTableView
@@ -59,50 +121,6 @@ const CGFloat additionalTopInset = 50.f;
         return nil;
     }
     return (UITableView *)self.superview;
-}
-
-- (void)setOffset:(CGFloat)offset
-{
-    _offset = offset;
-    
-    if (self.refreshed && offset >= 0) {
-        self.refreshed = NO;
-        if (self.gumView.hidden) {
-            int64_t delayInSeconds = 1.0;
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * .3f * NSEC_PER_SEC);
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                self.gumView.hidden = NO;
-            });
-        }
-    }
-    if (!self.refreshing && !self.refreshed && offset <= -115 && self.tracking) {
-        [self beginRefreshing];
-        [self sendActionsForControlEvents:UIControlEventValueChanged];
-    }
-
-    if (offset < -50) {
-        self.frame = CGRectMake(0, offset, self.frame.size.width, self.frame.size.height);
-        
-        if (!self.gumView.shrinking) {
-            self.gumView.distance = -offset-50;
-        }
-    } else {
-        self.frame = CGRectMake(0, -50, self.frame.size.width, self.frame.size.height);
-        
-        if (!self.gumView.shrinking) {
-            self.gumView.distance = 0.f;
-        }
-    }
-}
-
-- (void)setDragging:(BOOL)dragging
-{
-    _dragging = dragging;
-    
-    if (!self.dragging && self.refreshing && !self.didOffset) {
-        self.didOffset = YES;
-        [self updateTopInset];
-    }
 }
 
 #pragma mark -

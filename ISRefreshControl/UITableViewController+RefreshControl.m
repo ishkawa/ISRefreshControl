@@ -68,16 +68,10 @@ void Swizzle(Class c, SEL original, SEL alternative)
     objc_setAssociatedObject(self, @"observing", @YES, OBJC_ASSOCIATION_RETAIN);
 
     NSKeyValueObservingOptions options = (NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew);
-    
     [self addObserver:self
            forKeyPath:@"refreshControl"
               options:options
               context:NULL];
-    
-    [self.tableView addObserver:self
-                     forKeyPath:@"contentOffset"
-                        options:options
-                        context:NULL];
 }
 
 - (void)removeObserversForRefreshControl
@@ -90,7 +84,6 @@ void Swizzle(Class c, SEL original, SEL alternative)
     }
     objc_setAssociatedObject(self, @"observing", @NO, OBJC_ASSOCIATION_RETAIN);
 
-    [self.tableView removeObserver:self forKeyPath:@"contentOffset"];
     [self removeObserver:self forKeyPath:@"refreshControl"];
 }
 
@@ -109,14 +102,6 @@ void Swizzle(Class c, SEL original, SEL alternative)
             [newView setNeedsLayout];
             [self.view addSubview:newView];
         }
-        return;
-    }
-    if ([keyPath isEqualToString:@"contentOffset"]) {
-        CGFloat offset = self.tableView.contentOffset.y;
-        [(ISRefreshControl *)self.refreshControl setOffset:offset];
-        [(ISRefreshControl *)self.refreshControl setDragging:self.tableView.isDragging];
-        [(ISRefreshControl *)self.refreshControl setTracking:self.tableView.isTracking];
-        
         return;
     }
     
