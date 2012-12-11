@@ -1,18 +1,7 @@
 #import "ISDemoViewController.h"
+#import "ISRefreshControl.h"
 
 @implementation ISDemoViewController
-
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        self.refreshControl = (UIRefreshControl *)[[ISRefreshControl alloc] init];
-        [self.refreshControl addTarget:self
-                                action:@selector(refresh)
-                      forControlEvents:UIControlEventValueChanged];
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -23,8 +12,12 @@
     label.text = @"header";
     label.textColor = [UIColor lightGrayColor];
     label.textAlignment = UITextAlignmentCenter;
-    
     self.tableView.tableHeaderView = label;
+    
+    self.refreshControl = (id)[[ISRefreshControl alloc] init];
+    [self.refreshControl addTarget:self
+                            action:@selector(refresh)
+                  forControlEvents:UIControlEventValueChanged];
 }
 
 #pragma mark -
@@ -36,8 +29,6 @@
 
 - (void)refresh
 {
-    [self.refreshControl beginRefreshing];
-    
     int64_t delayInSeconds = 2.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){

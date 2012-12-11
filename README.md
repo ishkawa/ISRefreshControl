@@ -5,13 +5,13 @@ iOS5 or later
 ## Usage 
 
 1. add files under `ISRefreshControl/` to your project.
-2. import `ISRefreshControl.h` in `prefix.pch`  
-   (NOTE: if you did not import `ISRefreshControl` in `prefix.pch`, it might not work well.)
+2. import `ISRefreshControl.h`. 
 
-Usage of `ISRefreshControl` is almost the same as that of `UIRefreshControl`.
+Usage of `ISRefreshControl` is almost the same as that of `UIRefreshControl`.  
+set `refreshControl` of `UITableViewController` in `viewDidLoad`.
 
 ```objectivec
-self.refreshControl = (UIRefreshControl *)[[ISRefreshControl alloc] init];
+self.refreshControl = (id)[[ISRefreshControl alloc] init];
 [self.refreshControl addTarget:self
                         action:@selector(refresh)
               forControlEvents:UIControlEventValueChanged];

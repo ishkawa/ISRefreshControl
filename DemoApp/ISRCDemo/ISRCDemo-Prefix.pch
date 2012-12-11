@@ -1,7 +1,3 @@
-//
-// Prefix header for all source files of the 'ISRCDemo' target in the 'ISRCDemo' project
-//
-
 #import <Availability.h>
 
 #ifndef __IPHONE_3_0
@@ -11,6 +7,4 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-
-    #import "ISRefreshControl.h"
 #endif

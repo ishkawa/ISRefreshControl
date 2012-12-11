@@ -75,7 +75,8 @@ const CGFloat additionalTopInset = 50.f;
             });
         }
     }
-    if (!self.refreshing && !self.refreshed && offset <= -115) {
+    if (!self.refreshing && !self.refreshed && offset <= -115 && self.tracking) {
+        [self beginRefreshing];
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 
