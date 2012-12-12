@@ -44,14 +44,14 @@ const CGFloat additionalTopInset = 50.f;
     return self;
 }
 
+#pragma mark -
+
 - (void)layoutSubviews
 {
     CGFloat width = self.frame.size.width;
     self.gumView.frame = CGRectMake(width/2.f-15, 25-15, 35, 90);
     self.indicatorView.frame = CGRectMake(width/2.f-15, 25-15, 30, 30);
 }
-
-#pragma mark -
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
@@ -79,6 +79,7 @@ const CGFloat additionalTopInset = 50.f;
         UIScrollView *scrollView = (UIScrollView *)self.superview;
         CGFloat offset = scrollView.contentOffset.y;
         
+        // reset refresh status
         if (self.refreshed && offset >= 0) {
             self.refreshed = NO;
             if (self.gumView.hidden) {
@@ -89,11 +90,14 @@ const CGFloat additionalTopInset = 50.f;
                 });
             }
         }
+        
+        // send UIControlEvent
         if (!self.refreshing && !self.refreshed && offset <= -115 && scrollView.isTracking) {
             [self beginRefreshing];
             [self sendActionsForControlEvents:UIControlEventValueChanged];
         }
         
+        // stays top and send distance to gumView
         if (offset < -50) {
             self.frame = CGRectMake(0, offset, self.frame.size.width, self.frame.size.height);
             
@@ -108,6 +112,7 @@ const CGFloat additionalTopInset = 50.f;
             }
         }
         
+        // topInset
         if (!scrollView.isDragging && self.refreshing && !self.didOffset) {
             self.didOffset = YES;
             [self updateTopInset];
@@ -115,16 +120,6 @@ const CGFloat additionalTopInset = 50.f;
         return;
     }
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-}
-
-#pragma mark - accessor
-
-- (UITableView *)superTableView
-{
-    if (![self.superview isKindOfClass:[UITableView class]]) {
-        return nil;
-    }
-    return (UITableView *)self.superview;
 }
 
 #pragma mark -
@@ -161,14 +156,17 @@ const CGFloat additionalTopInset = 50.f;
 
 - (void)updateTopInset
 {
+    if (![self.superview isKindOfClass:[UIScrollView class]]) {
+        return;
+    }
+    UIScrollView *scrollView = (id)self.superview;
     CGFloat diff = additionalTopInset * (self.refreshing?1.f:-1.f);
-    UIEdgeInsets inset = self.superTableView.contentInset;
     [UIView animateWithDuration:.3f
                      animations:^{
-                         self.superTableView.contentInset = UIEdgeInsetsMake(inset.top + diff,
-                                                                             inset.left,
-                                                                             inset.bottom,
-                                                                             inset.right);
+                         scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
+                                                                    scrollView.contentInset.left,
+                                                                    scrollView.contentInset.bottom,
+                                                                    scrollView.contentInset.right);
                      }];
 }
 
@@ -183,8 +181,6 @@ const CGFloat additionalTopInset = 50.f;
             [UIView animateWithDuration:.4f
                              animations:^{
                                  [self.indicatorView.layer setValue:@.7f forKeyPath:@"transform.scale"];
-                             }
-                             completion:^(BOOL finished) {
                              }];
         });
     } else {
@@ -196,7 +192,6 @@ const CGFloat additionalTopInset = 50.f;
                              [self.indicatorView stopAnimating];
                          }];
     }
-    
 }
 
 @end
