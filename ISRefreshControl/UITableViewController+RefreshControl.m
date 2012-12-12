@@ -45,9 +45,11 @@ void Swizzle(Class c, SEL original, SEL alternative)
 
 - (void)iOS5_setRefreshControl:(ISRefreshControl *)refreshControl
 {
-    ISRefreshControl *oldRefreshControl = objc_getAssociatedObject(self, @"iOS5RefreshControl");
-    [oldRefreshControl removeFromSuperview];
-    [self.view addSubview:refreshControl];
+    if (self.isViewLoaded) {
+        ISRefreshControl *oldRefreshControl = objc_getAssociatedObject(self, @"iOS5RefreshControl");
+        [oldRefreshControl removeFromSuperview];
+        [self.view addSubview:refreshControl];
+    }
     
     objc_setAssociatedObject(self, @"iOS5RefreshControl", refreshControl, OBJC_ASSOCIATION_RETAIN);
 }
