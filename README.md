@@ -17,6 +17,17 @@ self.refreshControl = (id)[[ISRefreshControl alloc] init];
               forControlEvents:UIControlEventValueChanged];
 ```
 
+or just call `addSubview:`
+
+```objectivec
+UIScrollView *scrollView = [[UIScrollView alloc] init];
+ISRefreshControl *refreshControl = [[ISRefreshControl alloc] init];
+[scrollView addSubview:refreshControl];
+[refreshControl addTarget:self
+                   action:@selector(refresh)
+         forControlEvents:UIControlEventValueChanged];
+```
+
 NOTE: currently, `ISRefreshControl` does not support setting on storyboard. 
 
 
