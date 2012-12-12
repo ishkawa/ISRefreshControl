@@ -133,6 +133,7 @@ const CGFloat additionalTopInset = 50.f;
     self.refreshing = YES;
     self.refreshed  = NO;
     
+    [self.superview bringSubviewToFront:self];
     [self updateIndicator];
     [self.gumView shrink];
 }
@@ -146,6 +147,7 @@ const CGFloat additionalTopInset = 50.f;
     self.refreshing = NO;
     self.refreshed  = YES;
     
+    [self.superview bringSubviewToFront:self];
     [self updateIndicator];
     
     if (self.didOffset) {
