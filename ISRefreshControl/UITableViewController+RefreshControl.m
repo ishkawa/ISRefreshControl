@@ -20,30 +20,23 @@ void Swizzle(Class c, SEL original, SEL alternative)
 {
     @autoreleasepool {
         if ([[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
-            Swizzle([self class], @selector(refreshControl), @selector(iOS5_refreshControl));
+            Swizzle([self class], @selector(refreshControl),     @selector(iOS5_refreshControl));
             Swizzle([self class], @selector(setRefreshControl:), @selector(iOS5_setRefreshControl:));
+            Swizzle([self class], @selector(viewDidLoad),        @selector(iOS5_viewDidLoad));
         }
     }
 }
 
-- (void)viewDidLoad
+#pragma mark -
+
+- (void)iOS5_viewDidLoad
 {
     [super viewDidLoad];
-    [self addObserversForRefreshControl];
+    
+    if (self.refreshControl) {
+        [self.view addSubview:self.refreshControl];
+    }
 }
-
-- (void)viewWillUnload
-{
-    [self removeObserversForRefreshControl];
-    [super viewWillUnload];
-}
-
-- (void)dealloc
-{
-    [self removeObserversForRefreshControl];
-}
-
-#pragma mark -
 
 - (ISRefreshControl *)iOS5_refreshControl
 {
@@ -52,75 +45,11 @@ void Swizzle(Class c, SEL original, SEL alternative)
 
 - (void)iOS5_setRefreshControl:(ISRefreshControl *)refreshControl
 {
+    ISRefreshControl *oldRefreshControl = objc_getAssociatedObject(self, @"iOS5RefreshControl");
+    [oldRefreshControl removeFromSuperview];
+    [self.view addSubview:refreshControl];
+    
     objc_setAssociatedObject(self, @"iOS5RefreshControl", refreshControl, OBJC_ASSOCIATION_RETAIN);
-}
-
-#pragma mark - KVO
-
-- (void)addObserversForRefreshControl
-{
-    if (![[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
-        return;
-    }
-    if ([objc_getAssociatedObject(self, @"observing") boolValue]) {
-        return;
-    }
-    objc_setAssociatedObject(self, @"observing", @YES, OBJC_ASSOCIATION_RETAIN);
-
-    NSKeyValueObservingOptions options = (NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew);
-    
-    [self addObserver:self
-           forKeyPath:@"refreshControl"
-              options:options
-              context:NULL];
-    
-    [self.tableView addObserver:self
-                     forKeyPath:@"contentOffset"
-                        options:options
-                        context:NULL];
-}
-
-- (void)removeObserversForRefreshControl
-{
-    if (![[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
-        return;
-    }
-    if (![objc_getAssociatedObject(self, @"observing") boolValue]) {
-        return;
-    }
-    objc_setAssociatedObject(self, @"observing", @NO, OBJC_ASSOCIATION_RETAIN);
-
-    [self.tableView removeObserver:self forKeyPath:@"contentOffset"];
-    [self removeObserver:self forKeyPath:@"refreshControl"];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (object == self && [keyPath isEqualToString:@"refreshControl"]) {
-        UIView *oldView = [change objectForKey:@"old"];
-        UIView *newView = [change objectForKey:@"new"];
-        
-        if ([oldView isKindOfClass:[UIView class]]) {
-            [oldView removeFromSuperview];
-        }
-        if ([newView isKindOfClass:[UIView class]]) {
-            newView.frame = CGRectMake(0, -50, self.view.frame.size.width, 50);
-            newView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            [newView setNeedsLayout];
-            [self.view addSubview:newView];
-        }
-        return;
-    }
-    if ([keyPath isEqualToString:@"contentOffset"]) {
-        CGFloat offset = self.tableView.contentOffset.y;
-        [(ISRefreshControl *)self.refreshControl setOffset:offset];
-        [(ISRefreshControl *)self.refreshControl setDragging:self.tableView.isDragging];
-        [(ISRefreshControl *)self.refreshControl setTracking:self.tableView.isTracking];
-        
-        return;
-    }
-    
-    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
 @end
