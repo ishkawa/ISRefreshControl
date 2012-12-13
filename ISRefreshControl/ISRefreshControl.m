@@ -161,15 +161,19 @@ const CGFloat additionalTopInset = 50.f;
     if (![self.superview isKindOfClass:[UIScrollView class]]) {
         return;
     }
-    UIScrollView *scrollView = (id)self.superview;
-    CGFloat diff = additionalTopInset * (self.refreshing?1.f:-1.f);
-    [UIView animateWithDuration:.3f
-                     animations:^{
-                         scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
-                                                                    scrollView.contentInset.left,
-                                                                    scrollView.contentInset.bottom,
-                                                                    scrollView.contentInset.right);
-                     }];
+    int64_t delayInSeconds = 0.1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        UIScrollView *scrollView = (id)self.superview;
+        CGFloat diff = additionalTopInset * (self.refreshing?1.f:-1.f);
+        [UIView animateWithDuration:.3f
+                         animations:^{
+                             scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
+                                                                        scrollView.contentInset.left,
+                                                                        scrollView.contentInset.bottom,
+                                                                        scrollView.contentInset.right);
+                         }];
+    });
 }
 
 - (void)updateIndicator
