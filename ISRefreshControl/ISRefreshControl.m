@@ -200,4 +200,12 @@ const CGFloat additionalTopInset = 50.f;
     }
 }
 
+- (void)setTintColor:(UIColor *)tintColor {
+    if (_tintColor != tintColor) {
+        _tintColor = tintColor;
+        self.gumView.tintColor = _tintColor;
+        self.indicatorView.color = _tintColor;        
+    }
+}
+
 @end
