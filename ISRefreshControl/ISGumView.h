@@ -4,6 +4,7 @@
 
 @property CGFloat distance;
 @property BOOL shrinking;
+@property (nonatomic, strong) UIColor *tintColor;
 
 - (void)shrink;
 

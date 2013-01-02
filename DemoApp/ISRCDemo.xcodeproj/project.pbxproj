@@ -19,6 +19,7 @@
 		7F0F08A6164BE71200C4A4EA /* ISDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F08A5164BE71200C4A4EA /* ISDemoViewController.m */; };
 		7F49DD50165887AD0046D42F /* ISRefresgControlIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F49DD46165887AD0046D42F /* ISRefresgControlIcon.png */; };
 		7F49DD51165887AD0046D42F /* ISRefresgControlIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F49DD47165887AD0046D42F /* ISRefresgControlIcon@2x.png */; };
+		7F66A6201694AA030011B614 /* ISUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F66A61F1694AA030011B614 /* ISUtility.m */; };
 		7F68C0021661CFC100F72ED4 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F68C0011661CFC100F72ED4 /* iPhone.storyboard */; };
 		7F68C0031661D03A00F72ED4 /* ISGumView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F49DD49165887AD0046D42F /* ISGumView.m */; };
 		7F68C0041661D03A00F72ED4 /* ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F49DD4B165887AD0046D42F /* ISRefreshControl.m */; };
@@ -49,6 +50,8 @@
 		7F49DD4B165887AD0046D42F /* ISRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISRefreshControl.m; sourceTree = "<group>"; };
 		7F49DD4E165887AD0046D42F /* UITableViewController+RefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewController+RefreshControl.h"; sourceTree = "<group>"; };
 		7F49DD4F165887AD0046D42F /* UITableViewController+RefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewController+RefreshControl.m"; sourceTree = "<group>"; };
+		7F66A61E1694AA030011B614 /* ISUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISUtility.h; sourceTree = "<group>"; };
+		7F66A61F1694AA030011B614 /* ISUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISUtility.m; sourceTree = "<group>"; };
 		7F68C0011661CFC100F72ED4 /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPhone.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -131,6 +134,8 @@
 				7F49DD4B165887AD0046D42F /* ISRefreshControl.m */,
 				7F49DD4E165887AD0046D42F /* UITableViewController+RefreshControl.h */,
 				7F49DD4F165887AD0046D42F /* UITableViewController+RefreshControl.m */,
+				7F66A61E1694AA030011B614 /* ISUtility.h */,
+				7F66A61F1694AA030011B614 /* ISUtility.m */,
 			);
 			name = ISRefreshControl;
 			path = ../ISRefreshControl;
@@ -220,6 +225,7 @@
 				7F68C0031661D03A00F72ED4 /* ISGumView.m in Sources */,
 				7F68C0041661D03A00F72ED4 /* ISRefreshControl.m in Sources */,
 				7F68C0071661D05900F72ED4 /* UITableViewController+RefreshControl.m in Sources */,
+				7F66A6201694AA030011B614 /* ISUtility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
