@@ -40,8 +40,23 @@ const CGFloat additionalTopInset = 50.f;
         self.indicatorView.color = [UIColor lightGrayColor];
         [self.indicatorView.layer setValue:@.01f forKeyPath:@"transform.scale"];
         [self addSubview:self.indicatorView];
+        
+        [self addObserver:self
+               forKeyPath:@"tintColor"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+        
+        UIColor *tintColor = [[ISRefreshControl appearance] tintColor];
+        if (tintColor) {
+            self.tintColor = tintColor;
+        }
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"tintColor"];
 }
 
 #pragma mark -
@@ -119,6 +134,14 @@ const CGFloat additionalTopInset = 50.f;
         }
         return;
     }
+    
+    if (object == self && [keyPath isEqualToString:@"tintColor"]) {
+        self.gumView.tintColor = self.tintColor;
+        self.indicatorView.color = self.tintColor;
+        
+        return;
+    }
+    
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
@@ -133,6 +156,7 @@ const CGFloat additionalTopInset = 50.f;
     self.refreshing = YES;
     self.refreshed  = NO;
     
+    [self.superview bringSubviewToFront:self];
     [self updateIndicator];
     [self.gumView shrink];
 }
@@ -146,6 +170,7 @@ const CGFloat additionalTopInset = 50.f;
     self.refreshing = NO;
     self.refreshed  = YES;
     
+    [self.superview bringSubviewToFront:self];
     [self updateIndicator];
     
     if (self.didOffset) {
@@ -159,15 +184,19 @@ const CGFloat additionalTopInset = 50.f;
     if (![self.superview isKindOfClass:[UIScrollView class]]) {
         return;
     }
-    UIScrollView *scrollView = (id)self.superview;
-    CGFloat diff = additionalTopInset * (self.refreshing?1.f:-1.f);
-    [UIView animateWithDuration:.3f
-                     animations:^{
-                         scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
-                                                                    scrollView.contentInset.left,
-                                                                    scrollView.contentInset.bottom,
-                                                                    scrollView.contentInset.right);
-                     }];
+    int64_t delayInSeconds = 0.1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        UIScrollView *scrollView = (id)self.superview;
+        CGFloat diff = additionalTopInset * (self.refreshing?1.f:-1.f);
+        [UIView animateWithDuration:.3f
+                         animations:^{
+                             scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
+                                                                        scrollView.contentInset.left,
+                                                                        scrollView.contentInset.bottom,
+                                                                        scrollView.contentInset.right);
+                         }];
+    });
 }
 
 - (void)updateIndicator

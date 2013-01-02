@@ -115,7 +115,7 @@
     
     CGPathCloseSubpath(path);
     CGContextAddPath(ctx, path);
-    CGContextSetFillColorWithColor(ctx, [UIColor lightGrayColor].CGColor);
+    CGContextSetFillColorWithColor(ctx, (self.tintColor ? self.tintColor : [UIColor lightGrayColor]).CGColor);
     CGContextFillPath(ctx);
     CGPathRelease(path);
 }
