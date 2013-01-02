@@ -1,18 +1,7 @@
 #import "UITableViewController+RefreshControl.h"
 #import "ISRefreshControl.h"
+#import "ISUtility.h"
 #import <objc/runtime.h>
-
-void Swizzle(Class c, SEL original, SEL alternative)
-{
-    Method orgMethod = class_getInstanceMethod(c, original);
-    Method altMethod = class_getInstanceMethod(c, alternative);
-    
-    if(class_addMethod(c, original, method_getImplementation(altMethod), method_getTypeEncoding(altMethod))) {
-        class_replaceMethod(c, alternative, method_getImplementation(orgMethod), method_getTypeEncoding(orgMethod));
-    } else {
-        method_exchangeImplementations(orgMethod, altMethod);
-    }
-}
 
 @implementation UITableViewController (RefreshControl)
 
@@ -20,9 +9,9 @@ void Swizzle(Class c, SEL original, SEL alternative)
 {
     @autoreleasepool {
         if ([[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
-            Swizzle([self class], @selector(refreshControl),     @selector(iOS5_refreshControl));
-            Swizzle([self class], @selector(setRefreshControl:), @selector(iOS5_setRefreshControl:));
-            Swizzle([self class], @selector(viewDidLoad),        @selector(iOS5_viewDidLoad));
+            SwizzleMethod([self class], @selector(refreshControl),     @selector(iOS5_refreshControl));
+            SwizzleMethod([self class], @selector(setRefreshControl:), @selector(iOS5_setRefreshControl:));
+            SwizzleMethod([self class], @selector(viewDidLoad),        @selector(iOS5_viewDidLoad));
         }
     }
 }
