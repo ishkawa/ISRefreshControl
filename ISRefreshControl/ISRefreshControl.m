@@ -45,6 +45,11 @@ const CGFloat additionalTopInset = 50.f;
                forKeyPath:@"tintColor"
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
+        
+        UIColor *tintColor = [[ISRefreshControl appearance] tintColor];
+        if (tintColor) {
+            self.tintColor = tintColor;
+        }
     }
     return self;
 }
