@@ -1,5 +1,6 @@
 #import "ISRefreshControl.h"
 #import "ISGumView.h"
+#import "ISUtility.h"
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -19,12 +20,26 @@ const CGFloat additionalTopInset = 50.f;
 
 @implementation ISRefreshControl
 
++ (void)load
+{
+    @autoreleasepool {
+        if (![[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
+            SwizzleMethod(object_getClass([self class]), @selector(appearance), @selector(iOS6_appearance));
+        }
+    }
+}
+
 + (id)alloc
 {
     if ([UIRefreshControl class]) {
         return (id)[UIRefreshControl alloc];
     }
     return [super alloc];
+}
+
++ (id)iOS6_appearance
+{
+    return [[UIRefreshControl class] appearance];
 }
 
 - (id)initWithFrame:(CGRect)frame
