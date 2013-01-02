@@ -40,8 +40,18 @@ const CGFloat additionalTopInset = 50.f;
         self.indicatorView.color = [UIColor lightGrayColor];
         [self.indicatorView.layer setValue:@.01f forKeyPath:@"transform.scale"];
         [self addSubview:self.indicatorView];
+        
+        [self addObserver:self
+               forKeyPath:@"tintColor"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"tintColor"];
 }
 
 #pragma mark -
@@ -119,6 +129,14 @@ const CGFloat additionalTopInset = 50.f;
         }
         return;
     }
+    
+    if (object == self && [keyPath isEqualToString:@"tintColor"]) {
+        self.gumView.tintColor = self.tintColor;
+        self.indicatorView.color = self.tintColor;
+        
+        return;
+    }
+    
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
@@ -197,14 +215,6 @@ const CGFloat additionalTopInset = 50.f;
                          completion:^(BOOL finished) {
                              [self.indicatorView stopAnimating];
                          }];
-    }
-}
-
-- (void)setTintColor:(UIColor *)tintColor {
-    if (_tintColor != tintColor) {
-        _tintColor = tintColor;
-        self.gumView.tintColor = _tintColor;
-        self.indicatorView.color = _tintColor;        
     }
 }
 
