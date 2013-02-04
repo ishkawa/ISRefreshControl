@@ -12,6 +12,7 @@ const CGFloat additionalTopInset = 50.f;
 @property (nonatomic) BOOL topInsetsEnabled;
 @property (nonatomic) BOOL animating;
 @property (nonatomic) BOOL refreshing;
+@property (nonatomic) BOOL refreshed;
 @property (strong, nonatomic) ISGumView *gumView;
 @property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
 @property (readonly, nonatomic) UITableView *superTableView;
@@ -116,7 +117,7 @@ const CGFloat additionalTopInset = 50.f;
         }
         
         // send UIControlEvent
-        if (!self.refreshing && offset <= -115 && scrollView.isTracking) {
+        if (!self.refreshing && !self.refreshed && offset <= -115 && scrollView.isTracking) {
             [self beginRefreshing];
             [self sendActionsForControlEvents:UIControlEventValueChanged];
         }
@@ -177,6 +178,7 @@ const CGFloat additionalTopInset = 50.f;
     }
     
     self.refreshing = NO;
+    self.refreshed = YES;
     
     [self.superview bringSubviewToFront:self];
     [self.indicatorView shrinkWithCompletion:^(BOOL finished) {
@@ -197,6 +199,7 @@ const CGFloat additionalTopInset = 50.f;
 - (void)reset
 {
     self.refreshing = NO;
+    self.refreshed = NO;
     self.gumView.hidden = NO;
 }
 
