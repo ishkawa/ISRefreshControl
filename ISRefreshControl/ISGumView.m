@@ -122,19 +122,30 @@
 
 - (void)shrink
 {
-    if (self.distance <= 0) {
+    self.shrinking = YES;
+    
+    CGFloat distance = self.distance < MAX_DISTANCE ? self.distance : MAX_DISTANCE;
+    NSInteger count = 20;
+    CGFloat delta = self.distance/(CGFloat)count;
+    NSTimeInterval interval = (distance/MAX_DISTANCE)*0.1/(NSTimeInterval)count;
+    [self shrinkWithDelta:delta interval:interval count:count];
+}
+
+- (void)shrinkWithDelta:(CGFloat)delta interval:(NSTimeInterval)interval count:(NSInteger)count
+{
+    if (count <= 0) {
         self.shrinking = NO;
         self.hidden = YES;
         self.alpha = 1.f;
+        
         return;
     }
-    self.shrinking = YES;
-    self.distance -= 1.f;
-    
-    int64_t delayInSeconds = 1.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * 0.002 * NSEC_PER_SEC);
+    self.distance -= delta;
+
+    double delayInSeconds = interval;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self shrink];
+        [self shrinkWithDelta:delta interval:interval count:count-1];
     });
 }
 

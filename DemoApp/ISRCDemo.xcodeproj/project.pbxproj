@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1997FB3E16BF889B004BB50A /* UIActivityIndicatorView+ScaleAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1997FB3D16BF889B004BB50A /* UIActivityIndicatorView+ScaleAnimation.m */; };
 		7F0F0880164BE48700C4A4EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F0F087F164BE48700C4A4EA /* UIKit.framework */; };
 		7F0F0882164BE48700C4A4EA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F0F0881164BE48700C4A4EA /* Foundation.framework */; };
 		7F0F0884164BE48700C4A4EA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F0F0883164BE48700C4A4EA /* CoreGraphics.framework */; };
@@ -27,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1997FB3C16BF889B004BB50A /* UIActivityIndicatorView+ScaleAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityIndicatorView+ScaleAnimation.h"; sourceTree = "<group>"; };
+		1997FB3D16BF889B004BB50A /* UIActivityIndicatorView+ScaleAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActivityIndicatorView+ScaleAnimation.m"; sourceTree = "<group>"; };
 		7F0F087B164BE48700C4A4EA /* ISRCDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ISRCDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F0F087F164BE48700C4A4EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7F0F0881164BE48700C4A4EA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -132,6 +135,8 @@
 				7F49DD49165887AD0046D42F /* ISGumView.m */,
 				7F49DD4A165887AD0046D42F /* ISRefreshControl.h */,
 				7F49DD4B165887AD0046D42F /* ISRefreshControl.m */,
+				1997FB3C16BF889B004BB50A /* UIActivityIndicatorView+ScaleAnimation.h */,
+				1997FB3D16BF889B004BB50A /* UIActivityIndicatorView+ScaleAnimation.m */,
 				7F49DD4E165887AD0046D42F /* UITableViewController+RefreshControl.h */,
 				7F49DD4F165887AD0046D42F /* UITableViewController+RefreshControl.m */,
 				7F66A61E1694AA030011B614 /* ISUtility.h */,
@@ -226,6 +231,7 @@
 				7F68C0041661D03A00F72ED4 /* ISRefreshControl.m in Sources */,
 				7F68C0071661D05900F72ED4 /* UITableViewController+RefreshControl.m in Sources */,
 				7F66A6201694AA030011B614 /* ISUtility.m in Sources */,
+				1997FB3E16BF889B004BB50A /* UIActivityIndicatorView+ScaleAnimation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

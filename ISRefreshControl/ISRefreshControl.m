@@ -1,6 +1,7 @@
 #import "ISRefreshControl.h"
 #import "ISGumView.h"
 #import "ISUtility.h"
+#import "UIActivityIndicatorView+ScaleAnimation.h"
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -8,9 +9,10 @@ const CGFloat additionalTopInset = 50.f;
 
 @interface ISRefreshControl ()
 
+@property (nonatomic) BOOL topInsetsEnabled;
+@property (nonatomic) BOOL animating;
 @property (nonatomic) BOOL refreshing;
 @property (nonatomic) BOOL refreshed;
-@property (nonatomic) BOOL didOffset;
 @property (strong, nonatomic) ISGumView *gumView;
 @property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
 @property (readonly, nonatomic) UITableView *superTableView;
@@ -74,7 +76,7 @@ const CGFloat additionalTopInset = 50.f;
     [self removeObserver:self forKeyPath:@"tintColor"];
 }
 
-#pragma mark -
+#pragma mark - view events
 
 - (void)layoutSubviews
 {
@@ -110,15 +112,8 @@ const CGFloat additionalTopInset = 50.f;
         CGFloat offset = scrollView.contentOffset.y;
         
         // reset refresh status
-        if (self.refreshed && offset >= 0) {
-            self.refreshed = NO;
-            if (self.gumView.hidden) {
-                int64_t delayInSeconds = 1.0;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * .3f * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    self.gumView.hidden = NO;
-                });
-            }
+        if (!self.refreshing && !self.animating && offset >= 0) {
+            [self reset];
         }
         
         // send UIControlEvent
@@ -143,9 +138,8 @@ const CGFloat additionalTopInset = 50.f;
         }
         
         // topInset
-        if (!scrollView.isDragging && self.refreshing && !self.didOffset) {
-            self.didOffset = YES;
-            [self updateTopInset];
+        if (!scrollView.isDragging && self.refreshing && !self.animating && !self.topInsetsEnabled) {
+            [self setTopInsetsEnabled:YES completion:nil];
         }
         return;
     }
@@ -169,73 +163,76 @@ const CGFloat additionalTopInset = 50.f;
     }
     
     self.refreshing = YES;
-    self.refreshed  = NO;
     
     [self.superview bringSubviewToFront:self];
-    [self updateIndicator];
+    
+    [self.indicatorView startAnimating];
+    [self.indicatorView expandWithCompletion:nil];
     [self.gumView shrink];
 }
 
 - (void)endRefreshing
 {
-    if (self.refreshed) {
+    if (!self.refreshing) {
         return;
     }
     
     self.refreshing = NO;
-    self.refreshed  = YES;
+    self.refreshed = YES;
     
     [self.superview bringSubviewToFront:self];
-    [self updateIndicator];
+    [self.indicatorView shrinkWithCompletion:^(BOOL finished) {
+        [self.indicatorView stopAnimating];
+    }];
     
-    if (self.didOffset) {
-        [self updateTopInset];
+    if (self.topInsetsEnabled) {
+        __weak typeof(self) wself = self;
+        [self setTopInsetsEnabled:NO completion:^{
+            UIScrollView *scrollView = (UIScrollView *)wself.superview;
+            if (!scrollView.isDragging) {
+                [wself reset];
+            }
+        }];
     }
-    self.didOffset = NO;
 }
 
-- (void)updateTopInset
+- (void)reset
+{
+    self.refreshing = NO;
+    self.refreshed = NO;
+    self.gumView.hidden = NO;
+}
+
+- (void)setTopInsetsEnabled:(BOOL)enabled completion:(void (^)(void))completion
 {
     if (![self.superview isKindOfClass:[UIScrollView class]]) {
         return;
     }
-    int64_t delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        UIScrollView *scrollView = (id)self.superview;
-        CGFloat diff = additionalTopInset * (self.refreshing?1.f:-1.f);
-        [UIView animateWithDuration:.3f
-                         animations:^{
-                             scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
-                                                                        scrollView.contentInset.left,
-                                                                        scrollView.contentInset.bottom,
-                                                                        scrollView.contentInset.right);
-                         }];
-    });
-}
-
-- (void)updateIndicator
-{
-    if (self.refreshing) {
-        [self.indicatorView startAnimating];
-        
-        int64_t delayInSeconds = 1.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * 0.1 * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [UIView animateWithDuration:.4f
-                             animations:^{
-                                 [self.indicatorView.layer setValue:@.7f forKeyPath:@"transform.scale"];
-                             }];
-        });
-    } else {
-        [UIView animateWithDuration:.3f
-                         animations:^{
-                             [self.indicatorView.layer setValue:@0.01f forKeyPath:@"transform.scale"];
-                         }
-                         completion:^(BOOL finished) {
-                             [self.indicatorView stopAnimating];
-                         }];
+    if (self.topInsetsEnabled == enabled) {
+        return;
     }
+    self.topInsetsEnabled = enabled;
+    
+    UIScrollView *scrollView = (id)self.superview;
+    CGFloat diff = additionalTopInset * (enabled?1.f:-1.f);
+    
+    __weak typeof(self) wself = self;
+    wself.animating = YES;
+    
+    [UIView animateWithDuration:.3f
+                     animations:^{
+                         scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
+                                                                    scrollView.contentInset.left,
+                                                                    scrollView.contentInset.bottom,
+                                                                    scrollView.contentInset.right);
+                     }
+                     completion:^(BOOL finished) {
+                         self.animating = NO;
+                         
+                         if (completion) {
+                             completion();
+                         };
+                     }];
 }
 
 @end
