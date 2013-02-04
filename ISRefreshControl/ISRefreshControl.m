@@ -1,6 +1,7 @@
 #import "ISRefreshControl.h"
 #import "ISGumView.h"
 #import "ISUtility.h"
+#import "UIActivityIndicatorView+ScaleAnimation.h"
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -122,14 +123,7 @@ const CGFloat additionalTopInset = 50.f;
         
         // reset refresh status
         if (self.refreshControlState == ISRefreshControlStateRefreshed && offset >= 0) {
-            self.refreshControlState = ISRefreshControlStateNormal;
-            if (self.gumView.hidden) {
-                int64_t delayInSeconds = 1.0;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * .3f * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    self.gumView.hidden = NO;
-                });
-            }
+            [self reset];
         }
         
         // send UIControlEvent
@@ -156,7 +150,7 @@ const CGFloat additionalTopInset = 50.f;
         // topInset
         if (!scrollView.isDragging && self.refreshing && !self.didOffset) {
             self.didOffset = YES;
-            [self updateTopInset];
+            [self setTopInsetsEnabled:YES completion:nil];
         }
         return;
     }
@@ -182,7 +176,9 @@ const CGFloat additionalTopInset = 50.f;
     self.refreshControlState = ISRefreshControlStateRefreshing;
     
     [self.superview bringSubviewToFront:self];
-    [self updateIndicator];
+    
+    [self.indicatorView startAnimating];
+    [self.indicatorView expandWithCompletion:nil];
     [self.gumView shrink];
 }
 
@@ -192,59 +188,48 @@ const CGFloat additionalTopInset = 50.f;
         return;
     }
     
-    self.refreshControlState = ISRefreshControlStateRefreshed;
-    
     [self.superview bringSubviewToFront:self];
-    [self updateIndicator];
+    [self.indicatorView shrinkWithCompletion:^(BOOL finished) {
+        [self.indicatorView stopAnimating];
+    }];
     
     if (self.didOffset) {
-        [self updateTopInset];
+        __weak ISRefreshControl *wself = self;
+        [self setTopInsetsEnabled:NO completion:^(BOOL finished) {
+            wself.refreshControlState = ISRefreshControlStateRefreshed;
+    
+            UIScrollView *scrollView = (UIScrollView *)wself.superview;
+            if (!scrollView.isDragging) {
+                [wself reset];
+            }
+        }];
+    } else {
+        self.refreshControlState = ISRefreshControlStateRefreshed;
     }
     self.didOffset = NO;
 }
 
-- (void)updateTopInset
+- (void)reset
+{
+    self.refreshControlState = ISRefreshControlStateNormal;
+    self.gumView.hidden = NO;
+}
+
+- (void)setTopInsetsEnabled:(BOOL)offset completion:(void (^)(BOOL finished))completion
 {
     if (![self.superview isKindOfClass:[UIScrollView class]]) {
         return;
     }
-    int64_t delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        UIScrollView *scrollView = (id)self.superview;
-        CGFloat diff = additionalTopInset * (self.refreshing?1.f:-1.f);
-        [UIView animateWithDuration:.3f
-                         animations:^{
-                             scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
-                                                                        scrollView.contentInset.left,
-                                                                        scrollView.contentInset.bottom,
-                                                                        scrollView.contentInset.right);
-                         }];
-    });
-}
-
-- (void)updateIndicator
-{
-    if (self.refreshing) {
-        [self.indicatorView startAnimating];
-        
-        int64_t delayInSeconds = 1.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * 0.1 * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [UIView animateWithDuration:.4f
-                             animations:^{
-                                 [self.indicatorView.layer setValue:@.7f forKeyPath:@"transform.scale"];
-                             }];
-        });
-    } else {
-        [UIView animateWithDuration:.3f
-                         animations:^{
-                             [self.indicatorView.layer setValue:@0.01f forKeyPath:@"transform.scale"];
-                         }
-                         completion:^(BOOL finished) {
-                             [self.indicatorView stopAnimating];
-                         }];
-    }
+    UIScrollView *scrollView = (id)self.superview;
+    CGFloat diff = additionalTopInset * (offset?1.f:-1.f);
+    [UIView animateWithDuration:.3f
+                     animations:^{
+                         scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
+                                                                    scrollView.contentInset.left,
+                                                                    scrollView.contentInset.bottom,
+                                                                    scrollView.contentInset.right);
+                     }
+                     completion:completion];
 }
 
 @end
