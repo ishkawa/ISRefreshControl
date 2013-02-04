@@ -4,13 +4,17 @@
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 
+typedef NS_ENUM(NSInteger, ISRefreshControlState) {
+    ISRefreshControlStateNormal,
+    ISRefreshControlStateRefreshing,
+    ISRefreshControlStateRefreshed,
+};
 const CGFloat additionalTopInset = 50.f;
 
 @interface ISRefreshControl ()
 
-@property (nonatomic) BOOL refreshing;
-@property (nonatomic) BOOL refreshed;
 @property (nonatomic) BOOL didOffset;
+@property (nonatomic) ISRefreshControlState refreshControlState;
 @property (strong, nonatomic) ISGumView *gumView;
 @property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
 @property (readonly, nonatomic) UITableView *superTableView;
@@ -74,7 +78,14 @@ const CGFloat additionalTopInset = 50.f;
     [self removeObserver:self forKeyPath:@"tintColor"];
 }
 
-#pragma mark -
+#pragma mark - accessor
+
+- (BOOL)isRefreshing
+{
+    return self.refreshControlState == ISRefreshControlStateRefreshing;
+}
+
+#pragma mark - view events
 
 - (void)layoutSubviews
 {
@@ -110,8 +121,8 @@ const CGFloat additionalTopInset = 50.f;
         CGFloat offset = scrollView.contentOffset.y;
         
         // reset refresh status
-        if (self.refreshed && offset >= 0) {
-            self.refreshed = NO;
+        if (self.refreshControlState == ISRefreshControlStateRefreshed && offset >= 0) {
+            self.refreshControlState = ISRefreshControlStateNormal;
             if (self.gumView.hidden) {
                 int64_t delayInSeconds = 1.0;
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * .3f * NSEC_PER_SEC);
@@ -122,7 +133,7 @@ const CGFloat additionalTopInset = 50.f;
         }
         
         // send UIControlEvent
-        if (!self.refreshing && !self.refreshed && offset <= -115 && scrollView.isTracking) {
+        if (self.refreshControlState == ISRefreshControlStateNormal && offset <= -115 && scrollView.isTracking) {
             [self beginRefreshing];
             [self sendActionsForControlEvents:UIControlEventValueChanged];
         }
@@ -164,12 +175,11 @@ const CGFloat additionalTopInset = 50.f;
 
 - (void)beginRefreshing
 {
-    if (self.refreshing) {
+    if (self.refreshControlState != ISRefreshControlStateNormal) {
         return;
     }
     
-    self.refreshing = YES;
-    self.refreshed  = NO;
+    self.refreshControlState = ISRefreshControlStateRefreshing;
     
     [self.superview bringSubviewToFront:self];
     [self updateIndicator];
@@ -178,12 +188,11 @@ const CGFloat additionalTopInset = 50.f;
 
 - (void)endRefreshing
 {
-    if (self.refreshed) {
+    if (self.refreshControlState != ISRefreshControlStateRefreshing) {
         return;
     }
     
-    self.refreshing = NO;
-    self.refreshed  = YES;
+    self.refreshControlState = ISRefreshControlStateRefreshed;
     
     [self.superview bringSubviewToFront:self];
     [self updateIndicator];
