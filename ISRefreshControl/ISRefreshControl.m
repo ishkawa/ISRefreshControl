@@ -17,6 +17,8 @@ const CGFloat additionalTopInset = 50.f;
 @property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
 @property (readonly, nonatomic) UITableView *superTableView;
 
+@property (nonatomic) CGFloat superScrollViewTopContentInset;
+
 @end
 
 
@@ -96,8 +98,8 @@ const CGFloat additionalTopInset = 50.f;
 {
     if ([self.superview isKindOfClass:[UIScrollView class]]) {
         [self.superview addObserver:self forKeyPath:@"contentOffset" options:0 context:NULL];
-        
-        self.frame = CGRectMake(0, -50, self.superview.frame.size.width, 50);
+        self.superScrollViewTopContentInset = [(UIScrollView*)self.superview contentInset].top;
+        self.frame = CGRectMake(0, (-50-self.superScrollViewTopContentInset), self.superview.frame.size.width, 50);
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self setNeedsLayout];
     }
@@ -109,7 +111,18 @@ const CGFloat additionalTopInset = 50.f;
 {
     if (object == self.superview && [keyPath isEqualToString:@"contentOffset"]) {
         UIScrollView *scrollView = (UIScrollView *)self.superview;
-        CGFloat offset = scrollView.contentOffset.y;
+        CGFloat offset = scrollView.contentOffset.y + self.superScrollViewTopContentInset;
+        
+        // hide when isTracking == NO
+        if (offset >= -2) {
+            if (_refreshing == NO && scrollView.isTracking == NO) {
+                self.alpha = 0.0;
+            } else {
+                [UIView animateWithDuration:0.1 animations:^{
+                    self.alpha = 1.0;
+                }];
+            }
+        }
         
         // reset refresh status
         if (!self.refreshing && !self.animating && offset >= 0) {
@@ -124,13 +137,13 @@ const CGFloat additionalTopInset = 50.f;
         
         // stays top and send distance to gumView
         if (offset < -50) {
-            self.frame = CGRectMake(0, offset, self.frame.size.width, self.frame.size.height);
+            self.frame = CGRectMake(0, (offset-self.superScrollViewTopContentInset), self.frame.size.width, self.frame.size.height);
             
             if (!self.gumView.shrinking) {
                 self.gumView.distance = -offset-50;
             }
         } else {
-            self.frame = CGRectMake(0, -50, self.frame.size.width, self.frame.size.height);
+            self.frame = CGRectMake(0, (-50-self.superScrollViewTopContentInset), self.frame.size.width, self.frame.size.height);
             
             if (!self.gumView.shrinking) {
                 self.gumView.distance = 0.f;
