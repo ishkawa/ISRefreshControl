@@ -114,14 +114,8 @@ const CGFloat additionalTopInset = 50.f;
         CGFloat offset = scrollView.contentOffset.y + self.superScrollViewTopContentInset;
         
         // hide when isTracking == NO
-        if (offset >= -2) {
-            if (_refreshing == NO && scrollView.isTracking == NO) {
-                self.alpha = 0.0;
-            } else {
-                [UIView animateWithDuration:0.1 animations:^{
-                    self.alpha = 1.0;
-                }];
-            }
+        if ([(UIScrollView *)self.superview isTracking] && !self.isRefreshing) {
+            self.hidden = (offset > 0);
         }
         
         // reset refresh status
