@@ -34,9 +34,9 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         static BOOL flag = NO;
         if (flag) {
-            self.items = @[@"foo", @"bar", @"baz"];
+            self.items = @[@"foo", @"bar", @"baz", @"foo", @"bar", @"baz", @"foo", @"bar", @"baz", @"foo", @"bar", @"baz", @"foo", @"bar", @"baz", ];
         }else {
-            self.items = @[@"hoge", @"fuga", @"piyo"];
+            self.items = @[@"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", ];
         }
         flag = !flag;
         
