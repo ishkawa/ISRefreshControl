@@ -193,7 +193,7 @@ const CGFloat additionalTopInset = 50.f;
     }];
     
     if (self.topInsetsEnabled) {
-        __weak typeof(self) wself = self;
+        __weak __typeof__(self) wself = self;
         [self setTopInsetsEnabled:NO completion:^{
             UIScrollView *scrollView = (UIScrollView *)wself.superview;
             if (!scrollView.isDragging) {
@@ -223,7 +223,7 @@ const CGFloat additionalTopInset = 50.f;
     UIScrollView *scrollView = (id)self.superview;
     CGFloat diff = additionalTopInset * (enabled?1.f:-1.f);
     
-    __weak typeof(self) wself = self;
+    __weak __typeof__(self) wself = self;
     wself.animating = YES;
     
     [UIView animateWithDuration:.3f
