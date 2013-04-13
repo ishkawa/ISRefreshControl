@@ -12,12 +12,11 @@
 		7F2A03E8171982C50026E92A /* UIColor+ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F2A03E7171982C50026E92A /* UIColor+ISRefreshControl.m */; };
 		7F5F44841719625600B77D7E /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F5F44821719624B00B77D7E /* iPhone.storyboard */; };
 		7F5F4487171966BE00B77D7E /* UITableView+ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F5F4486171966BE00B77D7E /* UITableView+ISRefreshControl.m */; };
+		7FA0C90D1719C71B0025DD40 /* ISMockScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA0C90C1719C71B0025DD40 /* ISMockScrollView.m */; };
 		7FC97B7016F763B8005848F8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B6F16F763B8005848F8 /* Foundation.framework */; };
-		7FC97B7F16F763B8005848F8 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B7E16F763B8005848F8 /* SenTestingKit.framework */; };
 		7FC97B8216F763B8005848F8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B6F16F763B8005848F8 /* Foundation.framework */; };
 		7FC97B8516F763B8005848F8 /* libISRefreshControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B6C16F763B8005848F8 /* libISRefreshControl.a */; };
 		7FC97B8B16F763B8005848F8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7FC97B8916F763B8005848F8 /* InfoPlist.strings */; };
-		7FC97B8E16F763B8005848F8 /* ISRefreshControlTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC97B8D16F763B8005848F8 /* ISRefreshControlTests.m */; };
 		7FC97BB116F76440005848F8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B6F16F763B8005848F8 /* Foundation.framework */; };
 		7FC97BB316F76440005848F8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97BB216F76440005848F8 /* CoreGraphics.framework */; };
 		7FC97BB916F76440005848F8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7FC97BB716F76440005848F8 /* InfoPlist.strings */; };
@@ -34,6 +33,10 @@
 		7FC97BD516F76510005848F8 /* UITableViewController+ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC97BA316F7641F005848F8 /* UITableViewController+ISRefreshControl.m */; };
 		7FC97BD616F7651E005848F8 /* ISRefresgControlIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC97B9816F7641F005848F8 /* ISRefresgControlIcon.png */; };
 		7FC97BD716F7651E005848F8 /* ISRefresgControlIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC97B9916F7641F005848F8 /* ISRefresgControlIcon@2x.png */; };
+		7FFA31381719B4BC00009FDE /* ISRefreshControlSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FFA31371719B4BC00009FDE /* ISRefreshControlSpec.m */; };
+		7FFA31391719B5E500009FDE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97BCC16F76479005848F8 /* UIKit.framework */; };
+		7FFA313B1719B60300009FDE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FFA313A1719B60300009FDE /* QuartzCore.framework */; };
+		7FFA313C1719B61500009FDE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97BB216F76440005848F8 /* CoreGraphics.framework */; };
 		B3958DF9FDAC4D8C9705E3F3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 535D40CE8FFB45B1A740FE5B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -77,14 +80,13 @@
 		7F5F44821719624B00B77D7E /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPhone.storyboard; sourceTree = "<group>"; };
 		7F5F4485171966BE00B77D7E /* UITableView+ISRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+ISRefreshControl.h"; sourceTree = "<group>"; };
 		7F5F4486171966BE00B77D7E /* UITableView+ISRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ISRefreshControl.m"; sourceTree = "<group>"; };
+		7FA0C90B1719C71B0025DD40 /* ISMockScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMockScrollView.h; sourceTree = "<group>"; };
+		7FA0C90C1719C71B0025DD40 /* ISMockScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMockScrollView.m; sourceTree = "<group>"; };
 		7FC97B6C16F763B8005848F8 /* libISRefreshControl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libISRefreshControl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FC97B6F16F763B8005848F8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7FC97B7D16F763B8005848F8 /* ISRefreshControlTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ISRefreshControlTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7FC97B7E16F763B8005848F8 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		7FC97B8816F763B8005848F8 /* ISRefreshControlTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ISRefreshControlTests-Info.plist"; sourceTree = "<group>"; };
 		7FC97B8A16F763B8005848F8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7FC97B8C16F763B8005848F8 /* ISRefreshControlTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ISRefreshControlTests.h; sourceTree = "<group>"; };
-		7FC97B8D16F763B8005848F8 /* ISRefreshControlTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ISRefreshControlTests.m; sourceTree = "<group>"; };
 		7FC97B9816F7641F005848F8 /* ISRefresgControlIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ISRefresgControlIcon.png; sourceTree = "<group>"; };
 		7FC97B9916F7641F005848F8 /* ISRefresgControlIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ISRefresgControlIcon@2x.png"; sourceTree = "<group>"; };
 		7FC97B9A16F7641F005848F8 /* ISGumView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISGumView.h; sourceTree = "<group>"; };
@@ -107,6 +109,8 @@
 		7FC97BCC16F76479005848F8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7FC97BCE16F764CD005848F8 /* ISDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISDemoViewController.h; sourceTree = "<group>"; };
 		7FC97BCF16F764CD005848F8 /* ISDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISDemoViewController.m; sourceTree = "<group>"; };
+		7FFA31371719B4BC00009FDE /* ISRefreshControlSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISRefreshControlSpec.m; sourceTree = "<group>"; };
+		7FFA313A1719B60300009FDE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		840360A22CFE4CEDA14E4C3B /* Pods-ISRefreshControlTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ISRefreshControlTests.xcconfig"; path = "Pods/Pods-ISRefreshControlTests.xcconfig"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -124,10 +128,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FC97B7F16F763B8005848F8 /* SenTestingKit.framework in Frameworks */,
+				7FFA313B1719B60300009FDE /* QuartzCore.framework in Frameworks */,
 				7FC97B8216F763B8005848F8 /* Foundation.framework in Frameworks */,
 				7FC97B8516F763B8005848F8 /* libISRefreshControl.a in Frameworks */,
 				4D9C44E6D9C24FA8BE38B0E0 /* libPods-ISRefreshControlTests.a in Frameworks */,
+				7FFA31391719B5E500009FDE /* UIKit.framework in Frameworks */,
+				7FFA313C1719B61500009FDE /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,9 +177,9 @@
 		7FC97B6E16F763B8005848F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7FFA313A1719B60300009FDE /* QuartzCore.framework */,
 				7FC97BCC16F76479005848F8 /* UIKit.framework */,
 				7FC97B6F16F763B8005848F8 /* Foundation.framework */,
-				7FC97B7E16F763B8005848F8 /* SenTestingKit.framework */,
 				7FC97BB216F76440005848F8 /* CoreGraphics.framework */,
 				535D40CE8FFB45B1A740FE5B /* libPods.a */,
 				12F560D0942140FA8C00ADBE /* libPods-ISRefreshControlTests.a */,
@@ -204,8 +210,9 @@
 		7FC97B8616F763B8005848F8 /* ISRefreshControlTests */ = {
 			isa = PBXGroup;
 			children = (
-				7FC97B8C16F763B8005848F8 /* ISRefreshControlTests.h */,
-				7FC97B8D16F763B8005848F8 /* ISRefreshControlTests.m */,
+				7FFA31371719B4BC00009FDE /* ISRefreshControlSpec.m */,
+				7FA0C90B1719C71B0025DD40 /* ISMockScrollView.h */,
+				7FA0C90C1719C71B0025DD40 /* ISMockScrollView.m */,
 				7FC97B8716F763B8005848F8 /* Supporting Files */,
 			);
 			path = ISRefreshControlTests;
@@ -430,7 +437,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FC97B8E16F763B8005848F8 /* ISRefreshControlTests.m in Sources */,
+				7FFA31381719B4BC00009FDE /* ISRefreshControlSpec.m in Sources */,
+				7FA0C90D1719C71B0025DD40 /* ISMockScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
