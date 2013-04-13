@@ -74,7 +74,7 @@
         self.subRadius  = SUB_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.3)*(SUB_CIRCLE_MAX_RADIUS-SUB_CIRCLE_MIN_RADIUS);
     }
     self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-5, self.mainRadius*2-5);
-    self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f);
+    self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f + self.distance * 0.03);
     
     // offset to keep center
     CGFloat offset = self.frame.size.width/2.f - self.mainRadius;
