@@ -1,6 +1,7 @@
 #import "ISRefreshControl.h"
 #import "ISGumView.h"
 #import "ISScalingActivityIndicatorView.h"
+#import <ISMethodSwizzling/ISMethodSwizzling.h>
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 
@@ -26,8 +27,18 @@ const CGFloat additionalTopInset = 50.f;
     @autoreleasepool {
         if (![UIRefreshControl class]) {
             objc_registerClassPair(objc_allocateClassPair([ISRefreshControl class], "UIRefreshControl", 0));
+        } else {
+            ISSwizzleClassMethod([ISRefreshControl class], @selector(alloc), @selector(_alloc));
         }
     }
+}
+
++ (id)_alloc
+{
+    if ([UIRefreshControl class]) {
+        return (id)[UIRefreshControl alloc];
+    }
+    return [self _alloc];
 }
 
 - (id)initWithCoder:(NSCoder *)coder
