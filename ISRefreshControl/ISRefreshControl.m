@@ -1,7 +1,7 @@
 #import "ISRefreshControl.h"
 #import "ISGumView.h"
 #import "ISUtility.h"
-#import "UIActivityIndicatorView+ScaleAnimation.h"
+#import "ISScalingActivityIndicatorView.h"
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -14,7 +14,7 @@ const CGFloat additionalTopInset = 50.f;
 @property (nonatomic) BOOL refreshing;
 @property (nonatomic) BOOL refreshed;
 @property (strong, nonatomic) ISGumView *gumView;
-@property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
+@property (strong, nonatomic) ISScalingActivityIndicatorView *indicatorView;
 @property (readonly, nonatomic) UITableView *superTableView;
 
 @end
@@ -54,7 +54,7 @@ const CGFloat additionalTopInset = 50.f;
     self.gumView = [[ISGumView alloc] init];
     [self addSubview:self.gumView];
     
-    self.indicatorView = [[UIActivityIndicatorView alloc] init];
+    self.indicatorView = [[ISScalingActivityIndicatorView alloc] init];
     self.indicatorView.hidesWhenStopped = YES;
     self.indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     self.indicatorView.color = [UIColor lightGrayColor];
