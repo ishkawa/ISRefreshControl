@@ -1,7 +1,17 @@
 #import "ISScalingActivityIndicatorView.h"
+#import "UIColor+ISRefreshControl.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation ISScalingActivityIndicatorView
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        self.color = [UIColor is_refreshControlColor];
+    }
+    return self;
+}
 
 - (void)expandWithCompletion:(void (^)(BOOL))completion
 {

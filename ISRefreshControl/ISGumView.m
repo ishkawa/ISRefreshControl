@@ -1,4 +1,5 @@
 #import "ISGumView.h"
+#import "UIColor+ISRefreshControl.h"
 
 #define MAX_DISTANCE 65.f
 
@@ -115,7 +116,8 @@
     
     CGPathCloseSubpath(path);
     CGContextAddPath(ctx, path);
-    CGContextSetFillColorWithColor(ctx, (self.tintColor ? self.tintColor : [UIColor lightGrayColor]).CGColor);
+    CGContextSetFillColorWithColor(ctx, (self.tintColor ?: [UIColor is_refreshControlColor]).CGColor);
+    CGContextSetShadow(ctx, CGSizeMake(0.f, .5f), 1.f);
     CGContextFillPath(ctx);
     CGPathRelease(path);
 }
