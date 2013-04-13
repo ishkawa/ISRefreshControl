@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F5F44841719625600B77D7E /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F5F44821719624B00B77D7E /* iPhone.storyboard */; };
+		7F5F4487171966BE00B77D7E /* UITableView+ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F5F4486171966BE00B77D7E /* UITableView+ISRefreshControl.m */; };
 		7FC97B7016F763B8005848F8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B6F16F763B8005848F8 /* Foundation.framework */; };
 		7FC97B7F16F763B8005848F8 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B7E16F763B8005848F8 /* SenTestingKit.framework */; };
 		7FC97B8216F763B8005848F8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B6F16F763B8005848F8 /* Foundation.framework */; };
@@ -28,7 +30,7 @@
 		7FC97BD216F76510005848F8 /* ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC97B9D16F7641F005848F8 /* ISRefreshControl.m */; };
 		7FC97BD316F76510005848F8 /* ISUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC97B9F16F7641F005848F8 /* ISUtility.m */; };
 		7FC97BD416F76510005848F8 /* UIActivityIndicatorView+ScaleAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC97BA116F7641F005848F8 /* UIActivityIndicatorView+ScaleAnimation.m */; };
-		7FC97BD516F76510005848F8 /* UITableViewController+RefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC97BA316F7641F005848F8 /* UITableViewController+RefreshControl.m */; };
+		7FC97BD516F76510005848F8 /* UITableViewController+ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC97BA316F7641F005848F8 /* UITableViewController+ISRefreshControl.m */; };
 		7FC97BD616F7651E005848F8 /* ISRefresgControlIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC97B9816F7641F005848F8 /* ISRefresgControlIcon.png */; };
 		7FC97BD716F7651E005848F8 /* ISRefresgControlIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC97B9916F7641F005848F8 /* ISRefresgControlIcon@2x.png */; };
 /* End PBXBuildFile section */
@@ -63,6 +65,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7F5F44821719624B00B77D7E /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPhone.storyboard; sourceTree = "<group>"; };
+		7F5F4485171966BE00B77D7E /* UITableView+ISRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+ISRefreshControl.h"; sourceTree = "<group>"; };
+		7F5F4486171966BE00B77D7E /* UITableView+ISRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ISRefreshControl.m"; sourceTree = "<group>"; };
 		7FC97B6C16F763B8005848F8 /* libISRefreshControl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libISRefreshControl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FC97B6F16F763B8005848F8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7FC97B7D16F763B8005848F8 /* ISRefreshControlTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ISRefreshControlTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,8 +86,8 @@
 		7FC97B9F16F7641F005848F8 /* ISUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISUtility.m; sourceTree = "<group>"; };
 		7FC97BA016F7641F005848F8 /* UIActivityIndicatorView+ScaleAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityIndicatorView+ScaleAnimation.h"; sourceTree = "<group>"; };
 		7FC97BA116F7641F005848F8 /* UIActivityIndicatorView+ScaleAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActivityIndicatorView+ScaleAnimation.m"; sourceTree = "<group>"; };
-		7FC97BA216F7641F005848F8 /* UITableViewController+RefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewController+RefreshControl.h"; sourceTree = "<group>"; };
-		7FC97BA316F7641F005848F8 /* UITableViewController+RefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewController+RefreshControl.m"; sourceTree = "<group>"; };
+		7FC97BA216F7641F005848F8 /* UITableViewController+ISRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewController+ISRefreshControl.h"; sourceTree = "<group>"; };
+		7FC97BA316F7641F005848F8 /* UITableViewController+ISRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewController+ISRefreshControl.m"; sourceTree = "<group>"; };
 		7FC97BAF16F76440005848F8 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FC97BB216F76440005848F8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7FC97BB616F76440005848F8 /* DemoApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DemoApp-Info.plist"; sourceTree = "<group>"; };
@@ -175,8 +180,10 @@
 				7FC97B9F16F7641F005848F8 /* ISUtility.m */,
 				7FC97BA016F7641F005848F8 /* UIActivityIndicatorView+ScaleAnimation.h */,
 				7FC97BA116F7641F005848F8 /* UIActivityIndicatorView+ScaleAnimation.m */,
-				7FC97BA216F7641F005848F8 /* UITableViewController+RefreshControl.h */,
-				7FC97BA316F7641F005848F8 /* UITableViewController+RefreshControl.m */,
+				7FC97BA216F7641F005848F8 /* UITableViewController+ISRefreshControl.h */,
+				7FC97BA316F7641F005848F8 /* UITableViewController+ISRefreshControl.m */,
+				7F5F4485171966BE00B77D7E /* UITableView+ISRefreshControl.h */,
+				7F5F4486171966BE00B77D7E /* UITableView+ISRefreshControl.m */,
 				7FC97B9716F7641F005848F8 /* Images */,
 			);
 			path = ISRefreshControl;
@@ -213,6 +220,7 @@
 		7FC97BB416F76440005848F8 /* DemoApp */ = {
 			isa = PBXGroup;
 			children = (
+				7F5F44821719624B00B77D7E /* iPhone.storyboard */,
 				7FC97BBD16F76440005848F8 /* ISAppDelegate.h */,
 				7FC97BBE16F76440005848F8 /* ISAppDelegate.m */,
 				7FC97BCE16F764CD005848F8 /* ISDemoViewController.h */,
@@ -340,6 +348,7 @@
 				7FC97BC516F76440005848F8 /* Default-568h@2x.png in Resources */,
 				7FC97BD616F7651E005848F8 /* ISRefresgControlIcon.png in Resources */,
 				7FC97BD716F7651E005848F8 /* ISRefresgControlIcon@2x.png in Resources */,
+				7F5F44841719625600B77D7E /* iPhone.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,7 +379,8 @@
 				7FC97BD216F76510005848F8 /* ISRefreshControl.m in Sources */,
 				7FC97BD316F76510005848F8 /* ISUtility.m in Sources */,
 				7FC97BD416F76510005848F8 /* UIActivityIndicatorView+ScaleAnimation.m in Sources */,
-				7FC97BD516F76510005848F8 /* UITableViewController+RefreshControl.m in Sources */,
+				7FC97BD516F76510005848F8 /* UITableViewController+ISRefreshControl.m in Sources */,
+				7F5F4487171966BE00B77D7E /* UITableView+ISRefreshControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,6 +598,7 @@
 				7FC97B9316F763B8005848F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7FC97B9416F763B8005848F8 /* Build configuration list for PBXNativeTarget "ISRefreshControlTests" */ = {
 			isa = XCConfigurationList;
@@ -596,6 +607,7 @@
 				7FC97B9616F763B8005848F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7FC97BC616F76440005848F8 /* Build configuration list for PBXNativeTarget "DemoApp" */ = {
 			isa = XCConfigurationList;
@@ -604,6 +616,7 @@
 				7FC97BC816F76440005848F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

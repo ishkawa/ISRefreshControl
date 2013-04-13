@@ -1,5 +1,4 @@
 #import <UIKit/UIKit.h>
-#import "UITableViewController+RefreshControl.h"
 
 @interface ISRefreshControl : UIControl;
 
