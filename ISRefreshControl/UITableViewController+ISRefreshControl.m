@@ -8,7 +8,7 @@
 + (void)load
 {
     @autoreleasepool {
-        if ([[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
+        if (![UIRefreshControl class]) {
             SwizzleMethod([self class], @selector(refreshControl),     @selector(_refreshControl));
             SwizzleMethod([self class], @selector(setRefreshControl:), @selector(_setRefreshControl:));
             SwizzleMethod([self class], @selector(viewDidLoad),        @selector(_viewDidLoad));
