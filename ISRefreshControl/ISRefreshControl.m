@@ -13,9 +13,9 @@ const CGFloat additionalTopInset = 50.f;
 @property (nonatomic) BOOL animating;
 @property (nonatomic) BOOL refreshing;
 @property (nonatomic) BOOL refreshed;
-@property (strong, nonatomic) ISGumView *gumView;
-@property (strong, nonatomic) ISScalingActivityIndicatorView *indicatorView;
-@property (readonly, nonatomic) UITableView *superTableView;
+@property (nonatomic, strong) ISGumView *gumView;
+@property (nonatomic, strong) ISScalingActivityIndicatorView *indicatorView;
+@property (nonatomic, readonly) UITableView *superTableView;
 
 @end
 
