@@ -1,6 +1,6 @@
 #import "UITableViewController+ISRefreshControl.h"
 #import "ISRefreshControl.h"
-#import "ISUtility.h"
+#import <ISMethodSwizzling/ISMethodSwizzling.h>
 #import <objc/runtime.h>
 
 @implementation UITableViewController (ISRefreshControl)
@@ -9,9 +9,9 @@
 {
     @autoreleasepool {
         if (![UIRefreshControl class]) {
-            SwizzleMethod([self class], @selector(refreshControl),     @selector(_refreshControl));
-            SwizzleMethod([self class], @selector(setRefreshControl:), @selector(_setRefreshControl:));
-            SwizzleMethod([self class], @selector(viewDidLoad),        @selector(_viewDidLoad));
+            ISSwizzleInstanceMethod([self class], @selector(refreshControl),     @selector(_refreshControl));
+            ISSwizzleInstanceMethod([self class], @selector(setRefreshControl:), @selector(_setRefreshControl:));
+            ISSwizzleInstanceMethod([self class], @selector(viewDidLoad),        @selector(_viewDidLoad));
         }
     }
 }

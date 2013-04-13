@@ -1,9 +1,8 @@
 #import "ISRefreshControl.h"
 #import "ISGumView.h"
-#import "ISUtility.h"
 #import "ISScalingActivityIndicatorView.h"
-#import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
+#import <objc/runtime.h>
 
 const CGFloat additionalTopInset = 50.f;
 
