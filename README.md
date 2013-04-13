@@ -36,7 +36,6 @@ or set "Refreshing" of `UITableViewController` "Enabled" on storyboard.
               forControlEvents:UIControlEventValueChanged];
 ```
 
-
 ## How it works
 
 #### iOS6
@@ -49,6 +48,17 @@ the constructor of `ISRefreshControl` returns an instance of `UIRefreshControl`.
 imitates `UIRefreshControl`.
 `ISRefreshControl` sends `UIControlEventValueChanged` when content offset of `UITableView` overs threshold.
 `UITableViewController` is extended to send content offset to `ISRefreshControl`.
+
+## Installing
+
+The best way to Install ISRefreshControl is by using CocoaPods.
+```
+pod 'ISRefreshControl', '~> 1.0.2'
+```
+
+### Without CocoaPods 
+
+add files under `ISRefreshControl/` and `ISMethodSwizzling/` of [ISMethodSwizzling](https://github.com/ishkawa/ISMethodSwizzling) to your project.
 
 ## License
 
