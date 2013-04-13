@@ -217,9 +217,7 @@ const CGFloat additionalTopInset = 50.f;
     UIScrollView *scrollView = (id)self.superview;
     CGFloat diff = additionalTopInset * (enabled?1.f:-1.f);
     
-    __weak __typeof__(self) wself = self;
-    wself.animating = YES;
-    
+    self.animating = YES;
     [UIView animateWithDuration:.3f
                      animations:^{
                          scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
