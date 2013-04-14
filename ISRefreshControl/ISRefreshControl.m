@@ -187,7 +187,7 @@ static CGFloat const ISThreshold = 115.f;
 
 - (void)beginRefreshing
 {
-    if (self.refreshing) {
+    if (self.isRefreshing) {
         return;
     }
     
@@ -198,7 +198,7 @@ static CGFloat const ISThreshold = 115.f;
 
 - (void)endRefreshing
 {
-    if (!self.refreshing) {
+    if (!self.isRefreshing) {
         return;
     }
     

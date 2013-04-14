@@ -73,6 +73,7 @@
 		12F560D0942140FA8C00ADBE /* libPods-ISRefreshControlTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ISRefreshControlTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D9C63983744525873A9532 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		535D40CE8FFB45B1A740FE5B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F07D4E3171A46C900D601CC /* ISRefreshControl+Public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ISRefreshControl+Public.h"; sourceTree = "<group>"; };
 		7F2A03DE171978A00026E92A /* ISScalingActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISScalingActivityIndicatorView.h; sourceTree = "<group>"; };
 		7F2A03DF171978A00026E92A /* ISScalingActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISScalingActivityIndicatorView.m; sourceTree = "<group>"; };
 		7F2A03E6171982C50026E92A /* UIColor+ISRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+ISRefreshControl.h"; sourceTree = "<group>"; };
@@ -210,6 +211,7 @@
 		7FC97B8616F763B8005848F8 /* ISRefreshControlTests */ = {
 			isa = PBXGroup;
 			children = (
+				7F07D4E3171A46C900D601CC /* ISRefreshControl+Public.h */,
 				7FFA31371719B4BC00009FDE /* ISRefreshControlSpec.m */,
 				7FA0C90B1719C71B0025DD40 /* ISMockScrollView.h */,
 				7FA0C90C1719C71B0025DD40 /* ISMockScrollView.m */,
@@ -578,6 +580,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "ISRefreshControlTests/ISRefreshControlTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_AFTER_BUILD = NO;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -594,6 +597,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "ISRefreshControlTests/ISRefreshControlTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_AFTER_BUILD = NO;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
