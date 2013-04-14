@@ -27,10 +27,6 @@ if ([UIRefreshControl class] && shouldRunOS6Tests) {
                 [[refreshControl should] beMemberOfClass:[UIRefreshControl class]];
             });
         });
-            
-            it(@"fail", ^{
-                [[theValue(YES) should] equal:theValue(NO)];
-            });
     });
 } else {
     describe(@"ISRefreshControl on iOS5", ^{
