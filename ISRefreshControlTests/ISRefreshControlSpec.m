@@ -8,7 +8,13 @@
 
 SPEC_BEGIN(ISRefreshControlSpec)
 
-if ([UIRefreshControl class]) {
+#ifdef IS_TEST_FROM_COMMAND_LINE
+BOOL shouldRunOS6Tests = NO;
+#else
+BOOL shouldRunOS6Tests = YES;
+#endif
+
+if ([UIRefreshControl class] && shouldRunOS6Tests) {
     describe(@"ISRefreshControl on iOS6+", ^{
         __block ISRefreshControl *refreshControl;
         
@@ -21,6 +27,10 @@ if ([UIRefreshControl class]) {
                 [[refreshControl should] beMemberOfClass:[UIRefreshControl class]];
             });
         });
+            
+            it(@"fail", ^{
+                [[theValue(YES) should] equal:theValue(NO)];
+            });
     });
 } else {
     describe(@"ISRefreshControl on iOS5", ^{

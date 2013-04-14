@@ -33,7 +33,9 @@ static CGFloat const ISThreshold = 115.f;
         if (![UIRefreshControl class]) {
             objc_registerClassPair(objc_allocateClassPair([ISRefreshControl class], "UIRefreshControl", 0));
         } else {
+#ifndef IS_TEST_FROM_COMMAND_LINE
             ISSwizzleClassMethod([ISRefreshControl class], @selector(alloc), @selector(_alloc));
+#endif
         }
     }
 }
