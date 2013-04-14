@@ -133,6 +133,7 @@ static CGFloat const ISThreshold = 115.f;
         
         [self keepOnTopOfView];
         [self sendDistanceToGumView];
+        [self updateGumViewVisible];
         
         if (self.refreshingState == ISRefreshingStateNormal && self.offset <= -ISThreshold && scrollView.isTracking) {
             [self beginRefreshing];
@@ -141,7 +142,7 @@ static CGFloat const ISThreshold = 115.f;
         if (self.refreshingState == ISRefreshingStateRefreshing && !scrollView.isDragging && !self.addedTopInset) {
             [self addTopInsets];
         }
-        if (self.refreshingState == ISRefreshingStateRefreshed && self.offset <= 0.f) {
+        if (self.refreshingState == ISRefreshingStateRefreshed && self.offset >= scrollView.contentInset.top - 5.f) {
             [self reset];
         }
         return;
@@ -171,6 +172,15 @@ static CGFloat const ISThreshold = 115.f;
         return;
     }
     self.gumView.distance = self.offset < -ISAdditionalTopInset ? -self.offset-ISAdditionalTopInset : 0.f;
+}
+
+- (void)updateGumViewVisible
+{
+    // hides gumView when it is about to appear by inertial scrolling.
+    UIScrollView *scrollView = (UIScrollView *)self.superview;
+    if (scrollView.isTracking && !self.isRefreshing) {
+        self.hidden = (self.offset > 0);
+    }
 }
 
 #pragma mark -
