@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ishkawa/ISRefreshControl.png?branch=develop)](https://travis-ci.org/ishkawa/ISRefreshControl)
+[![Build Status](https://travis-ci.org/ishkawa/ISRefreshControl.png?branch=master)](https://travis-ci.org/ishkawa/ISRefreshControl)
 
 ## Requirements
 
