@@ -247,7 +247,12 @@ static CGFloat const ISThreshold = 115.f;
                      }
                      completion:^(BOOL finished) {
                          wself.addedTopInset = NO;
-                         wself.refreshingState = ISRefreshingStateRefreshed;
+                         
+                         if (wself.offset <= [(UIScrollView *)self.superview contentInset].top) {
+                             [self reset];
+                         } else {
+                             wself.refreshingState = ISRefreshingStateRefreshed;
+                         }
                      }];
 }
 
