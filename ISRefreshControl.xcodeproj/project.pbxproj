@@ -112,6 +112,7 @@
 		7FC97BCC16F76479005848F8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7FC97BCE16F764CD005848F8 /* ISDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISDemoViewController.h; sourceTree = "<group>"; };
 		7FC97BCF16F764CD005848F8 /* ISDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISDemoViewController.m; sourceTree = "<group>"; };
+		7FDDBB1F171BD689009B8BA6 /* Pods.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		7FFA31371719B4BC00009FDE /* ISRefreshControlSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISRefreshControlSpec.m; sourceTree = "<group>"; };
 		7FFA313A1719B60300009FDE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		840360A22CFE4CEDA14E4C3B /* Pods-ISRefreshControlTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ISRefreshControlTests.xcconfig"; path = "Pods/Pods-ISRefreshControlTests.xcconfig"; sourceTree = SOURCE_ROOT; };
@@ -162,6 +163,7 @@
 				7FC97BB416F76440005848F8 /* DemoApp */,
 				7FC97B6E16F763B8005848F8 /* Frameworks */,
 				7FC97B6D16F763B8005848F8 /* Products */,
+				7FDDBB1F171BD689009B8BA6 /* Pods.xcconfig */,
 				840360A22CFE4CEDA14E4C3B /* Pods-ISRefreshControlTests.xcconfig */,
 			);
 			sourceTree = "<group>";
@@ -533,6 +535,7 @@
 		};
 		7FC97B9216F763B8005848F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7FDDBB1F171BD689009B8BA6 /* Pods.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/ISRefreshControl.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -545,6 +548,7 @@
 		};
 		7FC97B9316F763B8005848F8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7FDDBB1F171BD689009B8BA6 /* Pods.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/ISRefreshControl.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;

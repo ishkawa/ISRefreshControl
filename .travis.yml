@@ -1,4 +1,3 @@
 language: objective-c
-before_install: make clean
 script: make test
 

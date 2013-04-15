@@ -9,6 +9,3 @@ test:
 		TEST_AFTER_BUILD=YES \
 		GCC_PREPROCESSOR_DEFINITIONS="IS_TEST_FROM_COMMAND_LINE=1"
 
-clean:
-	rm -rf Pods
-	rm -rf ISRefreshControl.xcworkspace
