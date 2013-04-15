@@ -1,7 +1,7 @@
 #import "ISRefreshControl.h"
 #import "ISGumView.h"
 #import "ISScalingActivityIndicatorView.h"
-#import <ISMethodSwizzling/ISMethodSwizzling.h>
+#import "ISMethodSwizzling.h"
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 

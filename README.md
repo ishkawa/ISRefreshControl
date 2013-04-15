@@ -55,12 +55,12 @@ imitates `UIRefreshControl`.
 
 The best way to Install ISRefreshControl is by using CocoaPods.
 ```
-pod 'ISRefreshControl', '~> 1.2.0'
+pod 'ISRefreshControl', '~> 1.2.1'
 ```
 
 ### Without CocoaPods 
 
-add files under `ISRefreshControl/` and `ISMethodSwizzling/` of [ISMethodSwizzling](https://github.com/ishkawa/ISMethodSwizzling) to your project.
+add files under `ISRefreshControl/` to your project.
 
 ## License
 

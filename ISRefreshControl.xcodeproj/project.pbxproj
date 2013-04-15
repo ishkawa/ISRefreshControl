@@ -13,6 +13,7 @@
 		7F5F44841719625600B77D7E /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F5F44821719624B00B77D7E /* iPhone.storyboard */; };
 		7F5F4487171966BE00B77D7E /* UITableView+ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F5F4486171966BE00B77D7E /* UITableView+ISRefreshControl.m */; };
 		7FA0C90D1719C71B0025DD40 /* ISMockScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA0C90C1719C71B0025DD40 /* ISMockScrollView.m */; };
+		7FAF1C49171BCA0B00593F46 /* ISMethodSwizzling.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FAF1C48171BCA0B00593F46 /* ISMethodSwizzling.m */; };
 		7FC97B7016F763B8005848F8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B6F16F763B8005848F8 /* Foundation.framework */; };
 		7FC97B8216F763B8005848F8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B6F16F763B8005848F8 /* Foundation.framework */; };
 		7FC97B8516F763B8005848F8 /* libISRefreshControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97B6C16F763B8005848F8 /* libISRefreshControl.a */; };
@@ -83,6 +84,8 @@
 		7F5F4486171966BE00B77D7E /* UITableView+ISRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ISRefreshControl.m"; sourceTree = "<group>"; };
 		7FA0C90B1719C71B0025DD40 /* ISMockScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMockScrollView.h; sourceTree = "<group>"; };
 		7FA0C90C1719C71B0025DD40 /* ISMockScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMockScrollView.m; sourceTree = "<group>"; };
+		7FAF1C47171BCA0B00593F46 /* ISMethodSwizzling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMethodSwizzling.h; sourceTree = "<group>"; };
+		7FAF1C48171BCA0B00593F46 /* ISMethodSwizzling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMethodSwizzling.m; sourceTree = "<group>"; };
 		7FC97B6C16F763B8005848F8 /* libISRefreshControl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libISRefreshControl.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FC97B6F16F763B8005848F8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7FC97B7D16F763B8005848F8 /* ISRefreshControlTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ISRefreshControlTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,6 +200,8 @@
 				7FC97B9B16F7641F005848F8 /* ISGumView.m */,
 				7F2A03DE171978A00026E92A /* ISScalingActivityIndicatorView.h */,
 				7F2A03DF171978A00026E92A /* ISScalingActivityIndicatorView.m */,
+				7FAF1C47171BCA0B00593F46 /* ISMethodSwizzling.h */,
+				7FAF1C48171BCA0B00593F46 /* ISMethodSwizzling.m */,
 				7FC97BA216F7641F005848F8 /* UITableViewController+ISRefreshControl.h */,
 				7FC97BA316F7641F005848F8 /* UITableViewController+ISRefreshControl.m */,
 				7F5F4485171966BE00B77D7E /* UITableView+ISRefreshControl.h */,
@@ -432,6 +437,7 @@
 				7F5F4487171966BE00B77D7E /* UITableView+ISRefreshControl.m in Sources */,
 				7F2A03E0171978A00026E92A /* ISScalingActivityIndicatorView.m in Sources */,
 				7F2A03E8171982C50026E92A /* UIColor+ISRefreshControl.m in Sources */,
+				7FAF1C49171BCA0B00593F46 /* ISMethodSwizzling.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
