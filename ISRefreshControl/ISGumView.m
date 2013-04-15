@@ -1,18 +1,17 @@
 #import "ISGumView.h"
+#import "UIColor+ISRefreshControl.h"
 
-#define MAX_DISTANCE 65.f
-
-#define MAIN_CIRCLE_MAX_RADIUS 16.f
-#define MAIN_CIRCLE_MIN_RADIUS 10.f
-
-#define SUB_CIRCLE_MAX_RADIUS 16.f
-#define SUB_CIRCLE_MIN_RADIUS 2.f
+static CGFloat const ISMaxDistance = 65.f;
+static CGFloat const ISMainCircleMaxRadius = 16.f;
+static CGFloat const ISMainCircleMinRadius = 10.f;
+static CGFloat const ISSubCircleMaxRadius  = 16.f;
+static CGFloat const ISSubCircleMinRadius  = 2.f;
 
 @interface ISGumView ()
 
-@property CGFloat mainRadius;
-@property CGFloat subRadius;
-@property (strong, nonatomic) UIImageView *imageView;
+@property (nonatomic) CGFloat mainRadius;
+@property (nonatomic) CGFloat subRadius;
+@property (nonatomic, strong) UIImageView *imageView;
 
 @end
 
@@ -25,8 +24,8 @@
         self.backgroundColor = [UIColor clearColor];
         
         self.distance = 0.f;
-        self.mainRadius = MAIN_CIRCLE_MAX_RADIUS;
-        self.subRadius  = MAIN_CIRCLE_MAX_RADIUS;
+        self.mainRadius = ISMainCircleMaxRadius;
+        self.subRadius  = ISMainCircleMaxRadius;
         
         self.imageView = [[UIImageView alloc] init];
         self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-12, self.mainRadius*2-12);
@@ -58,28 +57,28 @@
     if (self.distance < 0) {
         self.distance = 0;
     }
-    if (self.distance > MAX_DISTANCE) {
-        self.distance = MAX_DISTANCE;
+    if (self.distance > ISMaxDistance) {
+        self.distance = ISMaxDistance;
     }
     if (self.shrinking) {
-        self.mainRadius = MAIN_CIRCLE_MIN_RADIUS*pow((self.distance/MAX_DISTANCE), 0.1);
+        self.mainRadius = ISMainCircleMinRadius*pow((self.distance/ISMaxDistance), 0.1);
         if (self.distance > self.mainRadius) {
-            CGFloat diff = fabsf(SUB_CIRCLE_MIN_RADIUS-self.mainRadius);
-            self.subRadius = SUB_CIRCLE_MIN_RADIUS+diff*(1-(self.distance-self.mainRadius)/(MAX_DISTANCE-self.mainRadius));
+            CGFloat diff = fabsf(ISSubCircleMinRadius-self.mainRadius);
+            self.subRadius = ISSubCircleMinRadius+diff*(1-(self.distance-self.mainRadius)/(ISMaxDistance-self.mainRadius));
         } else {
             self.subRadius  = self.mainRadius;
         }
     } else {
-        self.mainRadius = MAIN_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.1)*(MAIN_CIRCLE_MAX_RADIUS-MAIN_CIRCLE_MIN_RADIUS);
-        self.subRadius  = SUB_CIRCLE_MAX_RADIUS-pow(((self.distance)/MAX_DISTANCE), 1.3)*(SUB_CIRCLE_MAX_RADIUS-SUB_CIRCLE_MIN_RADIUS);
+        self.mainRadius = ISMainCircleMaxRadius-pow(((self.distance)/ISMaxDistance), 1.1)*(ISMainCircleMaxRadius-ISMainCircleMinRadius);
+        self.subRadius  = ISSubCircleMaxRadius-pow(((self.distance)/ISMaxDistance), 1.3)*(ISSubCircleMaxRadius-ISSubCircleMinRadius);
     }
     self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-5, self.mainRadius*2-5);
-    self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f);
+    self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f + self.distance * 0.03);
     
     // offset to keep center
     CGFloat offset = self.frame.size.width/2.f - self.mainRadius;
     
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextRef context = UIGraphicsGetCurrentContext();
     CGMutablePathRef path = CGPathCreateMutable();
     
     CGPathMoveToPoint(path, NULL, offset, 25);
@@ -114,9 +113,10 @@
                           offset + 0, self.mainRadius);
     
     CGPathCloseSubpath(path);
-    CGContextAddPath(ctx, path);
-    CGContextSetFillColorWithColor(ctx, (self.tintColor ? self.tintColor : [UIColor lightGrayColor]).CGColor);
-    CGContextFillPath(ctx);
+    CGContextAddPath(context, path);
+    CGContextSetFillColorWithColor(context, (self.tintColor ?: [UIColor is_refreshControlColor]).CGColor);
+    CGContextSetShadow(context, CGSizeMake(0.f, .5f), 1.f);
+    CGContextFillPath(context);
     CGPathRelease(path);
 }
 
@@ -124,10 +124,10 @@
 {
     self.shrinking = YES;
     
-    CGFloat distance = self.distance < MAX_DISTANCE ? self.distance : MAX_DISTANCE;
+    CGFloat distance = self.distance < ISMaxDistance ? self.distance : ISMaxDistance;
     NSInteger count = 20;
     CGFloat delta = self.distance/(CGFloat)count;
-    NSTimeInterval interval = (distance/MAX_DISTANCE)*0.1/(NSTimeInterval)count;
+    NSTimeInterval interval = (distance/ISMaxDistance)*0.1/(NSTimeInterval)count;
     [self shrinkWithDelta:delta interval:interval count:count];
 }
 

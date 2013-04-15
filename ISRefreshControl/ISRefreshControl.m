@@ -1,23 +1,26 @@
 #import "ISRefreshControl.h"
 #import "ISGumView.h"
-#import "ISUtility.h"
-#import "UIActivityIndicatorView+ScaleAnimation.h"
-#import <objc/runtime.h>
+#import "ISScalingActivityIndicatorView.h"
+#import <ISMethodSwizzling/ISMethodSwizzling.h>
 #import <QuartzCore/QuartzCore.h>
+#import <objc/runtime.h>
 
-const CGFloat additionalTopInset = 50.f;
+typedef NS_ENUM(NSInteger, ISRefreshingState) {
+    ISRefreshingStateNormal,
+    ISRefreshingStateRefreshing,
+    ISRefreshingStateRefreshed,
+};
+
+static CGFloat const ISAdditionalTopInset = 50.f;
+static CGFloat const ISThreshold = 115.f;
 
 @interface ISRefreshControl ()
 
-@property (nonatomic) BOOL topInsetsEnabled;
-@property (nonatomic) BOOL animating;
-@property (nonatomic) BOOL refreshing;
-@property (nonatomic) BOOL refreshed;
-@property (strong, nonatomic) ISGumView *gumView;
-@property (strong, nonatomic) UIActivityIndicatorView *indicatorView;
-@property (readonly, nonatomic) UITableView *superTableView;
-
-@property (nonatomic) CGFloat superScrollViewTopContentInset;
+@property (nonatomic) BOOL addedTopInset;
+@property (nonatomic) CGFloat offset;
+@property (nonatomic) ISRefreshingState refreshingState;
+@property (nonatomic, strong) ISGumView *gumView;
+@property (nonatomic, strong) ISScalingActivityIndicatorView *indicatorView;
 
 @end
 
@@ -27,55 +30,72 @@ const CGFloat additionalTopInset = 50.f;
 + (void)load
 {
     @autoreleasepool {
-        if (![[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
-            SwizzleMethod(object_getClass([self class]), @selector(appearance), @selector(iOS6_appearance));
+        if (![UIRefreshControl class]) {
+            objc_registerClassPair(objc_allocateClassPair([ISRefreshControl class], "UIRefreshControl", 0));
+        } else {
+#ifndef IS_TEST_FROM_COMMAND_LINE
+            ISSwizzleClassMethod([ISRefreshControl class], @selector(alloc), @selector(_alloc));
+#endif
         }
     }
 }
 
-+ (id)alloc
++ (id)_alloc
 {
     if ([UIRefreshControl class]) {
         return (id)[UIRefreshControl alloc];
     }
-    return [super alloc];
+    return [self _alloc];
 }
 
-+ (id)iOS6_appearance
+- (id)initWithCoder:(NSCoder *)coder
 {
-    return [[UIRefreshControl class] appearance];
+    self = [super initWithCoder:coder];
+    if(self) {
+        [self initialize];
+    }
+    return self;
 }
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.gumView = [[ISGumView alloc] init];
-        [self addSubview:self.gumView];
-        
-        self.indicatorView = [[UIActivityIndicatorView alloc] init];
-        self.indicatorView.hidesWhenStopped = YES;
-        self.indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-        self.indicatorView.color = [UIColor lightGrayColor];
-        [self.indicatorView.layer setValue:@.01f forKeyPath:@"transform.scale"];
-        [self addSubview:self.indicatorView];
-        
-        [self addObserver:self
-               forKeyPath:@"tintColor"
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-        
-        UIColor *tintColor = [[ISRefreshControl appearance] tintColor];
-        if (tintColor) {
-            self.tintColor = tintColor;
-        }
+        [self initialize];
     }
     return self;
+}
+
+- (void)initialize
+{
+    self.gumView = [[ISGumView alloc] init];
+    [self addSubview:self.gumView];
+    
+    self.indicatorView = [[ISScalingActivityIndicatorView alloc] init];
+    self.indicatorView.hidesWhenStopped = YES;
+    self.indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    self.indicatorView.color = [UIColor lightGrayColor];
+    [self.indicatorView.layer setValue:@.01f forKeyPath:@"transform.scale"];
+    [self addSubview:self.indicatorView];
+    
+    [self addObserver:self forKeyPath:@"tintColor" options:0 context:NULL];
+    
+    UIColor *tintColor = [[ISRefreshControl appearance] tintColor];
+    if (tintColor) {
+        self.tintColor = tintColor;
+    }
 }
 
 - (void)dealloc
 {
     [self removeObserver:self forKeyPath:@"tintColor"];
+}
+
+#pragma mark -
+
+- (BOOL)isRefreshing
+{
+    return self.refreshingState == ISRefreshingStateRefreshing;
 }
 
 #pragma mark - view events
@@ -98,8 +118,8 @@ const CGFloat additionalTopInset = 50.f;
 {
     if ([self.superview isKindOfClass:[UIScrollView class]]) {
         [self.superview addObserver:self forKeyPath:@"contentOffset" options:0 context:NULL];
-        self.superScrollViewTopContentInset = [(UIScrollView*)self.superview contentInset].top;
-        self.frame = CGRectMake(0, (-50-self.superScrollViewTopContentInset), self.superview.frame.size.width, 50);
+        
+        self.frame = CGRectMake(0, -50, self.superview.frame.size.width, 50);
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self setNeedsLayout];
     }
@@ -111,42 +131,21 @@ const CGFloat additionalTopInset = 50.f;
 {
     if (object == self.superview && [keyPath isEqualToString:@"contentOffset"]) {
         UIScrollView *scrollView = (UIScrollView *)self.superview;
-        CGFloat offset = scrollView.contentOffset.y + self.superScrollViewTopContentInset;
+        self.offset = scrollView.contentOffset.y;
         
-        // hide when isTracking == NO
-        if ([(UIScrollView *)self.superview isTracking] && !self.isRefreshing) {
-            self.hidden = (offset > 0);
-        }
+        [self keepOnTopOfView];
+        [self sendDistanceToGumView];
+        [self updateGumViewVisible];
         
-        // reset refresh status
-        if (!self.refreshing && !self.animating && offset >= 0) {
-            [self reset];
-        }
-        
-        // send UIControlEvent
-        if (!self.refreshing && !self.refreshed && offset <= -115 && scrollView.isTracking) {
+        if (self.refreshingState == ISRefreshingStateNormal && self.offset <= -ISThreshold && scrollView.isTracking) {
             [self beginRefreshing];
             [self sendActionsForControlEvents:UIControlEventValueChanged];
         }
-        
-        // stays top and send distance to gumView
-        if (offset < -50) {
-            self.frame = CGRectMake(0, (offset-self.superScrollViewTopContentInset), self.frame.size.width, self.frame.size.height);
-            
-            if (!self.gumView.shrinking) {
-                self.gumView.distance = -offset-50;
-            }
-        } else {
-            self.frame = CGRectMake(0, (-50-self.superScrollViewTopContentInset), self.frame.size.width, self.frame.size.height);
-            
-            if (!self.gumView.shrinking) {
-                self.gumView.distance = 0.f;
-            }
+        if (self.refreshingState == ISRefreshingStateRefreshing && !scrollView.isDragging && !self.addedTopInset) {
+            [self addTopInsets];
         }
-        
-        // topInset
-        if (!scrollView.isDragging && self.refreshing && !self.animating && !self.topInsetsEnabled) {
-            [self setTopInsetsEnabled:YES completion:nil];
+        if (self.refreshingState == ISRefreshingStateRefreshed && self.offset >= scrollView.contentInset.top - 5.f) {
+            [self reset];
         }
         return;
     }
@@ -154,91 +153,106 @@ const CGFloat additionalTopInset = 50.f;
     if (object == self && [keyPath isEqualToString:@"tintColor"]) {
         self.gumView.tintColor = self.tintColor;
         self.indicatorView.color = self.tintColor;
-        
         return;
     }
     
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
+- (void)keepOnTopOfView
+{
+    if (self.offset < -ISAdditionalTopInset) {
+        self.frame = CGRectMake(0, self.offset, self.frame.size.width, self.frame.size.height);
+    } else {
+        self.frame = CGRectMake(0, -ISAdditionalTopInset, self.frame.size.width, self.frame.size.height);
+    }
+}
+
+- (void)sendDistanceToGumView
+{
+    if (self.gumView.shrinking) {
+        return;
+    }
+    self.gumView.distance = self.offset < -ISAdditionalTopInset ? -self.offset-ISAdditionalTopInset : 0.f;
+}
+
+- (void)updateGumViewVisible
+{
+    // hides gumView when it is about to appear by inertial scrolling.
+    UIScrollView *scrollView = (UIScrollView *)self.superview;
+    if (scrollView.isTracking && !self.isRefreshing) {
+        self.hidden = (self.offset > 0);
+    }
+}
+
 #pragma mark -
 
 - (void)beginRefreshing
 {
-    if (self.refreshing) {
+    if (self.isRefreshing) {
         return;
     }
     
-    self.refreshing = YES;
-    
-    [self.superview bringSubviewToFront:self];
-    
+    self.refreshingState = ISRefreshingStateRefreshing;
     [self.indicatorView startAnimating];
-    [self.indicatorView expandWithCompletion:nil];
     [self.gumView shrink];
 }
 
 - (void)endRefreshing
 {
-    if (!self.refreshing) {
+    if (!self.isRefreshing) {
         return;
     }
     
-    self.refreshing = NO;
-    self.refreshed = YES;
+    [self.indicatorView stopAnimating];
     
-    [self.superview bringSubviewToFront:self];
-    [self.indicatorView shrinkWithCompletion:^(BOOL finished) {
-        [self.indicatorView stopAnimating];
-    }];
-    
-    if (self.topInsetsEnabled) {
-        __weak __typeof__(self) wself = self;
-        [self setTopInsetsEnabled:NO completion:^{
-            UIScrollView *scrollView = (UIScrollView *)wself.superview;
-            if (!scrollView.isDragging) {
-                [wself reset];
-            }
-        }];
+    if (self.addedTopInset) {
+        [self subtractTopInsets];
+    } else {
+        self.refreshingState = ISRefreshingStateRefreshed;
     }
 }
 
 - (void)reset
 {
-    self.refreshing = NO;
-    self.refreshed = NO;
     self.gumView.hidden = NO;
+    self.indicatorView.hidden = YES;
+    self.refreshingState = ISRefreshingStateNormal;
 }
 
-- (void)setTopInsetsEnabled:(BOOL)enabled completion:(void (^)(void))completion
+- (void)addTopInsets
 {
-    if (![self.superview isKindOfClass:[UIScrollView class]]) {
-        return;
-    }
-    if (self.topInsetsEnabled == enabled) {
-        return;
-    }
-    self.topInsetsEnabled = enabled;
+    self.addedTopInset = YES;
     
     UIScrollView *scrollView = (id)self.superview;
-    CGFloat diff = additionalTopInset * (enabled?1.f:-1.f);
-    
-    __weak __typeof__(self) wself = self;
-    wself.animating = YES;
+    UIEdgeInsets inset = scrollView.contentInset;
+    inset.top += ISAdditionalTopInset;
     
     [UIView animateWithDuration:.3f
                      animations:^{
-                         scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top + diff,
-                                                                    scrollView.contentInset.left,
-                                                                    scrollView.contentInset.bottom,
-                                                                    scrollView.contentInset.right);
+                         scrollView.contentInset = inset;
+                     }];
+}
+
+- (void)subtractTopInsets
+{
+    UIScrollView *scrollView = (id)self.superview;
+    UIEdgeInsets inset = scrollView.contentInset;
+    inset.top -= ISAdditionalTopInset;
+    
+    __weak __typeof__(self) wself = self;
+    [UIView animateWithDuration:.3f
+                     animations:^{
+                         scrollView.contentInset = inset;
                      }
                      completion:^(BOOL finished) {
-                         self.animating = NO;
+                         wself.addedTopInset = NO;
                          
-                         if (completion) {
-                             completion();
-                         };
+                         if (wself.offset <= [(UIScrollView *)self.superview contentInset].top) {
+                             [self reset];
+                         } else {
+                             wself.refreshingState = ISRefreshingStateRefreshed;
+                         }
                      }];
 }
 

@@ -1,4 +1,5 @@
 #import "ISAppDelegate.h"
+#import "ISDemoViewController.h"
 
 @implementation ISAppDelegate
 
