@@ -240,7 +240,7 @@ static CGFloat const ISThreshold = 115.f;
     UIEdgeInsets inset = scrollView.contentInset;
     inset.top -= ISAdditionalTopInset;
     
-    __weak __typeof__(self) wself = self;
+    __block __typeof__(self) wself = self;
     [UIView animateWithDuration:.3f
                      animations:^{
                          scrollView.contentInset = inset;
@@ -248,8 +248,8 @@ static CGFloat const ISThreshold = 115.f;
                      completion:^(BOOL finished) {
                          wself.addedTopInset = NO;
                          
-                         if (wself.offset <= [(UIScrollView *)self.superview contentInset].top) {
-                             [self reset];
+                         if (wself.offset <= [(UIScrollView *)wself.superview contentInset].top) {
+                             [wself reset];
                          } else {
                              wself.refreshingState = ISRefreshingStateRefreshed;
                          }
