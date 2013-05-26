@@ -35,7 +35,6 @@
 		7FC97BD716F7651E005848F8 /* ISRefresgControlIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7FC97B9916F7641F005848F8 /* ISRefresgControlIcon@2x.png */; };
 		7FFA31381719B4BC00009FDE /* ISRefreshControlSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FFA31371719B4BC00009FDE /* ISRefreshControlSpec.m */; };
 		7FFA31391719B5E500009FDE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97BCC16F76479005848F8 /* UIKit.framework */; };
-		7FFA313B1719B60300009FDE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FFA313A1719B60300009FDE /* QuartzCore.framework */; };
 		7FFA313C1719B61500009FDE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC97BB216F76440005848F8 /* CoreGraphics.framework */; };
 		B3958DF9FDAC4D8C9705E3F3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 535D40CE8FFB45B1A740FE5B /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -111,7 +110,6 @@
 		7FC97BCF16F764CD005848F8 /* ISDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISDemoViewController.m; sourceTree = "<group>"; };
 		7FDDBB1F171BD689009B8BA6 /* Pods.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		7FFA31371719B4BC00009FDE /* ISRefreshControlSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISRefreshControlSpec.m; sourceTree = "<group>"; };
-		7FFA313A1719B60300009FDE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		840360A22CFE4CEDA14E4C3B /* Pods-ISRefreshControlTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ISRefreshControlTests.xcconfig"; path = "Pods/Pods-ISRefreshControlTests.xcconfig"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -129,7 +127,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FFA313B1719B60300009FDE /* QuartzCore.framework in Frameworks */,
 				7FC97B8216F763B8005848F8 /* Foundation.framework in Frameworks */,
 				7FC97B8516F763B8005848F8 /* libISRefreshControl.a in Frameworks */,
 				4D9C44E6D9C24FA8BE38B0E0 /* libPods-ISRefreshControlTests.a in Frameworks */,
@@ -178,7 +175,6 @@
 		7FC97B6E16F763B8005848F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7FFA313A1719B60300009FDE /* QuartzCore.framework */,
 				7FC97BCC16F76479005848F8 /* UIKit.framework */,
 				7FC97B6F16F763B8005848F8 /* Foundation.framework */,
 				7FC97BB216F76440005848F8 /* CoreGraphics.framework */,

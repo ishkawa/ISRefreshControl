@@ -2,7 +2,6 @@
 #import "ISGumView.h"
 #import "ISScalingActivityIndicatorView.h"
 #import "ISMethodSwizzling.h"
-#import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 
 typedef NS_ENUM(NSInteger, ISRefreshingState) {
@@ -72,10 +71,6 @@ static CGFloat const ISThreshold = 115.f;
     [self addSubview:self.gumView];
     
     self.indicatorView = [[ISScalingActivityIndicatorView alloc] init];
-    self.indicatorView.hidesWhenStopped = YES;
-    self.indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-    self.indicatorView.color = [UIColor lightGrayColor];
-    [self.indicatorView.layer setValue:@.01f forKeyPath:@"transform.scale"];
     [self addSubview:self.indicatorView];
     
     [self addObserver:self forKeyPath:@"tintColor" options:0 context:NULL];

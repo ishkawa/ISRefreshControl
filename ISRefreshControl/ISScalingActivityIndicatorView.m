@@ -1,14 +1,26 @@
 #import "ISScalingActivityIndicatorView.h"
 #import "UIColor+ISRefreshControl.h"
-#import <QuartzCore/QuartzCore.h>
 
 @implementation ISScalingActivityIndicatorView
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+        self.color = [UIColor is_refreshControlColor];
+        self.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
+    }
+    return self;
+}
 
 - (id)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
     if (self) {
+        self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
         self.color = [UIColor is_refreshControlColor];
+        self.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
     }
     return self;
 }
@@ -22,12 +34,12 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [UIView animateWithDuration:.2
                          animations:^{
-                             [self.layer setValue:@.8f forKeyPath:@"transform.scale"];
+                             self.transform = CGAffineTransformMakeScale(0.8f, 0.8f);
                          }
                          completion:^(BOOL finished) {
                              [UIView animateWithDuration:.2
                                               animations:^{
-                                                  [self.layer setValue:@.7f forKeyPath:@"transform.scale"];
+                                                  self.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
                                               }];
                          }];
     });
@@ -41,7 +53,7 @@
     
     [UIView animateWithDuration:.3f
                      animations:^{
-                         [self.layer setValue:@0.01f forKeyPath:@"transform.scale"];
+                         self.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
                      }
                      completion:^(BOOL finished) {
                          [super stopAnimating];
