@@ -1,14 +1,26 @@
 #import "ISScalingActivityIndicatorView.h"
 #import "UIColor+ISRefreshControl.h"
-#import <QuartzCore/QuartzCore.h>
 
 @implementation ISScalingActivityIndicatorView
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+        self.color = [UIColor is_refreshControlColor];
+        self.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
+    }
+    return self;
+}
 
 - (id)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
     if (self) {
+        self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
         self.color = [UIColor is_refreshControlColor];
+        self.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
     }
     return self;
 }
@@ -17,17 +29,21 @@
 {
     [super startAnimating];
     
-    int64_t delayInSeconds = 1.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * 0.1 * NSEC_PER_SEC);
+    CGAffineTransform rotation = CGAffineTransformMakeRotation(-M_PI_2);
+    CGAffineTransform scale = CGAffineTransformMakeScale(0.01f, 0.01f);
+    self.transform = CGAffineTransformConcat(rotation, scale);
+    
+    double delayInSeconds = 0.1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [UIView animateWithDuration:.2
                          animations:^{
-                             [self.layer setValue:@.8f forKeyPath:@"transform.scale"];
+                             self.transform = CGAffineTransformMakeScale(0.8f, 0.8f);
                          }
                          completion:^(BOOL finished) {
                              [UIView animateWithDuration:.2
                                               animations:^{
-                                                  [self.layer setValue:@.7f forKeyPath:@"transform.scale"];
+                                                  self.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
                                               }];
                          }];
     });
@@ -39,9 +55,11 @@
         return;
     }
     
-    [UIView animateWithDuration:.3f
+    [UIView animateWithDuration:.255f
                      animations:^{
-                         [self.layer setValue:@0.01f forKeyPath:@"transform.scale"];
+                         CGAffineTransform rotation = CGAffineTransformMakeRotation(M_PI_2);
+                         CGAffineTransform scale = CGAffineTransformMakeScale(0.01f, 0.01f);
+                         self.transform = CGAffineTransformConcat(rotation, scale);
                      }
                      completion:^(BOOL finished) {
                          [super stopAnimating];

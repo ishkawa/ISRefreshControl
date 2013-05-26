@@ -1,6 +1,6 @@
 platform :ios, '5.0'
 
-pod 'ISMethodSwizzling', :git => 'https://github.com/ishkawa/ISMethodSwizzling.git'
+pod 'ISMethodSwizzling', '~> 0.0.2'
 
 target :ISRefreshControlTests, :exclusive => true do
     pod 'Kiwi',   '~> 2.0.6'

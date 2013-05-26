@@ -2,7 +2,6 @@
 #import "ISGumView.h"
 #import "ISScalingActivityIndicatorView.h"
 #import "ISMethodSwizzling.h"
-#import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 
 typedef NS_ENUM(NSInteger, ISRefreshingState) {
@@ -72,10 +71,6 @@ static CGFloat const ISThreshold = 115.f;
     [self addSubview:self.gumView];
     
     self.indicatorView = [[ISScalingActivityIndicatorView alloc] init];
-    self.indicatorView.hidesWhenStopped = YES;
-    self.indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-    self.indicatorView.color = [UIColor lightGrayColor];
-    [self.indicatorView.layer setValue:@.01f forKeyPath:@"transform.scale"];
     [self addSubview:self.indicatorView];
     
     [self addObserver:self forKeyPath:@"tintColor" options:0 context:NULL];
@@ -240,18 +235,17 @@ static CGFloat const ISThreshold = 115.f;
     UIEdgeInsets inset = scrollView.contentInset;
     inset.top -= ISAdditionalTopInset;
     
-    __weak __typeof__(self) wself = self;
     [UIView animateWithDuration:.3f
                      animations:^{
                          scrollView.contentInset = inset;
                      }
                      completion:^(BOOL finished) {
-                         wself.addedTopInset = NO;
+                         self.addedTopInset = NO;
                          
-                         if (wself.offset <= [(UIScrollView *)self.superview contentInset].top) {
+                         if (self.offset <= [(UIScrollView *)self.superview contentInset].top) {
                              [self reset];
                          } else {
-                             wself.refreshingState = ISRefreshingStateRefreshed;
+                             self.refreshingState = ISRefreshingStateRefreshed;
                          }
                      }];
 }
