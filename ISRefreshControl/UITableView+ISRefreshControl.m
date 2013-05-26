@@ -1,5 +1,5 @@
 #import "UITableView+ISRefreshControl.h"
-#import <ISMethodSwizzling/ISMethodSwizzling.h>
+#import "ISMethodSwizzling.h"
 #import <objc/runtime.h>
 
 @implementation UITableView (ISRefreshControl)

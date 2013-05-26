@@ -35,6 +35,10 @@
 
 - (void)stopAnimating
 {
+    if (self.superview == nil) {
+        return;
+    }
+    
     [UIView animateWithDuration:.3f
                      animations:^{
                          [self.layer setValue:@0.01f forKeyPath:@"transform.scale"];

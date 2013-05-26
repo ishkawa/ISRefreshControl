@@ -1,4 +1,4 @@
-platform :ios
+platform :ios, '5.0'
 
 pod 'ISMethodSwizzling', :git => 'https://github.com/ishkawa/ISMethodSwizzling.git'
 
