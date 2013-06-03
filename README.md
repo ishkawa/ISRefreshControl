@@ -62,6 +62,10 @@ pod 'ISRefreshControl', '~> 1.3.0'
 
 add files under `ISRefreshControl/` to your project.
 
+## Change log
+
+see [CHANGELOG.md](https://github.com/ishkawa/ISRefreshControl/blob/master/CHANGELOG.md).
+
 ## License
 
 Copyright (c) 2013 Yosuke Ishikawa
