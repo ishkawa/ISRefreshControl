@@ -70,8 +70,8 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
             self.subRadius  = self.mainRadius;
         }
     } else {
-        self.mainRadius = ISMainCircleMaxRadius-pow(((self.distance)/ISMaxDistance), 1.1)*(ISMainCircleMaxRadius-ISMainCircleMinRadius);
-        self.subRadius  = ISSubCircleMaxRadius-pow(((self.distance)/ISMaxDistance), 1.3)*(ISSubCircleMaxRadius-ISSubCircleMinRadius);
+        self.mainRadius = ISMainCircleMaxRadius - (ISMainCircleMaxRadius - ISMainCircleMinRadius) * progress;
+        self.subRadius  = ISSubCircleMaxRadius - (ISSubCircleMaxRadius - ISSubCircleMinRadius) * progress;
     }
     self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-5, self.mainRadius*2-5);
     self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f + self.distance * 0.03);
