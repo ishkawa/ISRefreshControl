@@ -1,7 +1,7 @@
 #import "ISGumView.h"
 #import "UIColor+ISRefreshControl.h"
 
-static CGFloat const ISMaxDistance = 65.f;
+static CGFloat const ISMaxDistance = 55.f;
 static CGFloat const ISMainCircleMaxRadius = 16.f;
 static CGFloat const ISMainCircleMinRadius = 10.f;
 static CGFloat const ISSubCircleMaxRadius  = 16.f;
