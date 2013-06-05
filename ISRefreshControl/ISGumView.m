@@ -1,5 +1,6 @@
 #import "ISGumView.h"
 #import "UIColor+ISRefreshControl.h"
+#import <QuartzCore/QuartzCore.h>
 
 static CGFloat const ISMaxDistance = 55.f;
 static CGFloat const ISMainCircleMaxRadius = 16.f;
@@ -17,6 +18,11 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
 
 @implementation ISGumView
 
++ (Class)layerClass
+{
+    return [CAShapeLayer class];
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -26,6 +32,11 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
         self.distance = 0.f;
         self.mainRadius = ISMainCircleMaxRadius;
         self.subRadius  = ISMainCircleMaxRadius;
+        
+        self.layer.shadowColor = [UIColor is_refreshControlColor].CGColor;
+        self.layer.shadowOpacity = .5f;
+        self.layer.shadowRadius = .5f;
+        self.layer.shadowOffset = CGSizeMake(0.f, .5f);
         
         self.imageView = [[UIImageView alloc] init];
         self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-12, self.mainRadius*2-12);
@@ -46,36 +57,17 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (object == self && [keyPath isEqualToString:@"distance"]) {
-        [self setNeedsDisplay];
+        [self setNeedsLayout];
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
 
-- (void)drawRect:(CGRect)rect
+#pragma mark - accessor
+
+- (UIBezierPath *)bezierPath
 {
-    if (self.distance < 0) {
-        self.distance = 0;
-    }
-    if (self.distance > ISMaxDistance) {
-        self.distance = ISMaxDistance;
-    }
     CGFloat progress = self.distance / ISMaxDistance;
-    if (self.shrinking) {
-        self.mainRadius = ISMainCircleMinRadius*pow((self.distance/ISMaxDistance), 0.1);
-        if (self.distance > self.mainRadius) {
-            CGFloat diff = fabsf(ISSubCircleMinRadius-self.mainRadius);
-            self.subRadius = ISSubCircleMinRadius+diff*(1-(self.distance-self.mainRadius)/(ISMaxDistance-self.mainRadius));
-        } else {
-            self.subRadius  = self.mainRadius;
-        }
-    } else {
-        self.mainRadius = ISMainCircleMaxRadius - (ISMainCircleMaxRadius - ISMainCircleMinRadius) * progress;
-        self.subRadius  = ISSubCircleMaxRadius - (ISSubCircleMaxRadius - ISSubCircleMinRadius) * progress;
-    }
-    self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-5, self.mainRadius*2-5);
-    self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f + self.distance * 0.03);
-    
     UIBezierPath *bezierPath = [UIBezierPath bezierPath];
     
     [bezierPath addArcWithCenter:CGPointMake(self.mainRadius, self.mainRadius)
@@ -109,14 +101,41 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     CGFloat offset = self.frame.size.width/2.f - self.mainRadius;
     [bezierPath applyTransform:CGAffineTransformMakeTranslation(offset, 0.f)];
     
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGPathRef path = bezierPath.CGPath;
-    
-    CGContextAddPath(context, path);
-    CGContextSetFillColorWithColor(context, (self.tintColor ?: [UIColor is_refreshControlColor]).CGColor);
-    CGContextSetShadow(context, CGSizeMake(0.f, .5f), 1.f);
-    CGContextFillPath(context);
+    return bezierPath;
 }
+
+#pragma mark - UIView events
+
+- (void)layoutSubviews
+{
+    if (self.distance < 0) {
+        self.distance = 0;
+    }
+    if (self.distance > ISMaxDistance) {
+        self.distance = ISMaxDistance;
+    }
+    CGFloat progress = self.distance / ISMaxDistance;
+    if (self.shrinking) {
+        self.mainRadius = ISMainCircleMinRadius*pow((self.distance/ISMaxDistance), 0.1);
+        if (self.distance > self.mainRadius) {
+            CGFloat diff = fabsf(ISSubCircleMinRadius-self.mainRadius);
+            self.subRadius = ISSubCircleMinRadius+diff*(1-(self.distance-self.mainRadius)/(ISMaxDistance-self.mainRadius));
+        } else {
+            self.subRadius  = self.mainRadius;
+        }
+    } else {
+        self.mainRadius = ISMainCircleMaxRadius - (ISMainCircleMaxRadius - ISMainCircleMinRadius) * progress;
+        self.subRadius  = ISSubCircleMaxRadius - (ISSubCircleMaxRadius - ISSubCircleMinRadius) * progress;
+    }
+    self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-5, self.mainRadius*2-5);
+    self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f + self.distance * 0.03);
+    
+    CAShapeLayer *layer = (CAShapeLayer *)self.layer;
+    layer.path = self.bezierPath.CGPath;
+    layer.fillColor = [UIColor is_refreshControlColor].CGColor;
+}
+
+#pragma mark -
 
 - (void)shrink
 {
