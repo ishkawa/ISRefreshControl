@@ -60,6 +60,7 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     if (self.distance > ISMaxDistance) {
         self.distance = ISMaxDistance;
     }
+    CGFloat progress = self.distance / ISMaxDistance;
     if (self.shrinking) {
         self.mainRadius = ISMainCircleMinRadius*pow((self.distance/ISMaxDistance), 0.1);
         if (self.distance > self.mainRadius) {
@@ -75,49 +76,46 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-5, self.mainRadius*2-5);
     self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f + self.distance * 0.03);
     
-    // offset to keep center
+    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+    
+    [bezierPath addArcWithCenter:CGPointMake(self.mainRadius, self.mainRadius)
+                          radius:self.mainRadius
+                      startAngle:M_PI / 2.f
+                        endAngle:M_PI / 2.f + M_PI * 2.f
+                       clockwise:YES];
+    
+    [bezierPath addArcWithCenter:CGPointMake(self.mainRadius, self.mainRadius + self.distance)
+                          radius:self.subRadius
+                      startAngle:M_PI / 2.f
+                        endAngle:M_PI / 2.f + M_PI * 2.f
+                       clockwise:YES];
+    
+    CGPoint rightPoint1 = CGPointMake(self.mainRadius * 2.f, self.mainRadius);
+    CGPoint rightPoint2 = CGPointMake(self.mainRadius + self.subRadius, self.mainRadius + self.distance);
+    [bezierPath moveToPoint:rightPoint1];
+    [bezierPath addCurveToPoint:rightPoint2
+                  controlPoint1:CGPointMake(rightPoint1.x, rightPoint1.y * (1.f + progress))
+                  controlPoint2:CGPointMake(rightPoint2.x, rightPoint2.y * (1.f - progress * .7f))];
+    
+    CGPoint leftPoint1 = CGPointMake(self.mainRadius - self.subRadius, self.mainRadius + self.distance);
+    CGPoint leftPoint2 = CGPointMake(0.f, self.mainRadius);
+    [bezierPath addLineToPoint:leftPoint1];
+    [bezierPath addCurveToPoint:leftPoint2
+                  controlPoint1:CGPointMake(leftPoint1.x, leftPoint1.y * (1.f - progress * .7f))
+                  controlPoint2:CGPointMake(leftPoint2.x, leftPoint2.y * (1.f + progress))];
+    
+    [bezierPath closePath];
+    
     CGFloat offset = self.frame.size.width/2.f - self.mainRadius;
+    [bezierPath applyTransform:CGAffineTransformMakeTranslation(offset, 0.f)];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathRef path = bezierPath.CGPath;
     
-    CGPathMoveToPoint(path, NULL, offset, 25);
-    CGPathAddArcToPoint(path, NULL,
-                        offset, 0,
-                        offset + self.mainRadius, 0,
-                        self.mainRadius);
-    
-    CGPathAddArcToPoint(path, NULL,
-                        offset + self.mainRadius*2.f, 0,
-                        offset + self.mainRadius*2.f, self.mainRadius,
-                        self.mainRadius);
-
-    CGPathAddCurveToPoint(path, NULL,
-                          offset + self.mainRadius*2.f,            self.mainRadius*2.f,
-                          offset + self.mainRadius+self.subRadius, self.mainRadius*2.f,
-                          offset + self.mainRadius+self.subRadius, self.distance+self.mainRadius);
-    
-    CGPathAddArcToPoint(path, NULL,
-                        offset + self.mainRadius+self.subRadius, self.distance+self.mainRadius+self.subRadius,
-                        offset + self.mainRadius,                self.distance+self.mainRadius+self.subRadius,
-                        self.subRadius);
-    
-    CGPathAddArcToPoint(path, NULL,
-                        offset + self.mainRadius-self.subRadius, self.distance+self.mainRadius+self.subRadius,
-                        offset + self.mainRadius-self.subRadius, self.distance+self.mainRadius,
-                        self.subRadius);
-    
-    CGPathAddCurveToPoint(path, NULL,
-                          offset + self.mainRadius-self.subRadius, self.mainRadius*2.f,
-                          offset + 0, self.mainRadius*2.f,
-                          offset + 0, self.mainRadius);
-    
-    CGPathCloseSubpath(path);
     CGContextAddPath(context, path);
     CGContextSetFillColorWithColor(context, (self.tintColor ?: [UIColor is_refreshControlColor]).CGColor);
     CGContextSetShadow(context, CGSizeMake(0.f, .5f), 1.f);
     CGContextFillPath(context);
-    CGPathRelease(path);
 }
 
 - (void)shrink
