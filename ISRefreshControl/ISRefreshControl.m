@@ -175,7 +175,9 @@ static CGFloat const ISRefreshControlThreshold = 105.f;
     CGFloat y = offset < -self.frame.size.height ? offset - topInset : -self.frame.size.height - topInset;
     self.frame = CGRectOffset(self.frame, 0.f, y - self.frame.origin.y);
     
-    self.gumView.distance = offset < -self.frame.size.height ? -offset-self.frame.size.height : 0.f;
+    if (offset < 0.f) {
+        self.gumView.distance = offset < -self.frame.size.height ? -offset-self.frame.size.height : 0.f;
+    }
     
     // hides gumView when it is about to appear by inertial scrolling.
     if (scrollView.isTracking && !self.isRefreshing) {
@@ -268,6 +270,7 @@ static CGFloat const ISRefreshControlThreshold = 105.f;
                      completion:^(BOOL finished) {
                          self.subtractingTopInset = NO;
                          self.addedTopInset = NO;
+                         self.gumView.distance = 0.f;
                          
                          if (scrollView.contentOffset.y <= scrollView.contentInset.top && !scrollView.isDragging) {
                              [self reset];
