@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface ISRefreshControl : UIControl;
+@interface ISRefreshControl : UIControl
 
 @property (nonatomic, readonly, getter=isRefreshing) BOOL refreshing;
 
