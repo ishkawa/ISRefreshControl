@@ -3,20 +3,42 @@
 
 @implementation ISDemoViewController
 
+- (id)init
+{
+    return [self initWithStyle:UITableViewStylePlain rowHeight:44.f topInset:0.f];
+}
+
+- (id)initWithStyle:(UITableViewStyle)style rowHeight:(CGFloat)rowHeight topInset:(CGFloat)topInset
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        _topInset  = topInset;
+        _rowHeight = rowHeight;
+    }
+    return self;
+}
+
+#pragma mark - UIView events
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    UILabel *label = [[UILabel alloc] init];
-    label.frame = CGRectMake(0, 0, 320, 50);
-    label.text = @"header";
-    label.textColor = [UIColor lightGrayColor];
-    label.textAlignment = UITextAlignmentCenter;
-    self.tableView.tableHeaderView = label;
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topInset, 0.f, 0.f, 0.f);
+    self.tableView.rowHeight = self.rowHeight;
     
+    self.refreshControl = (id)[[ISRefreshControl alloc] init];
     [self.refreshControl addTarget:self
                             action:@selector(refresh)
                   forControlEvents:UIControlEventValueChanged];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.title = @"Demo";
+    [self toggleContents];
 }
 
 #pragma mark -
@@ -31,20 +53,26 @@
     int64_t delayInSeconds = 2.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        static BOOL flag = NO;
-        if (flag) {
-            self.items = @[@"foo", @"bar", @"baz", @"foo", @"bar", @"baz", @"foo", @"bar", @"baz", @"foo", @"bar", @"baz", @"foo", @"bar", @"baz", ];
-        }else {
-            self.items = @[@"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", ];
-        }
-        flag = !flag;
-        
-        [self.tableView reloadData];
+        [self toggleContents];
         [self.refreshControl endRefreshing];
     });
 }
 
-#pragma mark - table view data source
+- (void)toggleContents
+{
+    static BOOL flag = NO;
+    
+    if (flag) {
+        self.items = @[@"foo", @"bar", @"baz", @"foo", @"bar", @"baz", @"foo", @"bar", @"baz", @"foo", @"bar", @"baz", @"foo", @"bar", @"baz", ];
+    } else {
+        self.items = @[@"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", @"hoge", @"fuga", @"piyo", ];
+    }
+    flag = !flag;
+    
+    [self.tableView reloadData];
+}
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

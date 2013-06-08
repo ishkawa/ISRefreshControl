@@ -2,7 +2,7 @@
 
 ## Requirements
 
-iOS5 or later
+iOS 4.3 or later
 
 ## Usage 
 
@@ -45,7 +45,7 @@ or set "Refreshing" of `UITableViewController` "Enabled" on storyboard.
 works as real `UIRefreshControl`.  
 the constructor of `ISRefreshControl` returns an instance of `UIRefreshControl`.
 
-#### iOS5
+#### iOS5 and iOS4
 
 imitates `UIRefreshControl`.
 `ISRefreshControl` sends `UIControlEventValueChanged` when content offset of `UITableView` overs threshold.
@@ -55,13 +55,14 @@ imitates `UIRefreshControl`.
 
 The best way to Install ISRefreshControl is by using CocoaPods.
 ```
-pod 'ISRefreshControl', '~> 1.3.0'
+pod 'ISRefreshControl', '~> 1.4.0'
 ```
 
 ### Without CocoaPods 
 
 - install [ISMethodSwizzling](https://github.com/ishkawa/ISMethodSwizzling).
 - add files under `ISRefreshControl/` to your project.
+- add `QuartzCore.framework` to "Link Binary With Libraries" (in "Build Phases").
 
 ## Change log
 

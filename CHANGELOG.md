@@ -1,3 +1,11 @@
+### 1.4.0
+
+- iOS 4.x support.
+- improved many animations.
+- added `QuartzCore.framework` to linked frameworks.
+- fixed bug caused by `contentInset`.
+- stops drawing when visible area is away from refresh control. #13
+
 ### 1.3.0
 
 - avoided crash on stopAnimating if ISScalingActivityIndicatorView.superView is nil. #14
