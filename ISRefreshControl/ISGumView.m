@@ -168,29 +168,30 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
         }
     }
     
-    CAShapeLayer *layer = (CAShapeLayer *)self.layer;
-    layer.path = CGPathCreateMutable();
-    self.imageView.layer.transform = CATransform3DMakeScale(.01f, .01f, 1.f);
-    
     NSTimeInterval duration = 0.12;
     
     CAKeyframeAnimation *pathAnimation = [CAKeyframeAnimation animationWithKeyPath:@"path"];
     pathAnimation.duration = duration;
     pathAnimation.values = values;
     pathAnimation.delegate = self;
+    pathAnimation.fillMode = kCAFillModeForwards;
+    pathAnimation.removedOnCompletion = NO;
     [self.layer addAnimation:pathAnimation forKey:@"pathAnimation"];
     
     CABasicAnimation *scaleXAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale.x"];
     scaleXAnimation.duration = duration;
     scaleXAnimation.fromValue = @1.f;
     scaleXAnimation.toValue = @.7f;
-    scaleXAnimation.delegate = self;
+    scaleXAnimation.fillMode = kCAFillModeForwards;
+    scaleXAnimation.removedOnCompletion = NO;
     [self.imageView.layer addAnimation:scaleXAnimation forKey:@"scaleXAnimation"];
     
     CABasicAnimation *scaleYAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale.y"];
     scaleYAnimation.duration = duration;
     scaleYAnimation.fromValue = @1.f;
     scaleYAnimation.toValue = @.7f;
+    scaleYAnimation.fillMode = kCAFillModeForwards;
+    scaleYAnimation.removedOnCompletion = NO;
     [self.imageView.layer addAnimation:scaleYAnimation forKey:@"scaleYAnimation"];
     
     CABasicAnimation *moveAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
@@ -205,7 +206,9 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     self.shrinking = NO;
     self.hidden = YES;
     self.alpha = 1.f;
-    self.imageView.layer.transform = CATransform3DIdentity;
+    
+    [self.layer removeAllAnimations];
+    [self.imageView.layer removeAllAnimations];
 }
 
 @end
