@@ -117,7 +117,7 @@ static CGFloat const ISRefreshControlThreshold = 105.f;
     CGSize gumViewSize = CGSizeMake(35.f, 90.f);
     CGRect gumViewFrame = CGRectZero;
     gumViewFrame.origin.x = (self.frame.size.width - gumViewSize.width) / 2.f;
-    gumViewFrame.origin.y = 5.f;
+    gumViewFrame.origin.y = 10.f;
     gumViewFrame.size = gumViewSize;
     self.gumView.frame = gumViewFrame;
 }

@@ -2,7 +2,7 @@
 #import "UIColor+ISRefreshControl.h"
 #import <QuartzCore/QuartzCore.h>
 
-static CGFloat const ISMaxDistance = 55.f;
+static CGFloat const ISMaxDistance = 60.f;
 static CGFloat const ISMainCircleMaxRadius = 16.f;
 static CGFloat const ISMainCircleMinRadius = 10.f;
 static CGFloat const ISSubCircleMaxRadius  = 16.f;
@@ -147,7 +147,7 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     CGFloat delta = distance / (CGFloat)count;
     
     for (NSInteger index = 0; index < count; index++) {
-        CGFloat mainRadius = ISMainCircleMinRadius*pow((distance/ISMaxDistance), 0.1);
+        CGFloat mainRadius = ISMainCircleMinRadius*pow((distance/ISMaxDistance), 0.15);
         CGFloat subRadius;
         if (distance > mainRadius) {
             CGFloat diff = fabsf(ISSubCircleMinRadius-mainRadius);
@@ -168,7 +168,7 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
         }
     }
     
-    NSTimeInterval duration = 0.12;
+    NSTimeInterval duration = .135;
     
     CAKeyframeAnimation *pathAnimation = [CAKeyframeAnimation animationWithKeyPath:@"path"];
     pathAnimation.duration = duration;
@@ -181,7 +181,7 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     CABasicAnimation *scaleXAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale.x"];
     scaleXAnimation.duration = duration;
     scaleXAnimation.fromValue = @1.f;
-    scaleXAnimation.toValue = @.7f;
+    scaleXAnimation.toValue = @.4f;
     scaleXAnimation.fillMode = kCAFillModeForwards;
     scaleXAnimation.removedOnCompletion = NO;
     [self.imageView.layer addAnimation:scaleXAnimation forKey:@"scaleXAnimation"];
@@ -189,7 +189,7 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     CABasicAnimation *scaleYAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale.y"];
     scaleYAnimation.duration = duration;
     scaleYAnimation.fromValue = @1.f;
-    scaleYAnimation.toValue = @.7f;
+    scaleYAnimation.toValue = @.4f;
     scaleYAnimation.fillMode = kCAFillModeForwards;
     scaleYAnimation.removedOnCompletion = NO;
     [self.imageView.layer addAnimation:scaleYAnimation forKey:@"scaleYAnimation"];
@@ -197,7 +197,7 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     CABasicAnimation *moveAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
     moveAnimation.duration = duration;
     moveAnimation.fromValue = @0.f;
-    moveAnimation.toValue = @(-2.0f);
+    moveAnimation.toValue = @(-5.0f);
     [self.imageView.layer addAnimation:moveAnimation forKey:@"moveAnimation"];
 }
 
