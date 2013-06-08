@@ -11,7 +11,6 @@
 		4D9C44E6D9C24FA8BE38B0E0 /* libPods-ISRefreshControlTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F560D0942140FA8C00ADBE /* libPods-ISRefreshControlTests.a */; };
 		7F2A03E0171978A00026E92A /* ISScalingActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F2A03DF171978A00026E92A /* ISScalingActivityIndicatorView.m */; };
 		7F2A03E8171982C50026E92A /* UIColor+ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F2A03E7171982C50026E92A /* UIColor+ISRefreshControl.m */; };
-		7F5F44841719625600B77D7E /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F5F44821719624B00B77D7E /* iPhone.storyboard */; };
 		7F5F4487171966BE00B77D7E /* UITableView+ISRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F5F4486171966BE00B77D7E /* UITableView+ISRefreshControl.m */; };
 		7F5F9EF3175F99F50036B25B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F5F9EF2175F99F50036B25B /* QuartzCore.framework */; };
 		7F6B28EF17632C9A003DEF23 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F5F9EF2175F99F50036B25B /* QuartzCore.framework */; };
@@ -79,7 +78,6 @@
 		7F2A03DF171978A00026E92A /* ISScalingActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISScalingActivityIndicatorView.m; sourceTree = "<group>"; };
 		7F2A03E6171982C50026E92A /* UIColor+ISRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+ISRefreshControl.h"; sourceTree = "<group>"; };
 		7F2A03E7171982C50026E92A /* UIColor+ISRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+ISRefreshControl.m"; sourceTree = "<group>"; };
-		7F5F44821719624B00B77D7E /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPhone.storyboard; sourceTree = "<group>"; };
 		7F5F4485171966BE00B77D7E /* UITableView+ISRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+ISRefreshControl.h"; sourceTree = "<group>"; };
 		7F5F4486171966BE00B77D7E /* UITableView+ISRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ISRefreshControl.m"; sourceTree = "<group>"; };
 		7F5F9EF2175F99F50036B25B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -247,7 +245,6 @@
 		7FC97BB416F76440005848F8 /* DemoApp */ = {
 			isa = PBXGroup;
 			children = (
-				7F5F44821719624B00B77D7E /* iPhone.storyboard */,
 				7FC97BBD16F76440005848F8 /* ISAppDelegate.h */,
 				7FC97BBE16F76440005848F8 /* ISAppDelegate.m */,
 				7FC97BCE16F764CD005848F8 /* ISDemoViewController.h */,
@@ -378,7 +375,6 @@
 				7FC97BC516F76440005848F8 /* Default-568h@2x.png in Resources */,
 				7FC97BD616F7651E005848F8 /* ISRefresgControlIcon.png in Resources */,
 				7FC97BD716F7651E005848F8 /* ISRefresgControlIcon@2x.png in Resources */,
-				7F5F44841719625600B77D7E /* iPhone.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -534,7 +530,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -557,7 +553,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

@@ -75,9 +75,11 @@ static CGFloat const ISThreshold = 105.f;
     
     [self addObserver:self forKeyPath:@"tintColor" options:0 context:NULL];
     
-    UIColor *tintColor = [[ISRefreshControl appearance] tintColor];
-    if (tintColor) {
-        self.tintColor = tintColor;
+    if ([(id)[ISRefreshControl class] respondsToSelector:@selector(appearance)]) {
+        UIColor *tintColor = [[ISRefreshControl appearance] tintColor];
+        if (tintColor) {
+            self.tintColor = tintColor;
+        }
     }
 }
 
@@ -99,7 +101,12 @@ static CGFloat const ISThreshold = 105.f;
 {
     CGFloat width = self.frame.size.width;
     self.gumView.frame = CGRectMake(width/2.f-15, 25-15, 35, 90);
-    self.indicatorView.frame = CGRectMake(width/2.f-15, 25-15, 30, 30);
+    
+    if (self.indicatorView.activityIndicatorViewStyle == UIActivityIndicatorViewStyleWhiteLarge) {
+        self.indicatorView.frame = CGRectMake(width/2.f-15.f, 25.f-15.f, 30.f, 30.f);
+    } else {
+        self.indicatorView.frame = CGRectMake(width/2.f-12.5f, 25.f-12.5f, 25.f, 25.f);
+    }
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview
