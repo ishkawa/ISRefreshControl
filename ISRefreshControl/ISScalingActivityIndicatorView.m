@@ -8,10 +8,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-        if ([self respondsToSelector:@selector(setColor:)]) {
-            self.color = [UIColor is_refreshControlColor];
-        }
+        [self initialize];
     }
     return self;
 }
@@ -20,31 +17,45 @@
 {
     self = [super initWithCoder:coder];
     if (self) {
-        self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-        if ([self respondsToSelector:@selector(setColor:)]) {
-            self.color = [UIColor is_refreshControlColor];
-        }
+        [self initialize];
     }
     return self;
+}
+
+- (void)initialize
+{
+    if ([self respondsToSelector:@selector(setColor:)]) {
+        self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+        self.color = [UIColor is_refreshControlColor];
+    } else {
+        // iOS 4.x
+        self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    }
 }
 
 - (void)startAnimating
 {
     [super startAnimating];
     
-    self.transform = CGAffineTransformIdentity;
-    self.layer.transform = CATransform3DMakeScale(.7f, .7f, .7f);
+    
+    NSArray *scaleValues;
+    if (self.activityIndicatorViewStyle == UIActivityIndicatorViewStyleWhiteLarge) {
+        scaleValues = @[@.01f, @.85f, @.7f];
+        self.layer.transform = CATransform3DMakeScale(.7f, .7f, .7f);
+    } else {
+        scaleValues = @[@.01f, @1.2f, @1.f];
+    }
     
     NSTimeInterval duration = .4;
     
     CAKeyframeAnimation *scaleXAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale.x"];
     scaleXAnimation.duration = duration;
-    scaleXAnimation.values = @[@.01f, @.85f, @.7f];
+    scaleXAnimation.values = scaleValues;
     [self.layer addAnimation:scaleXAnimation forKey:@"scaleXAnimation"];
     
     CAKeyframeAnimation *scaleYAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale.y"];
     scaleYAnimation.duration = duration;
-    scaleYAnimation.values = @[@.01f, @.85f, @.7f];
+    scaleYAnimation.values = scaleValues;
     [self.layer addAnimation:scaleYAnimation forKey:@"scaleYAnimation"];
     
     CABasicAnimation *rotatingAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
@@ -61,18 +72,19 @@
         return;
     }
     
+    BOOL isOS4 = self.activityIndicatorViewStyle == UIActivityIndicatorViewStyleGray;
     NSTimeInterval duration = .255;
     
     CABasicAnimation *scaleXAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale.x"];
     scaleXAnimation.duration = duration;
-    scaleXAnimation.fromValue = @.7f;
+    scaleXAnimation.fromValue = isOS4 ? @1.f : @.7f;
     scaleXAnimation.toValue = @.01f;
     scaleXAnimation.delegate = self;
     [self.layer addAnimation:scaleXAnimation forKey:@"scaleXAnimation"];
     
     CABasicAnimation *scaleYAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale.y"];
     scaleYAnimation.duration = duration;
-    scaleYAnimation.fromValue = @.7f;
+    scaleYAnimation.fromValue = isOS4 ? @1.f : @.7f;
     scaleYAnimation.toValue = @.01f;
     [self.layer addAnimation:scaleYAnimation forKey:@"scaleYAnimation"];
     
