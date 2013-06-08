@@ -75,9 +75,11 @@ static CGFloat const ISThreshold = 105.f;
     
     [self addObserver:self forKeyPath:@"tintColor" options:0 context:NULL];
     
-    UIColor *tintColor = [[ISRefreshControl appearance] tintColor];
-    if (tintColor) {
-        self.tintColor = tintColor;
+    if ([(id)[ISRefreshControl class] respondsToSelector:@selector(appearance)]) {
+        UIColor *tintColor = [[ISRefreshControl appearance] tintColor];
+        if (tintColor) {
+            self.tintColor = tintColor;
+        }
     }
 }
 

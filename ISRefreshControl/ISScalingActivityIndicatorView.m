@@ -9,7 +9,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-        self.color = [UIColor is_refreshControlColor];
+        if ([self respondsToSelector:@selector(setColor:)]) {
+            self.color = [UIColor is_refreshControlColor];
+        }
     }
     return self;
 }
@@ -19,7 +21,9 @@
     self = [super initWithCoder:coder];
     if (self) {
         self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-        self.color = [UIColor is_refreshControlColor];
+        if ([self respondsToSelector:@selector(setColor:)]) {
+            self.color = [UIColor is_refreshControlColor];
+        }
     }
     return self;
 }
