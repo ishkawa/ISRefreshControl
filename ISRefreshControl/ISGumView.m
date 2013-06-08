@@ -6,7 +6,7 @@ static CGFloat const ISMaxDistance = 60.f;
 static CGFloat const ISMainCircleMaxRadius = 16.f;
 static CGFloat const ISMainCircleMinRadius = 10.f;
 static CGFloat const ISSubCircleMaxRadius  = 16.f;
-static CGFloat const ISSubCircleMinRadius  = 2.f;
+static CGFloat const ISSubCircleMinRadius  = 2.5f;
 
 @interface ISGumView ()
 
