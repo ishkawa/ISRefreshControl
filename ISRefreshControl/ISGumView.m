@@ -27,6 +27,8 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
 {
     self = [super initWithFrame:frame];
     if (self) {
+        CAShapeLayer *layer = (CAShapeLayer *)self.layer;
+        layer.fillColor = [UIColor is_refreshControlColor].CGColor;
         self.backgroundColor = [UIColor clearColor];
         
         self.distance = 0.f;
@@ -63,34 +65,34 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     }
 }
 
-#pragma mark - accessor
-
-- (UIBezierPath *)bezierPath
+- (UIBezierPath *)pathForMainRadius:(CGFloat)mainRadius
+                          subRadius:(CGFloat)subRadius
+                           distance:(CGFloat)distance
 {
-    CGFloat progress = self.distance / ISMaxDistance;
+    CGFloat progress = distance / ISMaxDistance;
     UIBezierPath *bezierPath = [UIBezierPath bezierPath];
     
-    [bezierPath addArcWithCenter:CGPointMake(self.mainRadius, self.mainRadius)
-                          radius:self.mainRadius
+    [bezierPath addArcWithCenter:CGPointMake(mainRadius, mainRadius)
+                          radius:mainRadius
                       startAngle:M_PI / 2.f
                         endAngle:M_PI / 2.f + M_PI * 2.f
                        clockwise:YES];
     
-    [bezierPath addArcWithCenter:CGPointMake(self.mainRadius, self.mainRadius + self.distance)
-                          radius:self.subRadius
+    [bezierPath addArcWithCenter:CGPointMake(mainRadius, mainRadius + distance)
+                          radius:subRadius
                       startAngle:M_PI / 2.f
                         endAngle:M_PI / 2.f + M_PI * 2.f
                        clockwise:YES];
     
-    CGPoint rightPoint1 = CGPointMake(self.mainRadius * 2.f, self.mainRadius);
-    CGPoint rightPoint2 = CGPointMake(self.mainRadius + self.subRadius, self.mainRadius + self.distance);
+    CGPoint rightPoint1 = CGPointMake(mainRadius * 2.f, mainRadius);
+    CGPoint rightPoint2 = CGPointMake(mainRadius + subRadius, mainRadius + distance);
     [bezierPath moveToPoint:rightPoint1];
     [bezierPath addCurveToPoint:rightPoint2
                   controlPoint1:CGPointMake(rightPoint1.x, rightPoint1.y * (1.f + progress))
                   controlPoint2:CGPointMake(rightPoint2.x, rightPoint2.y * (1.f - progress * .7f))];
     
-    CGPoint leftPoint1 = CGPointMake(self.mainRadius - self.subRadius, self.mainRadius + self.distance);
-    CGPoint leftPoint2 = CGPointMake(0.f, self.mainRadius);
+    CGPoint leftPoint1 = CGPointMake(mainRadius - subRadius, mainRadius + distance);
+    CGPoint leftPoint2 = CGPointMake(0.f, mainRadius);
     [bezierPath addLineToPoint:leftPoint1];
     [bezierPath addCurveToPoint:leftPoint2
                   controlPoint1:CGPointMake(leftPoint1.x, leftPoint1.y * (1.f - progress * .7f))
@@ -98,7 +100,7 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     
     [bezierPath closePath];
     
-    CGFloat offset = self.frame.size.width/2.f - self.mainRadius;
+    CGFloat offset = self.frame.size.width/2.f - mainRadius;
     [bezierPath applyTransform:CGAffineTransformMakeTranslation(offset, 0.f)];
     
     return bezierPath;
@@ -108,31 +110,21 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
 
 - (void)layoutSubviews
 {
-    if (self.distance < 0) {
-        self.distance = 0;
-    }
-    if (self.distance > ISMaxDistance) {
-        self.distance = ISMaxDistance;
-    }
-    CGFloat progress = self.distance / ISMaxDistance;
     if (self.shrinking) {
-        self.mainRadius = ISMainCircleMinRadius*pow((self.distance/ISMaxDistance), 0.1);
-        if (self.distance > self.mainRadius) {
-            CGFloat diff = fabsf(ISSubCircleMinRadius-self.mainRadius);
-            self.subRadius = ISSubCircleMinRadius+diff*(1-(self.distance-self.mainRadius)/(ISMaxDistance-self.mainRadius));
-        } else {
-            self.subRadius  = self.mainRadius;
-        }
-    } else {
-        self.mainRadius = ISMainCircleMaxRadius - (ISMainCircleMaxRadius - ISMainCircleMinRadius) * progress;
-        self.subRadius  = ISSubCircleMaxRadius - (ISSubCircleMaxRadius - ISSubCircleMinRadius) * progress;
+        return;
     }
-    self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-5, self.mainRadius*2-5);
-    self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f + self.distance * 0.03);
+    
+    CGFloat progress = self.distance / ISMaxDistance;
+    self.mainRadius = ISMainCircleMaxRadius - (ISMainCircleMaxRadius - ISMainCircleMinRadius) * progress;
+    self.subRadius  = ISSubCircleMaxRadius - (ISSubCircleMaxRadius - ISSubCircleMinRadius) * progress;
     
     CAShapeLayer *layer = (CAShapeLayer *)self.layer;
-    layer.path = self.bezierPath.CGPath;
-    layer.fillColor = [UIColor is_refreshControlColor].CGColor;
+    layer.path = [self pathForMainRadius:self.mainRadius
+                               subRadius:self.subRadius
+                                distance:self.distance].CGPath;
+    
+    self.imageView.frame = CGRectMake(0, 0, self.mainRadius*2-5, self.mainRadius*2-5);
+    self.imageView.center = CGPointMake(self.frame.size.width/2.f, self.mainRadius-2.f + self.distance * 0.03);
 }
 
 #pragma mark -
@@ -141,29 +133,73 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
 {
     self.shrinking = YES;
     
+    NSMutableArray *paths = [@[] mutableCopy];
+    NSMutableArray *values = [@[] mutableCopy];
+    
     CGFloat distance = self.distance < ISMaxDistance ? self.distance : ISMaxDistance;
     NSInteger count = 20;
-    CGFloat delta = self.distance/(CGFloat)count;
-    NSTimeInterval interval = (distance/ISMaxDistance)*0.1/(NSTimeInterval)count;
-    [self shrinkWithDelta:delta interval:interval count:count];
+    CGFloat delta = distance / (CGFloat)count;
+    
+    for (NSInteger index = 0; index < count; index++) {
+        CGFloat mainRadius = ISMainCircleMinRadius*pow((distance/ISMaxDistance), 0.1);
+        CGFloat subRadius;
+        if (distance > mainRadius) {
+            CGFloat diff = fabsf(ISSubCircleMinRadius-mainRadius);
+            subRadius = ISSubCircleMinRadius+diff*(1-(distance-mainRadius)/(ISMaxDistance-mainRadius));
+        } else {
+            subRadius = mainRadius;
+        }
+        
+        UIBezierPath *path = [self pathForMainRadius:mainRadius subRadius:subRadius distance:distance];
+        [paths addObject:path];
+        [values addObject:(id)path.CGPath];
+        
+        distance -= delta;
+        if (distance < 0.f) {
+            UIBezierPath *path = [self pathForMainRadius:.1f subRadius:.1f distance:.1f];
+            [paths addObject:path];
+            break;
+        }
+    }
+    
+    CAShapeLayer *layer = (CAShapeLayer *)self.layer;
+    layer.path = CGPathCreateMutable();
+    self.imageView.layer.transform = CATransform3DMakeScale(.01f, .01f, 1.f);
+    
+    NSTimeInterval duration = 0.12;
+    
+    CAKeyframeAnimation *pathAnimation = [CAKeyframeAnimation animationWithKeyPath:@"path"];
+    pathAnimation.duration = duration;
+    pathAnimation.values = values;
+    pathAnimation.delegate = self;
+    [self.layer addAnimation:pathAnimation forKey:@"pathAnimation"];
+    
+    CABasicAnimation *scaleXAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale.x"];
+    scaleXAnimation.duration = duration;
+    scaleXAnimation.fromValue = @1.f;
+    scaleXAnimation.toValue = @.7f;
+    scaleXAnimation.delegate = self;
+    [self.imageView.layer addAnimation:scaleXAnimation forKey:@"scaleXAnimation"];
+    
+    CABasicAnimation *scaleYAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale.y"];
+    scaleYAnimation.duration = duration;
+    scaleYAnimation.fromValue = @1.f;
+    scaleYAnimation.toValue = @.7f;
+    [self.imageView.layer addAnimation:scaleYAnimation forKey:@"scaleYAnimation"];
+    
+    CABasicAnimation *moveAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
+    moveAnimation.duration = duration;
+    moveAnimation.fromValue = @0.f;
+    moveAnimation.toValue = @(-2.0f);
+    [self.imageView.layer addAnimation:moveAnimation forKey:@"moveAnimation"];
 }
 
-- (void)shrinkWithDelta:(CGFloat)delta interval:(NSTimeInterval)interval count:(NSInteger)count
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
-    if (count <= 0) {
-        self.shrinking = NO;
-        self.hidden = YES;
-        self.alpha = 1.f;
-        
-        return;
-    }
-    self.distance -= delta;
-
-    double delayInSeconds = interval;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self shrinkWithDelta:delta interval:interval count:count-1];
-    });
+    self.shrinking = NO;
+    self.hidden = YES;
+    self.alpha = 1.f;
+    self.imageView.layer.transform = CATransform3DIdentity;
 }
 
 @end
