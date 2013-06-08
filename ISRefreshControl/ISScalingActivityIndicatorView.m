@@ -1,5 +1,6 @@
 #import "ISScalingActivityIndicatorView.h"
 #import "UIColor+ISRefreshControl.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation ISScalingActivityIndicatorView
 
@@ -9,7 +10,6 @@
     if (self) {
         self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
         self.color = [UIColor is_refreshControlColor];
-        self.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
     }
     return self;
 }
@@ -20,7 +20,6 @@
     if (self) {
         self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
         self.color = [UIColor is_refreshControlColor];
-        self.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
     }
     return self;
 }
@@ -29,24 +28,27 @@
 {
     [super startAnimating];
     
-    CGAffineTransform rotation = CGAffineTransformMakeRotation(-M_PI_2);
-    CGAffineTransform scale = CGAffineTransformMakeScale(0.01f, 0.01f);
-    self.transform = CGAffineTransformConcat(rotation, scale);
+    self.transform = CGAffineTransformIdentity;
+    self.layer.transform = CATransform3DMakeScale(.7f, .7f, .7f);
     
-    double delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [UIView animateWithDuration:.2
-                         animations:^{
-                             self.transform = CGAffineTransformMakeScale(0.8f, 0.8f);
-                         }
-                         completion:^(BOOL finished) {
-                             [UIView animateWithDuration:.2
-                                              animations:^{
-                                                  self.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
-                                              }];
-                         }];
-    });
+    NSTimeInterval duration = .4;
+    
+    CAKeyframeAnimation *scaleXAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale.x"];
+    scaleXAnimation.duration = duration;
+    scaleXAnimation.values = @[@.01f, @.85f, @.7f];
+    [self.layer addAnimation:scaleXAnimation forKey:@"scaleXAnimation"];
+    
+    CAKeyframeAnimation *scaleYAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale.y"];
+    scaleYAnimation.duration = duration;
+    scaleYAnimation.values = @[@.01f, @.85f, @.7f];
+    [self.layer addAnimation:scaleYAnimation forKey:@"scaleYAnimation"];
+    
+    CABasicAnimation *rotatingAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+    rotatingAnimation.duration = duration * .8;
+    rotatingAnimation.fromValue = @(-M_PI * .8);
+    rotatingAnimation.toValue = @(.0);
+    rotatingAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    [self.layer addAnimation:rotatingAnimation forKey:@"rotatingAnimation"];
 }
 
 - (void)stopAnimating
@@ -55,15 +57,32 @@
         return;
     }
     
-    [UIView animateWithDuration:.255f
-                     animations:^{
-                         CGAffineTransform rotation = CGAffineTransformMakeRotation(M_PI_2);
-                         CGAffineTransform scale = CGAffineTransformMakeScale(0.01f, 0.01f);
-                         self.transform = CGAffineTransformConcat(rotation, scale);
-                     }
-                     completion:^(BOOL finished) {
-                         [super stopAnimating];
-                     }];
+    NSTimeInterval duration = .255;
+    
+    CABasicAnimation *scaleXAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale.x"];
+    scaleXAnimation.duration = duration;
+    scaleXAnimation.fromValue = @.7f;
+    scaleXAnimation.toValue = @.01f;
+    scaleXAnimation.delegate = self;
+    [self.layer addAnimation:scaleXAnimation forKey:@"scaleXAnimation"];
+    
+    CABasicAnimation *scaleYAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale.y"];
+    scaleYAnimation.duration = duration;
+    scaleYAnimation.fromValue = @.7f;
+    scaleYAnimation.toValue = @.01f;
+    [self.layer addAnimation:scaleYAnimation forKey:@"scaleYAnimation"];
+    
+    CABasicAnimation *rotatingAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+    rotatingAnimation.duration = duration;
+    rotatingAnimation.fromValue = @(.0);
+    rotatingAnimation.toValue = @(M_PI * .3);
+    rotatingAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    [self.layer addAnimation:rotatingAnimation forKey:@"rotatingAnimation"];
+}
+
+- (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished
+{
+    [super stopAnimating];
 }
 
 @end

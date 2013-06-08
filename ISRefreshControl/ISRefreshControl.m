@@ -11,7 +11,7 @@ typedef NS_ENUM(NSInteger, ISRefreshingState) {
 };
 
 static CGFloat const ISAdditionalTopInset = 50.f;
-static CGFloat const ISThreshold = 115.f;
+static CGFloat const ISThreshold = 105.f;
 
 @interface ISRefreshControl ()
 
