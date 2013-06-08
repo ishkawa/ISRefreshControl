@@ -16,6 +16,7 @@ static CGFloat const ISRefreshControlThreshold = 105.f;
 @interface ISRefreshControl ()
 
 @property (nonatomic) BOOL addedTopInset;
+@property (nonatomic) BOOL subtractingTopInset;
 @property (nonatomic) ISRefreshingState refreshingState;
 @property (nonatomic, readonly) ISGumView *gumView;
 @property (nonatomic, readonly) ISScalingActivityIndicatorView *indicatorView;
@@ -135,10 +136,11 @@ static CGFloat const ISRefreshControlThreshold = 105.f;
     [super didMoveToSuperview];
     
     if ([self.superview isKindOfClass:[UIScrollView class]]) {
-        [self.superview addObserver:self forKeyPath:@"contentOffset" options:0 context:NULL];
+        UIScrollView *scrollView = (UIScrollView *)self.superview;
+        [scrollView addObserver:self forKeyPath:@"contentOffset" options:0 context:NULL];
         
         CGRect frame = CGRectZero;
-        frame.origin = CGPointMake(0.f, -ISRefreshControlDefaultHeight);
+        frame.origin = CGPointMake(0.f, -ISRefreshControlDefaultHeight - scrollView.contentInset.top);
         frame.size = CGSizeMake(self.superview.frame.size.width, ISRefreshControlDefaultHeight);
         self.frame = frame;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -163,9 +165,14 @@ static CGFloat const ISRefreshControlThreshold = 105.f;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    CGFloat topInset = scrollView.contentInset.top;
+    if (self.addedTopInset && !self.subtractingTopInset) {
+        topInset -= self.frame.size.height;
+    }
+    
     // keeps on top
-    CGFloat offset = scrollView.contentOffset.y;
-    CGFloat y = offset < -self.frame.size.height ? offset : -self.frame.size.height;
+    CGFloat offset = scrollView.contentOffset.y + topInset;
+    CGFloat y = offset < -self.frame.size.height ? offset - topInset : -self.frame.size.height - topInset;
     self.frame = CGRectOffset(self.frame, 0.f, y - self.frame.origin.y);
     
     self.gumView.distance = offset < -self.frame.size.height ? -offset-self.frame.size.height : 0.f;
@@ -190,7 +197,7 @@ static CGFloat const ISRefreshControlThreshold = 105.f;
             break;
             
         case ISRefreshingStateRefreshed:
-            if (offset >= scrollView.contentInset.top - 5.f) {
+            if (offset >= -5.f) {
                 [self reset];
             }
             break;
@@ -248,6 +255,8 @@ static CGFloat const ISRefreshControlThreshold = 105.f;
 
 - (void)subtractTopInsets
 {
+    self.subtractingTopInset = YES;
+    
     UIScrollView *scrollView = (id)self.superview;
     UIEdgeInsets inset = scrollView.contentInset;
     inset.top -= self.frame.size.height;
@@ -257,9 +266,10 @@ static CGFloat const ISRefreshControlThreshold = 105.f;
                          scrollView.contentInset = inset;
                      }
                      completion:^(BOOL finished) {
+                         self.subtractingTopInset = NO;
                          self.addedTopInset = NO;
                          
-                         if (scrollView.contentOffset.y <= scrollView.contentInset.top) {
+                         if (scrollView.contentOffset.y <= scrollView.contentInset.top && !scrollView.isDragging) {
                              [self reset];
                          } else {
                              self.refreshingState = ISRefreshingStateRefreshed;
