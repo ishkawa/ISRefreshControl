@@ -72,28 +72,27 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
     CGFloat progress = distance / ISMaxDistance;
     UIBezierPath *bezierPath = [UIBezierPath bezierPath];
     
+    [bezierPath moveToPoint:CGPointMake(0.f, mainRadius)];
     [bezierPath addArcWithCenter:CGPointMake(mainRadius, mainRadius)
                           radius:mainRadius
-                      startAngle:M_PI / 2.f
-                        endAngle:M_PI / 2.f + M_PI * 2.f
+                      startAngle:M_PI
+                        endAngle:0.f
                        clockwise:YES];
     
-    [bezierPath addArcWithCenter:CGPointMake(mainRadius, mainRadius + distance)
-                          radius:subRadius
-                      startAngle:M_PI / 2.f
-                        endAngle:M_PI / 2.f + M_PI * 2.f
-                       clockwise:YES];
-    
-    CGPoint rightPoint1 = CGPointMake(mainRadius * 2.f, mainRadius);
+    CGPoint rightPoint1 = [bezierPath currentPoint];
     CGPoint rightPoint2 = CGPointMake(mainRadius + subRadius, mainRadius + distance);
-    [bezierPath moveToPoint:rightPoint1];
     [bezierPath addCurveToPoint:rightPoint2
                   controlPoint1:CGPointMake(rightPoint1.x, rightPoint1.y * (1.f + progress))
                   controlPoint2:CGPointMake(rightPoint2.x, rightPoint2.y * (1.f - progress * .7f))];
     
-    CGPoint leftPoint1 = CGPointMake(mainRadius - subRadius, mainRadius + distance);
+    [bezierPath addArcWithCenter:CGPointMake(mainRadius, mainRadius + distance)
+                          radius:subRadius
+                      startAngle:0.f
+                        endAngle:-M_PI
+                       clockwise:YES];
+    
+    CGPoint leftPoint1 = [bezierPath currentPoint];
     CGPoint leftPoint2 = CGPointMake(0.f, mainRadius);
-    [bezierPath addLineToPoint:leftPoint1];
     [bezierPath addCurveToPoint:leftPoint2
                   controlPoint1:CGPointMake(leftPoint1.x, leftPoint1.y * (1.f - progress * .7f))
                   controlPoint2:CGPointMake(leftPoint2.x, leftPoint2.y * (1.f + progress))];
@@ -112,6 +111,13 @@ static CGFloat const ISSubCircleMinRadius  = 2.f;
 {
     if (self.shrinking) {
         return;
+    }
+    
+    if (self.distance < 0) {
+        self.distance = 0;
+    }
+    if (self.distance > ISMaxDistance) {
+        self.distance = ISMaxDistance;
     }
     
     CGFloat progress = self.distance / ISMaxDistance;
