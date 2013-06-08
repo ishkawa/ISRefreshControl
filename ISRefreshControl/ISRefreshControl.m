@@ -10,21 +10,22 @@ typedef NS_ENUM(NSInteger, ISRefreshingState) {
     ISRefreshingStateRefreshed,
 };
 
-static CGFloat const ISAdditionalTopInset = 50.f;
-static CGFloat const ISThreshold = 105.f;
+static CGFloat const ISRefreshControlDefaultHeight = 44.f;
+static CGFloat const ISRefreshControlThreshold = 105.f;
 
 @interface ISRefreshControl ()
 
 @property (nonatomic) BOOL addedTopInset;
-@property (nonatomic) CGFloat offset;
 @property (nonatomic) ISRefreshingState refreshingState;
-@property (nonatomic, strong) ISGumView *gumView;
-@property (nonatomic, strong) ISScalingActivityIndicatorView *indicatorView;
+@property (nonatomic, readonly) ISGumView *gumView;
+@property (nonatomic, readonly) ISScalingActivityIndicatorView *indicatorView;
 
 @end
 
 
 @implementation ISRefreshControl
+
+@synthesize tintColor = _tintColor;
 
 + (void)load
 {
@@ -67,13 +68,11 @@ static CGFloat const ISThreshold = 105.f;
 
 - (void)initialize
 {
-    self.gumView = [[ISGumView alloc] init];
+    _gumView = [[ISGumView alloc] init];
+    _indicatorView = [[ISScalingActivityIndicatorView alloc] init];
+    
     [self addSubview:self.gumView];
-    
-    self.indicatorView = [[ISScalingActivityIndicatorView alloc] init];
     [self addSubview:self.indicatorView];
-    
-    [self addObserver:self forKeyPath:@"tintColor" options:0 context:NULL];
     
     if ([(id)[ISRefreshControl class] respondsToSelector:@selector(appearance)]) {
         UIColor *tintColor = [[ISRefreshControl appearance] tintColor];
@@ -83,34 +82,49 @@ static CGFloat const ISThreshold = 105.f;
     }
 }
 
-- (void)dealloc
-{
-    [self removeObserver:self forKeyPath:@"tintColor"];
-}
-
-#pragma mark -
+#pragma mark - accessors
 
 - (BOOL)isRefreshing
 {
     return self.refreshingState == ISRefreshingStateRefreshing;
 }
 
+- (void)setTintColor:(UIColor *)tintColor
+{
+    _tintColor = tintColor;
+    
+    self.gumView.tintColor = self.tintColor;
+    if ([self.indicatorView respondsToSelector:@selector(setColor:)]) {
+        self.indicatorView.color = self.tintColor;
+    }
+}
+
 #pragma mark - view events
 
 - (void)layoutSubviews
 {
-    CGFloat width = self.frame.size.width;
-    self.gumView.frame = CGRectMake(width/2.f-15, 25-15, 35, 90);
+    [super layoutSubviews];
     
-    if (self.indicatorView.activityIndicatorViewStyle == UIActivityIndicatorViewStyleWhiteLarge) {
-        self.indicatorView.frame = CGRectMake(width/2.f-15.f, 25.f-15.f, 30.f, 30.f);
-    } else {
-        self.indicatorView.frame = CGRectMake(width/2.f-12.5f, 25.f-12.5f, 25.f, 25.f);
-    }
+    BOOL isOS4 = self.indicatorView.activityIndicatorViewStyle == UIActivityIndicatorViewStyleGray;
+    CGSize indicatorSize = isOS4 ? CGSizeMake(25.f, 25.f) : CGSizeMake(30.f, 30.f);
+    CGRect indicatorFrame = CGRectZero;
+    indicatorFrame.origin.x = (self.frame.size.width - indicatorSize.width)  / 2.f;
+    indicatorFrame.origin.y = (self.frame.size.height - indicatorSize.width) / 2.f;
+    indicatorFrame.size = indicatorSize;
+    self.indicatorView.frame = indicatorFrame;
+    
+    CGSize gumViewSize = CGSizeMake(35.f, 90.f);
+    CGRect gumViewFrame = CGRectZero;
+    gumViewFrame.origin.x = (self.frame.size.width - gumViewSize.width) / 2.f;
+    gumViewFrame.origin.y = 5.f;
+    gumViewFrame.size = gumViewSize;
+    self.gumView.frame = gumViewFrame;
 }
 
-- (void)willMoveToSuperview:(UIView *)newSuperview
+- (void)willMoveToSuperview:(UIView *)superview
 {
+    [super willMoveToSuperview:superview];
+    
     if ([self.superview isKindOfClass:[UIScrollView class]]) {
         [self.superview removeObserver:self forKeyPath:@"contentOffset"];
     }
@@ -118,12 +132,16 @@ static CGFloat const ISThreshold = 105.f;
 
 - (void)didMoveToSuperview
 {
+    [super didMoveToSuperview];
+    
     if ([self.superview isKindOfClass:[UIScrollView class]]) {
         [self.superview addObserver:self forKeyPath:@"contentOffset" options:0 context:NULL];
         
-        self.frame = CGRectMake(0, -50, self.superview.frame.size.width, 50);
+        CGRect frame = CGRectZero;
+        frame.origin = CGPointMake(0.f, -ISRefreshControlDefaultHeight);
+        frame.size = CGSizeMake(self.superview.frame.size.width, ISRefreshControlDefaultHeight);
+        self.frame = frame;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [self setNeedsLayout];
     }
 }
 
@@ -132,58 +150,50 @@ static CGFloat const ISThreshold = 105.f;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (object == self.superview && [keyPath isEqualToString:@"contentOffset"]) {
-        UIScrollView *scrollView = (UIScrollView *)self.superview;
-        self.offset = scrollView.contentOffset.y;
-        
-        [self keepOnTopOfView];
-        [self sendDistanceToGumView];
-        [self updateGumViewVisible];
-        
-        if (self.refreshingState == ISRefreshingStateNormal && self.offset <= -ISThreshold && scrollView.isTracking) {
-            [self beginRefreshing];
-            [self sendActionsForControlEvents:UIControlEventValueChanged];
+        if ([self.superview isKindOfClass:[UIScrollView class]]) {
+            UIScrollView *scrollView = (UIScrollView *)self.superview;
+            [self scrollViewDidScroll:scrollView];
         }
-        if (self.refreshingState == ISRefreshingStateRefreshing && !scrollView.isDragging && !self.addedTopInset) {
-            [self addTopInsets];
-        }
-        if (self.refreshingState == ISRefreshingStateRefreshed && self.offset >= scrollView.contentInset.top - 5.f) {
-            [self reset];
-        }
-        return;
-    }
-    
-    if (object == self && [keyPath isEqualToString:@"tintColor"]) {
-        self.gumView.tintColor = self.tintColor;
-        self.indicatorView.color = self.tintColor;
-        return;
-    }
-    
-    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-}
-
-- (void)keepOnTopOfView
-{
-    if (self.offset < -ISAdditionalTopInset) {
-        self.frame = CGRectMake(0, self.offset, self.frame.size.width, self.frame.size.height);
     } else {
-        self.frame = CGRectMake(0, -ISAdditionalTopInset, self.frame.size.width, self.frame.size.height);
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
 
-- (void)sendDistanceToGumView
-{
-    if (self.gumView.shrinking) {
-        return;
-    }
-    self.gumView.distance = self.offset < -ISAdditionalTopInset ? -self.offset-ISAdditionalTopInset : 0.f;
-}
+#pragma mark - fake UIScrollViewDelegate
 
-- (void)updateGumViewVisible
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    // keeps on top
+    CGFloat offset = scrollView.contentOffset.y;
+    CGFloat y = offset < -self.frame.size.height ? offset : -self.frame.size.height;
+    self.frame = CGRectOffset(self.frame, 0.f, y - self.frame.origin.y);
+    
+    self.gumView.distance = offset < -self.frame.size.height ? -offset-self.frame.size.height : 0.f;
+    
     // hides gumView when it is about to appear by inertial scrolling.
-    UIScrollView *scrollView = (UIScrollView *)self.superview;
     if (scrollView.isTracking && !self.isRefreshing) {
-        self.hidden = (self.offset > 0);
+        self.hidden = (offset > 0);
+    }
+    
+    switch (self.refreshingState) {
+        case ISRefreshingStateNormal:
+            if (offset <= -ISRefreshControlThreshold && scrollView.isTracking) {
+                [self beginRefreshing];
+                [self sendActionsForControlEvents:UIControlEventValueChanged];
+            }
+            break;
+            
+        case ISRefreshingStateRefreshing:
+            if (!scrollView.isDragging && !self.addedTopInset) {
+                [self addTopInsets];
+            }
+            break;
+            
+        case ISRefreshingStateRefreshed:
+            if (offset >= scrollView.contentInset.top - 5.f) {
+                [self reset];
+            }
+            break;
     }
 }
 
@@ -228,7 +238,7 @@ static CGFloat const ISThreshold = 105.f;
     
     UIScrollView *scrollView = (id)self.superview;
     UIEdgeInsets inset = scrollView.contentInset;
-    inset.top += ISAdditionalTopInset;
+    inset.top += self.frame.size.height;
     
     [UIView animateWithDuration:.3f
                      animations:^{
@@ -240,7 +250,7 @@ static CGFloat const ISThreshold = 105.f;
 {
     UIScrollView *scrollView = (id)self.superview;
     UIEdgeInsets inset = scrollView.contentInset;
-    inset.top -= ISAdditionalTopInset;
+    inset.top -= self.frame.size.height;
     
     [UIView animateWithDuration:.3f
                      animations:^{
@@ -249,7 +259,7 @@ static CGFloat const ISThreshold = 105.f;
                      completion:^(BOOL finished) {
                          self.addedTopInset = NO;
                          
-                         if (self.offset <= [(UIScrollView *)self.superview contentInset].top) {
+                         if (scrollView.contentOffset.y <= scrollView.contentInset.top) {
                              [self reset];
                          } else {
                              self.refreshingState = ISRefreshingStateRefreshed;
