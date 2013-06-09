@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name         = "ISRefreshControl"
-  s.version      = "1.4.0"
+  s.version      = "1.4.1"
   s.platform     = :ios, '4.3'
   s.summary      = "iOS4-compatible UIRefreshControl."
   s.homepage     = "https://github.com/ishkawa/ISRefreshControl"
   s.author       = { "Yosuke Ishikawa" => "y@ishkawa.org" }
-  s.source       = { :git => "https://github.com/ishkawa/ISRefreshControl.git", :tag => "1.4.0" }
+  s.source       = { :git => "https://github.com/ishkawa/ISRefreshControl.git", :tag => "1.4.1" }
   s.source_files = 'ISRefreshControl/**/*.{h,m}'
   s.resources    = 'ISRefreshControl/Images/*.png'
   s.framework    = 'QuartzCore'
