@@ -65,6 +65,14 @@ static CGFloat const ISSubCircleMinRadius  = 2.5f;
     }
 }
 
+- (void)setTintColor:(UIColor *)tintColor
+{
+    _tintColor = tintColor;
+    
+    CAShapeLayer *layer = (CAShapeLayer *)self.layer;
+    layer.fillColor = tintColor.CGColor;
+}
+
 - (UIBezierPath *)pathForMainRadius:(CGFloat)mainRadius
                           subRadius:(CGFloat)subRadius
                            distance:(CGFloat)distance
