@@ -55,7 +55,7 @@ imitates `UIRefreshControl`.
 
 The best way to Install ISRefreshControl is by using CocoaPods.
 ```
-pod 'ISRefreshControl', '~> 1.4.0'
+pod 'ISRefreshControl', '~> 1.4.1'
 ```
 
 ### Without CocoaPods 

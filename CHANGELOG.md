@@ -1,3 +1,7 @@
+### 1.4.1
+
+- fixed bug that `ISGumView.layer.fillColor` does not change when `ISRefreshControl.tintColor` changes.
+
 ### 1.4.0
 
 - iOS 4.x support.
