@@ -1,3 +1,11 @@
-language: objective-c
-script: make test
+language: 
+    objective-c
 
+before_install:
+    sudo pip install cpp-coveralls --use-mirrors
+
+script:
+    make test
+
+after_success:
+    coveralls --exclude Pods --exclude ISRefreshControlTests
