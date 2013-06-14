@@ -9,3 +9,4 @@ script:
 
 after_success:
     coveralls --exclude Pods --exclude ISRefreshControlTests
+
