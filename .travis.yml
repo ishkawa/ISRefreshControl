@@ -2,7 +2,7 @@ language:
     objective-c
 
 before_install:
-    sudo pip install cpp-coveralls --use-mirrors
+    sudo easy_install cpp-coveralls
 
 script:
     make test
