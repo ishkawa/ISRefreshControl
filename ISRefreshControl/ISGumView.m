@@ -147,7 +147,6 @@ static CGFloat const ISSubCircleMinRadius  = 2.5f;
 {
     self.shrinking = YES;
     
-    NSMutableArray *paths = [@[] mutableCopy];
     NSMutableArray *values = [@[] mutableCopy];
     
     CGFloat distance = self.distance < ISMaxDistance ? self.distance : ISMaxDistance;
@@ -165,13 +164,10 @@ static CGFloat const ISSubCircleMinRadius  = 2.5f;
         }
         
         UIBezierPath *path = [self pathForMainRadius:mainRadius subRadius:subRadius distance:distance];
-        [paths addObject:path];
         [values addObject:(id)path.CGPath];
         
         distance -= delta;
         if (distance < 0.f) {
-            UIBezierPath *path = [self pathForMainRadius:.1f subRadius:.1f distance:.1f];
-            [paths addObject:path];
             break;
         }
     }
