@@ -1,11 +1,10 @@
 test:
-	xcodebuild \
+	xcodebuild clean test \
 		-sdk iphonesimulator \
 		-workspace ISRefreshControl.xcworkspace \
-		-scheme ISRefreshControlTests \
+		-scheme ISRefreshControl \
 		-configuration Debug \
-		clean build \
-		ONLY_ACTIVE_ARCH=NO \
-		TEST_AFTER_BUILD=YES \
+		-destination "name=iPhone Retina (4-inch),OS=7.0" \
+		OBJROOT=build \
 		GCC_PREPROCESSOR_DEFINITIONS="IS_TEST_FROM_COMMAND_LINE=1"
 
